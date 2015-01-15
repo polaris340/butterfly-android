@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+    <me.jiho.butterfly.view.ThemeFontTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_2"
+        android:textColor="@color/black_87"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/app_name"
+        />
+    <me.jiho.butterfly.view.BaseFontTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_2"
+        android:layout_marginRight="@dimen/margin_2"
+        android:textColor="@color/black_54"
+        android:text="@string/message_uploading_picture"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lightgray"/>
+    <me.jiho.butterfly.view.BaseFontButton
+        android:id="@+id/btn_close_dialog"
+        style="?android:borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/span_1"
+        android:text="@string/label_confirm"
+        />
+</LinearLayout>

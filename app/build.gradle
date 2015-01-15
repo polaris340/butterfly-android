@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "me.jiho.butterfly"
-        minSdkVersion 9
+        minSdkVersion 11
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
@@ -17,9 +17,25 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile project(':volley')
+    compile 'com.github.bumptech.glide:glide:3.4.0'
     compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'com.facebook.android:facebook-android-sdk:3.21.1'
+    compile "com.google.android.gms:play-services:6.5.87"
+    compile 'com.melnykov:floatingactionbutton:1.1.0'
+    compile "commons-io:commons-io:2.0.1"
+    compile 'org.apache.httpcomponents:httpmime:4.3.6'
+    compile 'org.apache.httpcomponents:httpcore:4.3.3'
+    compile 'com.google.code.gson:gson:2.3'
+    //compile 'com.j256.ormlite:ormlite-android:4.45'
 }

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    >
+    <me.jiho.butterfly.view.BaseFontTextView
+        android:id="@+id/picturelist_tv_title"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_2"
+        android:textColor="@color/black_87"
+        android:text="@string/label_untitled"
+        android:gravity="center_vertical"
+        />
+    <me.jiho.butterfly.view.PictureListImageView
+        android:id="@+id/picturelist_main_image"
+        android:background="@color/black_12"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:adjustViewBounds="true"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_centerVertical="true"
+
+            >
+            <me.jiho.butterfly.view.BaseFontTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/label_captured_by"
+                android:layout_marginLeft="@dimen/margin_2"
+
+                />
+            <me.jiho.butterfly.view.BaseFontButton
+                android:id="@+id/picturelist_btn_uploader"
+                style="?android:borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="0dp"
+                android:layout_margin="0dp"
+                android:textAllCaps="false"
+                android:text="Jiho Hong"
+                android:layout_gravity="center_vertical"
+
+                />
+        </LinearLayout>
+
+
+        <me.jiho.butterfly.view.BaseFontButton
+            style="?android:borderlessButtonStyle"
+            android:id="@+id/picturelist_btn_like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/heart_active_18"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:layout_centerVertical="true"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_alignParentRight="true"
+            />
+    </RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lightgray"
+        />
+
+
+</LinearLayout>

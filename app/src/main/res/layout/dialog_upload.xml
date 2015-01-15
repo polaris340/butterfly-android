@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <me.jiho.butterfly.view.UploadTargetImageView
+            android:id="@+id/upload_iv_target"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black_26"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            />
+        <ImageButton
+            android:id="@+id/upload_btn_take_picture"
+            style="?android:borderlessButtonStyle"
+            android:src="@drawable/shutter_white_48"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@+id/upload_iv_target"
+            android:layout_alignBottom="@+id/upload_iv_target"
+
+            />
+
+    </RelativeLayout>
+    <me.jiho.butterfly.view.BaseFontEditText
+        android:id="@+id/upload_et_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:hint="@string/hint_picture_title"
+        android:gravity="center"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+
+        <me.jiho.butterfly.view.BaseFontButton
+            android:id="@+id/upload_btn_cancel"
+            style="?android:borderlessButtonStyle"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="@dimen/span_1"
+            android:text="@string/label_cancel"
+            android:textColor="@color/black_54"
+            />
+
+        <me.jiho.butterfly.view.BaseFontButton
+            android:id="@+id/upload_btn_edit_picture"
+            style="?android:borderlessButtonStyle"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="@dimen/span_1"
+            android:text="@string/label_edit"
+            android:textColor="@color/black_87"
+            />
+
+        <me.jiho.butterfly.view.BaseFontButton
+            android:id="@+id/upload_btn_submit"
+            style="?android:borderlessButtonStyle"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="@dimen/span_1"
+            android:text="@string/label_upload"
+            android:textColor="@color/black_87"
+            />
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

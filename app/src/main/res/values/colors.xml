@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="material_red_500">#F44336</color>
+    <color name="material_red_a400">#FF1744</color>
+    <color name="material_red_a700">#D50000</color>
+
+    <color name="primary">#607D8B</color>
+    <color name="primary_dark">#455A64</color>
+
+    <color name="lightgray">#F3F3F3</color>
+
+    <color name="black_12">#1F000000</color>
+    <color name="black_26">#42000000</color>
+    <color name="black_54">#8A000000</color>
+    <color name="black_87">#CD000000</color>
+</resources>

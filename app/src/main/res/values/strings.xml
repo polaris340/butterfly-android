@@ -1,11 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="facebook_app_id">680388332060479</string>
+
     <string name="app_name">Butterfly</string>
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_auth">Sign in</string>
+    <string name="hint_email">\@</string>
+    <string name="hint_password">*</string>
+    <string name="hint_password_confirm">**</string>
+    <string name="fa_facebook_square"></string>
+    <string name="fa_google_plus_square"></string>
+    <string name="fa_envelope_square"></string>
+    <string name="fa_plus"></string>
+    <string name="fa_facebook"></string>
+    <string name="fa_google_plus"></string>
+    <string name="fa_envelope_o"></string>
+    <string name="fa_plus_square_o"></string>
+    <string name="label_sign_up">Sign up with email</string>
+    <string name="font_theme">fonts/desyrel.ttf</string>
+    <string name="font_base">fonts/Quicksand-Regular.otf</string>
+    <string name="hint_picture_title">Title(optional)</string>
+    <string name="label_cancel">Cancel</string>
+    <string name="label_upload">Upload</string>
+    <string name="label_edit">Edit</string>
+    <string name="label_captured_by">Captured by</string>
+    <string name="label_untitled">Untitled</string>
+    <string name="message_uploading_picture">Now uploading your picture. Please wait a moment!</string>
+    <string name="label_confirm">OK</string>
+    <string name="message_sending_picture">Sending picture...</string>
+    <string name="message_send_complete">Picture upload completed!</string>
+    <string name="message_send_fail">Failed to upload picture</string>
 
 </resources>
