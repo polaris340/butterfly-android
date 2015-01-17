@@ -2,6 +2,7 @@ package me.jiho.butterfly.auth;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
@@ -79,7 +80,6 @@ public class Auth {
 
     public void login(JSONObject requestData, final Callable loginCallback, final Callable errorCallback) throws JSONException {
 
-
         // add location data
         LastLocationManager.LocationData lastLocation = LastLocationManager.getLocationData();
         if (lastLocation != null) {
@@ -87,6 +87,8 @@ public class Auth {
                     .put(LastLocationManager.KEY_LATITUDE, lastLocation.latitude)
                     .put(LastLocationManager.KEY_LONGITUDE, lastLocation.longitude);
         }
+
+        Log.e("login",requestData.toString() );
 
         Request request = new JsonObjectRequest(Request.Method.POST, URL_LOGIN, requestData,
                 new LoginCallback() {

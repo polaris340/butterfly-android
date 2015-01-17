@@ -2,7 +2,6 @@
 <resources>
 
     <string name="facebook_app_id">680388332060479</string>
-
     <string name="app_name">Butterfly</string>
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
@@ -32,8 +31,11 @@
     <string name="label_untitled">Untitled</string>
     <string name="message_uploading_picture">Now uploading your picture. Please wait a moment!</string>
     <string name="label_confirm">OK</string>
+    <string name="message_upload_start">Picture upload started</string>
     <string name="message_sending_picture">Sending picture...</string>
     <string name="message_send_complete">Picture upload completed!</string>
     <string name="message_send_fail">Failed to upload picture</string>
+    <string name="title_activity_picture_view">Picture View</string>
+    <string name="label_show_full_image">Click to show full picture</string>
 
 </resources>

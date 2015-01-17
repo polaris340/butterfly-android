@@ -13,4 +13,9 @@
     <color name="black_26">#42000000</color>
     <color name="black_54">#8A000000</color>
     <color name="black_87">#CD000000</color>
+
+    <color name="white_12">#1FFFFFFF</color>
+    <color name="white_30">#4DFFFFFF</color>
+    <color name="white_70">#B3FFFFFF</color>
+    <color name="white_100">#FFFFFFFF</color>
 </resources>

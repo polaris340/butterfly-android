@@ -1,5 +1,7 @@
 package me.jiho.butterfly.picture;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,16 +17,18 @@ import me.jiho.butterfly.R;
 /**
  * Created by jiho on 1/13/15.
  */
-public class PictureListFragment extends Fragment {
+public class PictureListFragment extends Fragment
+    implements View.OnClickListener {
 
     public static final String KEY_TYPE = "type";
-
+    public static final int REQUEST_CODE_PICTURE_VIEW = 16;
 
 
     private PictureDataManager.Type type;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView recyclerView;
     private PictureListAdapter adapter;
+    private ImageView fragmentHeader;
 
     public static PictureListFragment newInstance(PictureDataManager.Type type) {
         Bundle args = new Bundle();
@@ -41,13 +45,15 @@ public class PictureListFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_picture_list, null);
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.picture_recycler_view);
-        layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
-        adapter = new PictureListAdapter(type);
+        adapter = new PictureListAdapter(this, type);
         PictureDataManager.getInstance().addObserver(type, adapter);
         recyclerView.setAdapter(adapter);
+        layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
 
-        ImageView fragmentHeader = (ImageView) rootView.findViewById(R.id.picturelist_fragment_header);
+
+        fragmentHeader = (ImageView) rootView.findViewById(R.id.picturelist_fragment_header);
+        fragmentHeader.setOnClickListener(this);
         switch (type) {
             case SENT:
                 fragmentHeader.setImageResource(R.drawable.ic_sent_24);
@@ -57,6 +63,47 @@ public class PictureListFragment extends Fragment {
                 break;
         }
 
+        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                float newY = fragmentHeader.getTranslationY()-(dy/2);
+                if (newY > 0) newY = 0;
+                else if (newY < (-fragmentHeader.getMeasuredHeight())) {
+                    newY = -fragmentHeader.getMeasuredHeight();
+                }
+                fragmentHeader.setTranslationY(newY);
+            }
+        });
+
+
+
         return rootView;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.picturelist_fragment_header:
+                recyclerView.smoothScrollToPosition(0);
+                break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_CODE_PICTURE_VIEW) {
+                int position = data.getIntExtra(PictureDataManager.KEY_POSITION,0);
+                recyclerView.scrollToPosition(position);
+            }
+        }
     }
 }

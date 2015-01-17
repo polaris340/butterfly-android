@@ -30,6 +30,7 @@ dependencies {
     compile project(':volley')
     compile 'com.github.bumptech.glide:glide:3.4.0'
     compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'com.android.support:palette-v7:21.0.3'
     compile 'com.facebook.android:facebook-android-sdk:3.21.1'
     compile "com.google.android.gms:play-services:6.5.87"
     compile 'com.melnykov:floatingactionbutton:1.1.0'
@@ -37,5 +38,6 @@ dependencies {
     compile 'org.apache.httpcomponents:httpmime:4.3.6'
     compile 'org.apache.httpcomponents:httpcore:4.3.3'
     compile 'com.google.code.gson:gson:2.3'
+    compile 'com.github.chrisbanes.photoview:library:1.2.3'
     //compile 'com.j256.ormlite:ormlite-android:4.45'
 }

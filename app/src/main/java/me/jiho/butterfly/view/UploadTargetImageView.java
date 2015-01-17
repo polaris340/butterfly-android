@@ -1,11 +1,16 @@
 package me.jiho.butterfly.view;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.support.v7.graphics.Palette;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
 import java.io.File;
+
+import me.jiho.butterfly.R;
+import me.jiho.butterfly.util.ColorUtil;
 
 /**
  * Created by jiho on 1/12/15.
@@ -43,11 +48,19 @@ public class UploadTargetImageView extends ImageView{
         this.currentImageFile = file;
         if (file == null)
             setImageURI(null);
-        else
+        else {
             setImageURI(Uri.fromFile(file));
+            getImagePrimaryColor();
+        }
     }
 
     public File getImageFile() {
         return currentImageFile;
+    }
+
+    public String getImagePrimaryColor() {
+        Palette palette = Palette.generate(((BitmapDrawable)getDrawable()).getBitmap(), 1);
+        int color = palette.getMutedColor(getResources().getColor(R.color.lightgray));
+        return ColorUtil.toHexString(color);
     }
 }

@@ -15,6 +15,9 @@
         android:text="@string/label_untitled"
         android:gravity="center_vertical"
         />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <me.jiho.butterfly.view.PictureListImageView
         android:id="@+id/picturelist_main_image"
         android:background="@color/black_12"
@@ -22,6 +25,21 @@
         android:layout_height="wrap_content"
         android:scaleType="fitXY"
         android:adjustViewBounds="true"/>
+        <me.jiho.butterfly.view.BaseFontButton
+            android:id="@+id/picturelist_btn_show_image"
+            style="?android:borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/picturelist_main_image"
+            android:layout_alignBottom="@+id/picturelist_main_image"
+            android:visibility="gone"
+            android:background="@color/black_26"
+            android:textColor="@android:color/white"
+            android:textAllCaps="false"
+            android:text="@string/label_show_full_image"
+            android:adjustViewBounds="true"
+            />
+        </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

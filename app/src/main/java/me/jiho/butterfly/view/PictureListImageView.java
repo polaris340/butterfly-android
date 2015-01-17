@@ -23,6 +23,9 @@ public class PictureListImageView extends ImageView {
     }
 
     public void setImageRatio(float imageRatio) {
+        if (imageRatio > 1f) {
+            imageRatio = 1f;
+        }
         this.imageRatio = imageRatio;
     }
 

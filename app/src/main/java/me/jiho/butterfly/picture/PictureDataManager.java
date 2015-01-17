@@ -11,10 +11,12 @@ import me.jiho.butterfly.db.Picture;
  */
 public class PictureDataManager implements PictureDataObservable {
     private static PictureDataManager instance;
+    public static final String KEY_TYPE = "type";
+    public static final String KEY_POSITION = "position";
 
     private HashMap<Long, Picture> pictureHashMap;
     private HashMap<Type, ArrayList<Long>> pictureIdListHashMap;
-    private HashMap<Type, PictureDataObserver> observers;
+    private HashMap<Type, ArrayList<PictureDataObserver>> observers;
 
 
 
@@ -73,27 +75,43 @@ public class PictureDataManager implements PictureDataObservable {
 
     @Override
     public void addObserver(Type type, PictureDataObserver observer) {
-        observers.put(type, observer);
+        if (!observers.containsKey(type)) {
+            observers.put(type, new ArrayList<PictureDataObserver>());
+        }
+        observers.get(type).add(observer);
     }
 
     @Override
-    public void removeObserver(Type type) {
-        observers.remove(type);
+    public void removeObserver(Type type, PictureDataObserver observer) {
+        observers.get(type).remove(observer);
     }
 
     @Override
     public void update(Type type) {
         if (observers.containsKey(type)) {
-            observers.get(type).update();
+
+            Iterator<PictureDataObserver> iterator = observers.get(type).iterator();
+            while (iterator.hasNext()) {
+                iterator.next().update();
+            }
+        }
+    }
+
+    @Override
+    public void update(Type type, long pictureId) {
+        Iterator<PictureDataObserver> iterator = observers.get(type).iterator();
+        while (iterator.hasNext()) {
+            iterator.next().update(pictureId);
         }
     }
 
     @Override
     public void update(long pictureId) {
-        Iterator<PictureDataObserver> iterator = observers.values().iterator();
+        Iterator<Type> iterator = pictureIdListHashMap.keySet().iterator();
         while (iterator.hasNext()) {
-            PictureDataObserver observer = iterator.next();
-            observer.update(pictureId);
+            Type type = iterator.next();
+            if (getPictureIdList(type).contains(pictureId))
+                update(type, pictureId);
         }
 
     }

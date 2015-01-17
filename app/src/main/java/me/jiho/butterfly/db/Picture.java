@@ -1,5 +1,7 @@
 package me.jiho.butterfly.db;
 
+import android.graphics.Color;
+
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -23,6 +25,8 @@ public class Picture {
     private String capturedTime;
     private int likeCount;
     private boolean isLiked;
+    private String primaryColor;
+
 
     public Picture() {
 
@@ -117,6 +121,17 @@ public class Picture {
     }
     public boolean getIsLiked() {
         return isLiked;
+    }
+
+    public void setPrimaryColor(String color) {
+        primaryColor = color;
+    }
+    public String getPrimaryColor() {
+        return primaryColor;
+    }
+
+    public int getColor() {
+        return Color.parseColor(primaryColor);
     }
 
     public static Picture fromJson(String jsonString) {

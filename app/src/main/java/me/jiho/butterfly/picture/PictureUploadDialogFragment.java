@@ -47,6 +47,7 @@ import me.jiho.butterfly.network.DefaultErrorListener;
 import me.jiho.butterfly.network.MultipartRequest;
 import me.jiho.butterfly.network.VolleyRequestQueue;
 import me.jiho.butterfly.statics.Constants;
+import me.jiho.butterfly.util.MessageUtil;
 import me.jiho.butterfly.view.UploadTargetImageView;
 
 /**
@@ -58,8 +59,9 @@ public class PictureUploadDialogFragment extends DialogFragment implements View.
     public static final String TAG = "dialog_upload";
     public static final String UPLOAD_URL = Constants.URLs.API_URL + "picture";
     public static final String KEY_UPLOAD_IMAGE = "image";
-    public static final String KEY_IMAGE_RATIO = "image_ratio";
+    //public static final String KEY_IMAGE_RATIO = "image_ratio";
     public static final String KEY_IMAGE_TITLE = "title";
+    public static final String KEY_IMAGE_PRIMARY_COLOR = "primary_color";
 
     private static final int NOTIFICATION_ID = 4096;
 
@@ -180,6 +182,7 @@ public class PictureUploadDialogFragment extends DialogFragment implements View.
             case R.id.upload_btn_edit_picture:
                 if (uploadTargetFile == null) {
                     // TODO : show message
+
                 } else {
                     Intent editIntent = new Intent(Intent.ACTION_EDIT);
                     editIntent.setDataAndType(Uri.fromFile(uploadTargetFile), "image/jpg");
@@ -230,7 +233,7 @@ public class PictureUploadDialogFragment extends DialogFragment implements View.
                         new MultipartRequest.ProgressReporter() {
                             @Override
                             public void transferred(int transferredBytes, int totalSize) {
-                                Log.e("transferred", transferredBytes + "/" + totalSize);
+                                Log.i("transferred", transferredBytes + "/" + totalSize);
                             }
                         }) {
                     @Override
@@ -248,11 +251,17 @@ public class PictureUploadDialogFragment extends DialogFragment implements View.
                             multipartEntity.addPart(KEY_UPLOAD_IMAGE, inputStreamBody);
 
 
+
+
                             if (titleInput.length() > 0) {
                                 multipartEntity.addTextBody(KEY_IMAGE_TITLE,
                                         titleInput.getText().toString(),
                                         ContentType.APPLICATION_JSON);
                             }
+
+                            multipartEntity.addTextBody(KEY_IMAGE_PRIMARY_COLOR,
+                                    uploadTargetImageView.getImagePrimaryColor(),
+                                    ContentType.APPLICATION_JSON);
 
                             return multipartEntity.build();
                         } catch (FileNotFoundException e) {
@@ -267,6 +276,7 @@ public class PictureUploadDialogFragment extends DialogFragment implements View.
 
 
                 showNotification(NotificationType.UPLOAD_START);
+                MessageUtil.showMessage(R.string.message_upload_start);
                 dismiss();
                 uploading = true;
                 VolleyRequestQueue.add(
@@ -302,7 +312,9 @@ public class PictureUploadDialogFragment extends DialogFragment implements View.
                         .setContentText(App.getContext().getString(message));
 
         if (type == NotificationType.UPLOAD_START) {
-            // TODO : can't dismiss
+            mBuilder.setOngoing(true);
+        } else {
+            mBuilder.setOngoing(false);
         }
         // mId allows you to update the notification later on.
         NotificationManager mNotificationManager =

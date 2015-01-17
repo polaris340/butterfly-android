@@ -5,8 +5,9 @@ package me.jiho.butterfly.picture;
  */
 public interface PictureDataObservable {
     public void addObserver(PictureDataManager.Type type, PictureDataObserver observer);
-    public void removeObserver(PictureDataManager.Type type);
+    public void removeObserver(PictureDataManager.Type type, PictureDataObserver observer);
     public void update(PictureDataManager.Type type);
+    public void update(PictureDataManager.Type type, long pictureId);
     public void update(long pictureId);
     public void update();
 }
