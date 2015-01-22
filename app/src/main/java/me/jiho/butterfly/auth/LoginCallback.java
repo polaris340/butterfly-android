@@ -29,6 +29,7 @@ public class LoginCallback implements Response.Listener<JSONObject> {
                 for (int i = 0; i < pictures.length; i++) {
                     pictureDataManager.add(PictureDataManager.Type.SENT, pictures[i]);
                 }
+
                 pictureDataManager.update(PictureDataManager.Type.SENT);
             } catch (JSONException e) {
                 e.printStackTrace();

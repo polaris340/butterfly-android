@@ -32,7 +32,6 @@ import me.jiho.butterfly.R;
 public class SignInFragment extends Fragment implements View.OnClickListener{
     private static final String TAG = "SignInFragment";
 
-
     private UiLifecycleHelper uiHelper;
     private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
@@ -75,6 +74,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
         LoginButton facebookLoginButton = (LoginButton) rootView.findViewById(R.id.auth_btn_facebook_login);
         facebookLoginButton.setFragment(this);
         facebookLoginButton.setReadPermissions(Arrays.asList("public_profile", "email"));
+
+        rootView.findViewById(R.id.auth_btn_sign_up).setOnClickListener(this);
 
 
         return rootView;
@@ -186,6 +187,10 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                 } else {
                     Session.openActiveSession(getActivity(), this, true, callback);
                 }
+                break;
+
+            case R.id.auth_btn_sign_up:
+                ((AuthActivity) getActivity()).setCurrentItem(AuthActivity.POSITION_SIGN_UP);
                 break;
         }
     }

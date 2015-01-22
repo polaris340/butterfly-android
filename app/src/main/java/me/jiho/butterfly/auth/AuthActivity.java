@@ -10,7 +10,8 @@ import android.view.MenuItem;
 import me.jiho.butterfly.R;
 
 public class AuthActivity extends ActionBarActivity {
-
+    public static final int POSITION_SIGN_IN = 0;
+    public static final int POSITION_SIGN_UP = 1;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -25,6 +26,8 @@ public class AuthActivity extends ActionBarActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +67,10 @@ public class AuthActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void setCurrentItem(int position) {
+        mViewPager.setCurrentItem(position);
     }
 
 }
