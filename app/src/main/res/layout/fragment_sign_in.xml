@@ -66,7 +66,7 @@
             android:id="@+id/auth_btn_sign_up"
 
             android:layout_gravity="center_horizontal"
-            android:text="@string/label_sign_up"
+            android:text="@string/label_sign_up_with_email"
             android:textColor="@android:color/black"
             android:alpha=".54"
             android:textAppearance="?android:attr/textAppearanceSmall"
@@ -76,15 +76,5 @@
 
         </LinearLayout>
 
-
-    <!--
-    <com.facebook.widget.LoginButton
-        android:id="@+id/authButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-
-        />
-        -->
 
 </RelativeLayout>

@@ -9,15 +9,16 @@
         android:layout_width="@dimen/margin_3"
         android:layout_height="@dimen/margin_3"
         android:layout_margin="@dimen/margin_1"
+        android:layout_gravity="center_vertical"
         />
     <me.jiho.butterfly.view.BaseFontTextView
         android:id="@+id/toast_message"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/margin_3"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textColor="@color/black_87"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:gravity="center"
+        android:gravity="center_vertical"
         android:layout_margin="@dimen/margin_1"
         />
 </LinearLayout>

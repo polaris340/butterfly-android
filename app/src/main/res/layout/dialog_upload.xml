@@ -31,10 +31,11 @@
     <me.jiho.butterfly.view.BaseFontEditText
         android:id="@+id/upload_et_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/span_1"
         android:singleLine="true"
         android:hint="@string/hint_picture_title"
         android:gravity="center"
+        android:background="@null"
         />
 
     <LinearLayout
