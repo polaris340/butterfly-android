@@ -2,13 +2,14 @@ package me.jiho.butterfly.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.widget.Button;
 
-import me.jiho.butterfly.R;
+import me.jiho.butterfly.App;
 
 /**
  * Created by jiho on 1/8/15.
  */
-public class ThemeFontButton extends CustomFontButton {
+public class ThemeFontButton extends Button {
     public ThemeFontButton(Context context) {
         super(context);
         init();
@@ -25,6 +26,6 @@ public class ThemeFontButton extends CustomFontButton {
     }
 
     private void init() {
-        setFont(getContext().getString(R.string.font_theme));
+        setTypeface(App.getThemeFont());
     }
 }

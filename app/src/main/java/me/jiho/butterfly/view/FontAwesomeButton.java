@@ -5,10 +5,13 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.Button;
 
+import me.jiho.butterfly.App;
+
 /**
  * Created by jiho on 1/8/15.
  */
 public class FontAwesomeButton extends Button {
+    private static Typeface typeface;
     public FontAwesomeButton(Context context) {
         super(context);
         init();
@@ -25,7 +28,8 @@ public class FontAwesomeButton extends Button {
     }
 
     private void init() {
-        Typeface font = Typeface.createFromAsset(getContext().getAssets(), "fonts/fontawesome-webfont.ttf");
-        setTypeface(font);
+        setTypeface(
+                App.getFaFont()
+        );
     }
 }

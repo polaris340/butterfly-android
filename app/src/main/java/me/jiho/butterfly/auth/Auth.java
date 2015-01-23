@@ -1,9 +1,7 @@
 package me.jiho.butterfly.auth;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 
 import com.android.volley.Request;
@@ -16,7 +14,6 @@ import org.json.JSONObject;
 import java.util.concurrent.Callable;
 
 import me.jiho.butterfly.App;
-import me.jiho.butterfly.MainActivity;
 import me.jiho.butterfly.location.LastLocationManager;
 import me.jiho.butterfly.network.DefaultErrorListener;
 import me.jiho.butterfly.network.VolleyRequestQueue;

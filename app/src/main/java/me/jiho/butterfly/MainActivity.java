@@ -43,8 +43,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         if (!Auth.getInstance().isLogin()) {
             Intent intent = new Intent(this, AuthActivity.class);
+            intent.addFlags(
+                    Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            |Intent.FLAG_ACTIVITY_NEW_TASK
+            );
             startActivity(intent);
-            finish();
             return;
         }
 

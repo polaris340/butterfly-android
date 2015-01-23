@@ -2,13 +2,14 @@ package me.jiho.butterfly.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.widget.EditText;
 
-import me.jiho.butterfly.R;
+import me.jiho.butterfly.App;
 
 /**
  * Created by jiho on 1/8/15.
  */
-public class BaseFontEditText extends CustomFontEditText {
+public class BaseFontEditText extends EditText {
     public BaseFontEditText(Context context) {
         super(context);
         init();
@@ -25,6 +26,6 @@ public class BaseFontEditText extends CustomFontEditText {
     }
 
     private void init() {
-        setFont(getContext().getString(R.string.font_base));
+        setTypeface(App.getBaseFont());
     }
 }

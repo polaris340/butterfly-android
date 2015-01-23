@@ -1,14 +1,16 @@
 package me.jiho.butterfly.view;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.TextView;
+
+import me.jiho.butterfly.App;
 
 /**
  * Created by jiho on 1/8/15.
  */
 public class FontAwesomeTextView extends TextView {
+
     public FontAwesomeTextView(Context context) {
         super(context);
         init();
@@ -25,7 +27,8 @@ public class FontAwesomeTextView extends TextView {
     }
 
     private void init() {
-        Typeface font = Typeface.createFromAsset(getContext().getAssets(), "fonts/fontawesome-webfont.ttf");
-        setTypeface(font);
+        setTypeface(
+                App.getFaFont()
+        );
     }
 }

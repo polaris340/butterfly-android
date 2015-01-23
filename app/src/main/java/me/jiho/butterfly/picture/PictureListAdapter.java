@@ -153,6 +153,7 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
                     .load(pictureData.getPictureUrl())
                             //.placeholder(R.drawable.loading_spinner)
                     .crossFade()
+                    //.dontAnimate()
                     .into(this.mainImageView);
 
         }

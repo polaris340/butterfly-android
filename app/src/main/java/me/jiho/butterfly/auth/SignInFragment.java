@@ -1,5 +1,6 @@
 package me.jiho.butterfly.auth;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,6 +26,8 @@ import java.util.concurrent.Callable;
 
 import me.jiho.butterfly.MainActivity;
 import me.jiho.butterfly.R;
+import me.jiho.butterfly.util.DialogManager;
+import me.jiho.butterfly.util.MessageUtil;
 
 /**
  * Created by jiho on 1/9/15.
@@ -87,6 +90,9 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
         if (state.isOpened()) {
             // If the session is open, make an API call to get user data
             // and define a new callback to handle the response
+
+            final Dialog dialog = DialogManager.getDefaultProgressDialog(getActivity());
+            dialog.show();
             Request request = Request.newMeRequest(session, new Request.GraphUserCallback() {
                 @Override
                 public void onCompleted(GraphUser user, Response response) {
@@ -112,15 +118,27 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                                                     @Override
                                                     public Object call() throws Exception {
                                                         Intent intent = new Intent(getActivity(), MainActivity.class);
+                                                        intent.addFlags(
+                                                                Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                                                |Intent.FLAG_ACTIVITY_NEW_TASK
+                                                        );
+                                                        dialog.dismiss();
                                                         getActivity().startActivity(intent);
-                                                        getActivity().finish();
                                                         return null;
                                                     }
                                                 },
-                                                null
+                                                new Callable() {
+                                                    @Override
+                                                    public Object call() throws Exception {
+                                                        dialog.dismiss();
+                                                        return null;
+                                                    }
+                                                }
                                                 );
                             } catch (JSONException e) {
                                 // do error handling
+                                dialog.dismiss();
+                                MessageUtil.showDefaultErrorMessage();
                                 e.printStackTrace();
                             }
 
