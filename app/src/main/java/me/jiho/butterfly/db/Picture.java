@@ -20,12 +20,13 @@ public class Picture {
     private double latitude;
     private double longitude;
     private float imageRatio;
-    private int originalWidth;
-    private int originalHeight;
+    private long originalWidth;
+    private long originalHeight;
     private String capturedTime;
-    private int likeCount;
+    private long likeCount;
     private boolean isLiked;
     private String primaryColor;
+    private long sendPictureId;
 
 
     public Picture() {
@@ -88,17 +89,17 @@ public class Picture {
         return imageRatio;
     }
 
-    public void setOriginalWidth(int originalWidth) {
+    public void setOriginalWidth(long originalWidth) {
         this.originalWidth = originalWidth;
     }
-    public int getOriginalWidth() {
+    public long getOriginalWidth() {
         return originalWidth;
     }
 
-    public void setOriginalHeight(int originalHeight) {
+    public void setOriginalHeight(long originalHeight) {
         this.originalHeight = originalHeight;
     }
-    public int getOriginalHeight() {
+    public long getOriginalHeight() {
         return originalHeight;
     }
 
@@ -109,10 +110,10 @@ public class Picture {
         return capturedTime;
     }
 
-    public void setLikeCount(int likeCount) {
+    public void setLikeCount(long likeCount) {
         this.likeCount = likeCount;
     }
-    public int getLikeCount() {
+    public long getLikeCount() {
         return likeCount;
     }
 
@@ -121,6 +122,13 @@ public class Picture {
     }
     public boolean getIsLiked() {
         return isLiked;
+    }
+
+    public void setSendPictureId(long sendPictureId) {
+        this.sendPictureId = sendPictureId;
+    }
+    public long getSendPictureId() {
+        return sendPictureId;
     }
 
     public void setPrimaryColor(String color) {
@@ -138,7 +146,6 @@ public class Picture {
         Gson gson = new GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .create();
-
         return gson.fromJson(jsonString, Picture.class);
     }
 

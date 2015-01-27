@@ -147,6 +147,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                 }
             });
             Request.executeBatchAsync(request);
+
         } else if (state.isClosed()) {
             Log.i(TAG, "Logged out...");
         }
@@ -196,6 +197,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+                /* not required..
             case R.id.auth_btn_facebook_login:
                 Session session = Session.getActiveSession();
                 if (!session.isOpened() && !session.isClosed()) {
@@ -206,6 +208,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                     Session.openActiveSession(getActivity(), this, true, callback);
                 }
                 break;
+                //*/
 
             case R.id.auth_btn_sign_up:
                 ((AuthActivity) getActivity()).setCurrentItem(AuthActivity.POSITION_SIGN_UP);

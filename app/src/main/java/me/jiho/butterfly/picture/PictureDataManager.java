@@ -22,7 +22,9 @@ public class PictureDataManager implements PictureDataObservable {
 
     @Override
     public void update() {
-
+        for (Type type:Type.values()) {
+            update(type);
+        }
     }
 
     public enum Type {
@@ -73,6 +75,10 @@ public class PictureDataManager implements PictureDataObservable {
         put(picture);
     }
 
+    public void clear(Type type) {
+        getPictureIdList(type).clear();
+    }
+
     @Override
     public void addObserver(Type type, PictureDataObserver observer) {
         if (!observers.containsKey(type)) {
@@ -96,6 +102,7 @@ public class PictureDataManager implements PictureDataObservable {
             }
         }
     }
+
 
     @Override
     public void update(Type type, long pictureId) {

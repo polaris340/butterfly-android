@@ -1,6 +1,7 @@
 package me.jiho.butterfly.auth;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import org.json.JSONException;
 
 import java.util.concurrent.Callable;
 
+import me.jiho.butterfly.MainActivity;
 import me.jiho.butterfly.R;
 import me.jiho.butterfly.util.DialogManager;
 import me.jiho.butterfly.util.InputUtil;
@@ -79,7 +81,12 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
                 new Callable() {
                     @Override
                     public Object call() throws Exception {
-
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                        intent.addFlags(
+                                Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                |Intent.FLAG_ACTIVITY_NEW_TASK
+                        );
+                        startActivity(intent);
                         return null;
                     }
                 },

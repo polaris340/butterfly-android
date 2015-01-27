@@ -56,7 +56,7 @@ import me.jiho.butterfly.view.UploadTargetImageView;
 public class PictureUploadDialogFragment extends DialogFragment implements View.OnClickListener {
     public static final int REQUEST_IMAGE_CAPTURE = 32;
     public static final int REQUEST_IMAGE_EDIT = 64;
-    public static final String TAG = "dialog_upload";
+    public static final String TAG = "dialog_send";
     public static final String UPLOAD_URL = Constants.URLs.API_URL + "picture";
     public static final String KEY_UPLOAD_IMAGE = "image";
     //public static final String KEY_IMAGE_RATIO = "image_ratio";
@@ -83,7 +83,7 @@ public class PictureUploadDialogFragment extends DialogFragment implements View.
 
 
         if (!uploading) {
-            View rootView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_upload, null);
+            View rootView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_send, null);
 
             rootView.findViewById(R.id.upload_btn_take_picture).setOnClickListener(this);
             rootView.findViewById(R.id.upload_btn_edit_picture).setOnClickListener(this);

@@ -12,7 +12,7 @@ import me.jiho.butterfly.R;
 public class DialogManager {
     public static Dialog getDefaultProgressDialog(Context context) {
         ProgressDialog dialog = new ProgressDialog(context);
-        dialog.setTitle(R.string.label_sign_up);
+        dialog.setTitle(R.string.app_name);
         dialog.setMessage(context.getString(R.string.message_default_progress));
         return dialog;
     }

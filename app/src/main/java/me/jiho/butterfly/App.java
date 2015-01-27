@@ -53,4 +53,6 @@ public class App extends Application {
     public static Typeface getFaFont() {
         return faFont;
     }
+
+
 }

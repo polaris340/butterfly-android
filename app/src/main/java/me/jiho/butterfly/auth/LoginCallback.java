@@ -24,19 +24,22 @@ public class LoginCallback implements Response.Listener<JSONObject> {
             try {
                 PictureDataManager pictureDataManager = PictureDataManager.getInstance();
 
-                String sentPicturesArrayString = response.getString(PictureDataManager.Type.SENT.getKey());
-                Picture[] pictures = Picture.fromJsonArray(sentPicturesArrayString);
-                for (int i = 0; i < pictures.length; i++) {
-                    pictureDataManager.add(PictureDataManager.Type.SENT, pictures[i]);
+                for (PictureDataManager.Type type: PictureDataManager.Type.values()) {
+                    PictureDataManager.getInstance().clear(type);
+                    String pictureArrayString = response.getString(type.getKey());
+                    Picture[] pictures = Picture.fromJsonArray(pictureArrayString);
+                    for (int i = 0; i < pictures.length; i++) {
+                        pictureDataManager.add(type, pictures[i]);
+                    }
+
+                    pictureDataManager.update(type);
                 }
 
-                pictureDataManager.update(PictureDataManager.Type.SENT);
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-
-        // TODO : processing another data
     }
 
 }

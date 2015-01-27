@@ -31,6 +31,7 @@ public class Auth {
     public static final String KEY_EMAIL = "email";
     public static final String KEY_NAME = "name";
     public static final String KEY_PASSWORD = "password";
+    public static final String KEY_GCM_REG_ID = "gcm_reg_id";
 
 
 
@@ -89,6 +90,14 @@ public class Auth {
                     .put(LastLocationManager.KEY_LONGITUDE, lastLocation.longitude);
         }
 
+        // add gcm reg key
+        // TODO : 항상 보내면 안되는데..
+        SharedPreferences sharedPreferences = getAuthPreference();
+        String regid = sharedPreferences.getString(KEY_GCM_REG_ID, null);
+        if (regid != null) {
+            requestData.put(KEY_GCM_REG_ID, regid);
+        }
+
 
         Request request = new JsonObjectRequest(Request.Method.POST, URL_LOGIN, requestData,
                 new LoginCallback() {
@@ -134,6 +143,13 @@ public class Auth {
             requestData
                     .put(LastLocationManager.KEY_LATITUDE, lastLocation.latitude)
                     .put(LastLocationManager.KEY_LONGITUDE, lastLocation.longitude);
+        }
+
+        // add gcm reg key
+        SharedPreferences sharedPreferences = getAuthPreference();
+        String regid = sharedPreferences.getString(KEY_GCM_REG_ID, null);
+        if (regid != null) {
+            requestData.put(KEY_GCM_REG_ID, regid);
         }
 
         Request request = new JsonObjectRequest(

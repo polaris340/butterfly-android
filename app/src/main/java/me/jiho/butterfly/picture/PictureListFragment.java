@@ -5,12 +5,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import java.util.concurrent.Callable;
 
 import me.jiho.butterfly.R;
 
@@ -25,10 +28,11 @@ public class PictureListFragment extends Fragment
 
 
     private PictureDataManager.Type type;
-    private RecyclerView.LayoutManager layoutManager;
+    private LinearLayoutManager layoutManager;
     private RecyclerView recyclerView;
     private PictureListAdapter adapter;
     private ImageView fragmentHeader;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public static PictureListFragment newInstance(PictureDataManager.Type type) {
         Bundle args = new Bundle();
@@ -51,6 +55,23 @@ public class PictureListFragment extends Fragment
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
+        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.picturelist_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(adapter);
+
+        adapter.setOnPreLoading(new Callable() {
+            @Override
+            public Object call() throws Exception {
+                swipeRefreshLayout.setRefreshing(true);
+                return null;
+            }
+        });
+        adapter.setOnLoadingComplete(new Callable() {
+            @Override
+            public Object call() throws Exception {
+                swipeRefreshLayout.setRefreshing(false);
+                return null;
+            }
+        });
 
         fragmentHeader = (ImageView) rootView.findViewById(R.id.picturelist_fragment_header);
         fragmentHeader.setOnClickListener(this);
@@ -79,6 +100,10 @@ public class PictureListFragment extends Fragment
                     newY = -fragmentHeader.getMeasuredHeight();
                 }
                 fragmentHeader.setTranslationY(newY);
+
+                if (layoutManager.findLastVisibleItemPosition() == layoutManager.getItemCount()-1) {
+                    adapter.loadMore();
+                }
             }
         });
 
