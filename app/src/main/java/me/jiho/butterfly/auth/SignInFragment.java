@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.facebook.Request;
 import com.facebook.Response;
@@ -43,6 +44,14 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
             // Respond to session state changes, ex: updating the view
         }
     };
+
+
+    private View loginForm;
+    private View signinButtonset;
+
+    private EditText emailInput;
+    private EditText passwordInput;
+
 
 
     @Override
@@ -80,6 +89,14 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
 
         rootView.findViewById(R.id.auth_btn_sign_up).setOnClickListener(this);
 
+        emailInput = (EditText) rootView.findViewById(R.id.auth_et_email);
+        passwordInput = (EditText) rootView.findViewById(R.id.auth_et_password);
+        rootView.findViewById(R.id.auth_btn_email_login).setOnClickListener(this);
+        rootView.findViewById(R.id.auth_btn_submit).setOnClickListener(this);
+        rootView.findViewById(R.id.auth_btn_cancel).setOnClickListener(this);
+
+        loginForm = rootView.findViewById(R.id.auth_ll_login_form);
+        signinButtonset = rootView.findViewById(R.id.auth_ll_login_buttons);
 
         return rootView;
     }
@@ -213,6 +230,65 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
             case R.id.auth_btn_sign_up:
                 ((AuthActivity) getActivity()).setCurrentItem(AuthActivity.POSITION_SIGN_UP);
                 break;
+            case R.id.auth_btn_email_login:
+                signinButtonset.setVisibility(View.GONE);
+                loginForm.setVisibility(View.VISIBLE);
+                break;
+            case R.id.auth_btn_cancel:
+                loginForm.setVisibility(View.GONE);
+                signinButtonset.setVisibility(View.VISIBLE);
+                break;
+            case R.id.auth_btn_submit:
+                String email = emailInput.getText().toString();
+                String password = passwordInput.getText().toString();
+                if (email.length() == 0) {
+                    emailInput.requestFocus();
+                    return;
+                }
+                if (password.length() == 0) {
+                    passwordInput.requestFocus();
+                    return;
+                }
+                try {
+                    final Dialog dialog = DialogManager.getDefaultProgressDialog(getActivity());
+                    dialog.show();
+                    JSONObject jsonObject = new JSONObject()
+                            .put(Auth.KEY_EMAIL, email)
+                            .put(Auth.KEY_PASSWORD, password);
+                    Auth.getInstance().login(
+                            jsonObject,
+                            new Callable() {
+                                @Override
+                                public Object call() throws Exception {
+                                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                                    intent.addFlags(
+                                            Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                                    |Intent.FLAG_ACTIVITY_NEW_TASK
+                                    );
+                                    dialog.dismiss();
+                                    getActivity().startActivity(intent);
+                                    return null;
+                                }
+                            },
+                            new Callable() {
+                                @Override
+                                public Object call() throws Exception {
+                                    dialog.dismiss();
+                                    return null;
+                                }
+                            }
+
+                    );
+                } catch (JSONException e) {
+                    MessageUtil.showDefaultErrorMessage();
+                    e.printStackTrace();
+                    return;
+                }
+
+
+                break;
+
+
         }
     }
 }

@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
 
 import me.jiho.butterfly.MainActivity;
 import me.jiho.butterfly.R;
@@ -24,8 +23,6 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
     private static final String KEY_MESSAGE = "message";
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.e("gcm", "onReceive");
-        Log.e("gcm", intent.getStringExtra("message"));
 
         int notificationId = Integer.parseInt(intent.getStringExtra(KEY_GCM_NOTIFICATION_ID));
         String message = intent.getStringExtra(KEY_MESSAGE);

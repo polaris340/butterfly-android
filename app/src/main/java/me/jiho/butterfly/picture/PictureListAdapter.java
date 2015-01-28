@@ -263,6 +263,7 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
                 this.titleView.setTextColor(App.getContext().getResources().getColor(R.color.black_87));
             }
             this.titleView.setText(title);
+
             this.likeButton.setText(pictureData.getLikeCount() + " ");
             this.userNameButton.setText(pictureData.getUploaderName());
             this.mainImageView.setImageRatio(pictureData.getImageRatio());
@@ -292,7 +293,6 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
             Glide.with(App.getContext())
                     .load(pictureData.getPictureUrl())
                     //.dontAnimate()
-                            //.placeholder(R.drawable.loading_spinner)
                     .into(this.mainImageView);
         }
 

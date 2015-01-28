@@ -19,6 +19,7 @@
     <dimen name="span_large_4">224dp</dimen>
     <dimen name="span_large_5">280dp</dimen>
 
+    <dimen name="margin_thin">4dp</dimen>
     <dimen name="margin_1">8dp</dimen>
     <dimen name="margin_2">16dp</dimen>
     <dimen name="margin_3">24dp</dimen>

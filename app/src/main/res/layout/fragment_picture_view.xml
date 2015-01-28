@@ -3,7 +3,14 @@
     android:layout_height="match_parent"
     android:background="@android:color/black"
     tools:context="me.jiho.butterfly.picture.PictureViewActivity$PlaceholderFragment">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_image_white_48"
+        android:layout_centerInParent="true"
+        android:alpha=".70"
 
+        />
     <me.jiho.butterfly.view.PinchZoomImageView
         android:id="@+id/pictureview_main_image"
         android:layout_width="match_parent"
@@ -11,6 +18,7 @@
         android:scaleType="fitCenter"
         android:layout_centerInParent="true"
         android:adjustViewBounds="true"
+
         />
 
 </RelativeLayout>

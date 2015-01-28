@@ -5,26 +5,41 @@
     android:background="@android:color/white"
     android:orientation="vertical"
     >
-    <me.jiho.butterfly.view.BaseFontTextView
-        android:id="@+id/picturelist_tv_title"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_2"
-        android:textColor="@color/black_87"
-        android:text="@string/label_untitled"
-        android:gravity="center_vertical"
-        />
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    <me.jiho.butterfly.view.PictureListImageView
-        android:id="@+id/picturelist_main_image"
-        android:background="@color/black_12"
+        <me.jiho.butterfly.view.BaseFontTextView
+            android:id="@+id/picturelist_tv_title"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_2"
+            android:textColor="@color/black_87"
+            android:text="@string/label_untitled"
+            android:gravity="center_vertical"
+            android:layout_toLeftOf="@+id/picturelist_iv_delete"
+            />
+        <ImageButton
+            android:id="@+id/picturelist_iv_delete"
+            style="?android:borderlessButtonStyle"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:layout_width="@dimen/span_1"
+            android:layout_height="@dimen/span_1"
+            />
+    </RelativeLayout>
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scaleType="fitXY"
-        android:adjustViewBounds="true"/>
+        android:layout_height="wrap_content">
+        <me.jiho.butterfly.view.PictureListImageView
+            android:id="@+id/picturelist_main_image"
+            android:background="@color/black_12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"/>
         <me.jiho.butterfly.view.BaseFontButton
             android:id="@+id/picturelist_btn_show_image"
             style="?android:borderlessButtonStyle"
@@ -39,7 +54,7 @@
             android:text="@string/label_show_full_image"
             android:adjustViewBounds="true"
             />
-        </RelativeLayout>
+    </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

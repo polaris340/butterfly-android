@@ -43,7 +43,6 @@ public class PictureViewFragment extends Fragment {
         //mainImageView.setBackgroundColor(pictureData.getColor());
         Glide.with(this)
                 .load(pictureData.getPictureUrl())
-                        //.placeholder(R.drawable.loading_spinner)
                 .crossFade()
                 .into(mainImageView);
 

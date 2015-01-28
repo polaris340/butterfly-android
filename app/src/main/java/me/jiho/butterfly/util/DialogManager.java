@@ -14,6 +14,7 @@ public class DialogManager {
         ProgressDialog dialog = new ProgressDialog(context);
         dialog.setTitle(R.string.app_name);
         dialog.setMessage(context.getString(R.string.message_default_progress));
+        dialog.setCancelable(false);
         return dialog;
     }
 }

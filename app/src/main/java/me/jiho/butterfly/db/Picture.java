@@ -24,6 +24,7 @@ public class Picture {
     private long originalHeight;
     private String capturedTime;
     private long likeCount;
+    private long sendCount;
     private boolean isLiked;
     private String primaryColor;
     private long sendPictureId;
@@ -115,6 +116,13 @@ public class Picture {
     }
     public long getLikeCount() {
         return likeCount;
+    }
+
+    public void setSendCount(long sendCount) {
+        this.sendCount = sendCount;
+    }
+    public long getSendCount() {
+        return sendCount;
     }
 
     public void setIsLiked(boolean isLiked) {

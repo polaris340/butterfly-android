@@ -33,7 +33,7 @@
     <string name="label_confirm">OK</string>
     <string name="message_upload_start">Picture upload started</string>
     <string name="message_sending_picture">Sending picture...</string>
-    <string name="message_send_complete">Picture upload completed!</string>
+    <string name="message_send_complete">Your picture was sent successfully!</string>
     <string name="message_send_fail">Failed to upload picture</string>
     <string name="title_activity_picture_view">Picture View</string>
     <string name="label_show_full_image">Click to show full picture</string>
@@ -44,5 +44,10 @@
     <string name="message_default_progress">Please wait...</string>
     <string name="error_default">An unexpected error occured. Please try again later</string>
     <string name="label_send">Send</string>
+
+    <plurals name="message_send_count">
+        <item quantity="one">%d person received this picture.</item>
+        <item quantity="other">%d people received this picture.</item>
+    </plurals>
 
 </resources>

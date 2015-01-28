@@ -7,7 +7,7 @@
     android:background="@android:color/white"
     tools:context="me.jiho.butterfly.auth.AuthActivity$PlaceholderFragment">
 
-    
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,7 +23,58 @@
             android:layout_margin="@dimen/margin_2"
             />
         <LinearLayout
+            android:id="@+id/auth_ll_login_form"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            >
+            <me.jiho.butterfly.view.BaseFontEditText
+                android:id="@+id/auth_et_email"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:layout_width="@dimen/span_6"
+                android:layout_height="@dimen/span_1"
+                android:background="@null"
+                android:hint="@string/hint_email"
+                android:inputType="textEmailAddress"
+                android:singleLine="true"
+                />
+            <me.jiho.butterfly.view.BaseFontEditText
+                android:id="@+id/auth_et_password"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:layout_width="@dimen/span_6"
+                android:layout_height="@dimen/span_1"
+                android:background="@null"
+                android:hint="@string/hint_password"
+                android:inputType="textPassword"
+                android:singleLine="true"
+                />
 
+            <ImageButton
+                android:id="@+id/auth_btn_submit"
+                style="?android:borderlessButtonStyle"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:layout_width="@dimen/span_1"
+                android:layout_height="@dimen/span_1"
+                android:src="@drawable/ic_done_black_24dp"
+                />
+            <ImageButton
+                android:id="@+id/auth_btn_cancel"
+                style="?android:borderlessButtonStyle"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:layout_width="@dimen/span_1"
+                android:layout_height="@dimen/span_1"
+                android:src="@drawable/ic_arrow_back_grey600_24dp"
+                />
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/auth_ll_login_buttons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -51,6 +102,7 @@
                 android:layout_height="@dimen/span_1" />
 
             <me.jiho.butterfly.view.FontAwesomeButton
+                android:id="@+id/auth_btn_email_login"
                 style="?android:borderlessButtonStyle"
                 android:text="@string/fa_envelope_o"
                 android:textAppearance="?android:attr/textAppearanceLarge"
@@ -59,7 +111,7 @@
                 android:layout_height="@dimen/span_1" />
 
 
-            </LinearLayout>
+        </LinearLayout>
 
 
         <me.jiho.butterfly.view.ThemeFontButton
@@ -72,9 +124,10 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             style="?android:borderlessButtonStyle" />
 
-        </LinearLayout>
+    </LinearLayout>
 
 
 </RelativeLayout>
