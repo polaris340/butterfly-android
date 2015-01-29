@@ -163,4 +163,14 @@ public class Picture {
                 .create();
         return gson.fromJson(jsonArrayString, Picture[].class);
     }
+
+    public String getLikeCountString() {
+        if (likeCount > 1000000) {
+            return (likeCount / 1000000) + "m ";
+        } else if (likeCount > 1000) {
+            return (likeCount / 1000) + "k ";
+        } else {
+            return likeCount + " ";
+        }
+    }
 }

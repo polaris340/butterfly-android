@@ -30,6 +30,7 @@ import me.jiho.butterfly.network.NetworkRecyclerViewAdapter;
 import me.jiho.butterfly.network.VolleyRequestQueue;
 import me.jiho.butterfly.statics.Constants;
 import me.jiho.butterfly.util.MessageUtil;
+import me.jiho.butterfly.view.PictureLikeButton;
 import me.jiho.butterfly.view.PictureListImageView;
 
 /**
@@ -37,7 +38,6 @@ import me.jiho.butterfly.view.PictureListImageView;
  */
 public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.PictureListViewHolder>
         implements NetworkRecyclerViewAdapter<Picture>, PictureDataObserver, SwipeRefreshLayout.OnRefreshListener {
-    public static final String URL_LIKE = Constants.URLs.API_URL + "like-picture/";
     public static final String URL_GET_PICTURE = Constants.URLs.API_URL + "picture/";
 
     private PictureDataManager.Type type;
@@ -234,7 +234,7 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
         private TextView titleView;
         private PictureListImageView mainImageView;
         private Button userNameButton;
-        private Button likeButton;
+        private PictureLikeButton likeButton;
         private Button showFullImageButton;
 
         private Picture pictureData;
@@ -244,11 +244,10 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
             titleView = (TextView) rootView.findViewById(R.id.picturelist_tv_title);
             mainImageView = (PictureListImageView) rootView.findViewById(R.id.picturelist_main_image);
             userNameButton = (Button) rootView.findViewById(R.id.picturelist_btn_uploader);
-            likeButton = (Button) rootView.findViewById(R.id.picturelist_btn_like);
+            likeButton = (PictureLikeButton) rootView.findViewById(R.id.picturelist_btn_like);
             showFullImageButton = (Button) rootView.findViewById(R.id.picturelist_btn_show_image);
 
             userNameButton.setOnClickListener(this);
-            likeButton.setOnClickListener(this);
             mainImageView.setOnClickListener(this);
             showFullImageButton.setOnClickListener(this);
         }
@@ -264,7 +263,9 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
             }
             this.titleView.setText(title);
 
-            this.likeButton.setText(pictureData.getLikeCount() + " ");
+
+            this.likeButton.setPictureId(pictureData.getId());
+
             this.userNameButton.setText(pictureData.getUploaderName());
             this.mainImageView.setImageRatio(pictureData.getImageRatio());
             this.mainImageView.setBackgroundColor(pictureData.getColor());
@@ -275,19 +276,7 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
                 this.showFullImageButton.setVisibility(View.GONE);
                 this.mainImageView.setScaleType(ImageView.ScaleType.FIT_XY);
             }
-            int likeButtonIcon;
-            if (pictureData.getIsLiked()) {
-                likeButtonIcon = R.drawable.heart_active_18;
-            } else {
-                likeButtonIcon = R.drawable.heart_disabled_18;
-            }
 
-            this.likeButton.setCompoundDrawablesWithIntrinsicBounds(
-                    0,
-                    0,
-                    likeButtonIcon,
-                    0
-            );
 
 
             Glide.with(App.getContext())
@@ -299,58 +288,6 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.picturelist_btn_like:
-                    final Button likeButton = (Button) v;
-                    likeButton.setEnabled(false);
-                    pictureData.setIsLiked(
-                            !pictureData.getIsLiked()
-                    );
-                    likeButton.setCompoundDrawablesWithIntrinsicBounds(
-                            0,
-                            0,
-                            (pictureData.getIsLiked()?R.drawable.heart_active_18:R.drawable.heart_disabled_18),
-                            0
-                    );
-                    Request request = new JsonObjectRequest(
-                            Request.Method.POST,
-                            URL_LIKE + pictureData.getId(),
-                            null,
-                            new Response.Listener<JSONObject>() {
-                                @Override
-                                public void onResponse(JSONObject response) {
-                                    likeButton.setEnabled(true);
-                                    try {
-                                        Picture picture = Picture.fromJson(response.getString(Constants.Keys.MESSAGE));
-                                        PictureDataManager pictureDataManager = PictureDataManager.getInstance();
-                                        pictureDataManager.put(picture);
-                                        likeButton.setText(picture.getLikeCount() + " ");
-                                        //pictureDataManager.update(picture.getId());
-                                    } catch (JSONException e) {
-                                        MessageUtil.showDefaultErrorMessage();
-                                        e.printStackTrace();
-                                    }
-
-                                }
-                            },
-                            new DefaultErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    super.onErrorResponse(error);
-                                    likeButton.setEnabled(true);
-                                    pictureData.setIsLiked(
-                                            !pictureData.getIsLiked()
-                                    );
-                                    likeButton.setCompoundDrawablesWithIntrinsicBounds(
-                                            0,
-                                            0,
-                                            (pictureData.getIsLiked() ? R.drawable.heart_active_18 : R.drawable.heart_disabled_18),
-                                            0
-                                    );
-                                }
-                            }
-                    );
-                    VolleyRequestQueue.add(request);
-                    break;
                 case R.id.picturelist_btn_show_image:
                 case R.id.picturelist_main_image:
                     Intent intent = new Intent(v.getContext(),PictureViewActivity.class);

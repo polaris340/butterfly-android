@@ -72,4 +72,16 @@ public class PictureViewActivity extends ActionBarActivity {
         setResult(Activity.RESULT_OK, resultIntent);
         finish();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mFragmentPagerAdapter.addToObservable();
+    }
+
+    @Override
+    protected void onPause() {
+        mFragmentPagerAdapter.removeFromObservable();
+        super.onPause();
+    }
 }

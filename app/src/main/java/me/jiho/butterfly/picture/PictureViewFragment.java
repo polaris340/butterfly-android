@@ -6,17 +6,25 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
 import me.jiho.butterfly.R;
 import me.jiho.butterfly.db.Picture;
+import me.jiho.butterfly.view.Hideable;
+import me.jiho.butterfly.view.PictureLikeButton;
+import me.jiho.butterfly.view.PinchZoomImageView;
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * Created by jiho on 1/15/15.
  */
 public class PictureViewFragment extends Fragment {
+
+    private Hideable header;
+    private Hideable footer;
 
 
     public static PictureViewFragment newInstance(PictureDataManager.Type type, int position) {
@@ -32,7 +40,7 @@ public class PictureViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_picture_view, container, false);
 
-        ImageView mainImageView = (ImageView) rootView.findViewById(R.id.pictureview_main_image);
+        PinchZoomImageView mainImageView = (PinchZoomImageView) rootView.findViewById(R.id.pictureview_main_image);
         PictureDataManager.Type type = PictureDataManager.Type.valueOf(getArguments().getString(PictureDataManager.KEY_TYPE));
         int position = getArguments().getInt(PictureDataManager.KEY_POSITION);
         PictureDataManager manager = PictureDataManager.getInstance();
@@ -46,6 +54,38 @@ public class PictureViewFragment extends Fragment {
                 .crossFade()
                 .into(mainImageView);
 
+        TextView titleView = (TextView) rootView.findViewById(R.id.pictureview_tv_title);
+        String title = pictureData.getTitle();
+        if (title == null || title.equals("null")) {
+            titleView.setTextColor(getResources().getColor(R.color.white_70));
+            titleView.setText(R.string.label_untitled);
+        } else {
+            titleView.setText(title);
+        }
+
+        Button uploaderNameButton = (Button) rootView.findViewById(R.id.pictureview_btn_uploader);
+        uploaderNameButton.setText(pictureData.getUploaderName());
+
+        PictureLikeButton likeButton = (PictureLikeButton) rootView.findViewById(R.id.pictureview_btn_like);
+        likeButton.setPictureId(pictureData.getId());
+
+        header = new Hideable(rootView.findViewById(R.id.pictureview_rl_header));
+        footer = new Hideable(rootView.findViewById(R.id.pictureview_rl_footer));
+
+        mainImageView
+                .getPhotoViewAttacher()
+                .setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
+                    @Override
+                    public void onPhotoTap(View view, float v, float v2) {
+                        if (header.isShown()) {
+                            header.hide();
+                            footer.hide();
+                        } else {
+                            header.show();
+                            footer.show();
+                        }
+                    }
+                });
 
 
         return rootView;

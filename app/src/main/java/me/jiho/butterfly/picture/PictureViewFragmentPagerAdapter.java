@@ -19,9 +19,9 @@ public class PictureViewFragmentPagerAdapter extends FragmentPagerAdapter
     public PictureViewFragmentPagerAdapter(FragmentManager fm, PictureDataManager.Type type) {
         super(fm);
         this.type = type;
-        PictureDataManager
-                .getInstance()
-                .addObserver(type, this);
+        //PictureDataManager
+        //        .getInstance()
+        //        .addObserver(type, this);
     }
 
 
@@ -50,5 +50,17 @@ public class PictureViewFragmentPagerAdapter extends FragmentPagerAdapter
     @Override
     public void update(long pictureId) {
         notifyDataSetChanged();
+    }
+
+    public void addToObservable() {
+        PictureDataManager
+                .getInstance()
+                .addObserver(type, this);
+    }
+
+    public void removeFromObservable() {
+        PictureDataManager
+                .getInstance()
+                .removeObserver(type, this);
     }
 }

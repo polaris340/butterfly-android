@@ -37,4 +37,8 @@ public class PinchZoomImageView extends ImageView {
         super.setImageDrawable(drawable);
         mAttacher.update();
     }
+
+    public PhotoViewAttacher getPhotoViewAttacher() {
+        return mAttacher;
+    }
 }

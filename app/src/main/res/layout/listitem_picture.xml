@@ -88,7 +88,7 @@
         </LinearLayout>
 
 
-        <me.jiho.butterfly.view.BaseFontButton
+        <me.jiho.butterfly.view.PictureLikeButton
             style="?android:borderlessButtonStyle"
             android:id="@+id/picturelist_btn_like"
             android:layout_width="wrap_content"
