@@ -27,7 +27,7 @@ import java.util.concurrent.Callable;
 
 import me.jiho.butterfly.MainActivity;
 import me.jiho.butterfly.R;
-import me.jiho.butterfly.util.DialogManager;
+import me.jiho.butterfly.util.DialogUtil;
 import me.jiho.butterfly.util.MessageUtil;
 
 /**
@@ -108,7 +108,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
             // If the session is open, make an API call to get user data
             // and define a new callback to handle the response
 
-            final Dialog dialog = DialogManager.getDefaultProgressDialog(getActivity());
+            final Dialog dialog = DialogUtil.getDefaultProgressDialog(getActivity());
             dialog.show();
             Request request = Request.newMeRequest(session, new Request.GraphUserCallback() {
                 @Override
@@ -250,7 +250,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                     return;
                 }
                 try {
-                    final Dialog dialog = DialogManager.getDefaultProgressDialog(getActivity());
+                    final Dialog dialog = DialogUtil.getDefaultProgressDialog(getActivity());
                     dialog.show();
                     JSONObject jsonObject = new JSONObject()
                             .put(Auth.KEY_EMAIL, email)

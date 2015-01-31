@@ -9,7 +9,7 @@ import me.jiho.butterfly.R;
 /**
  * Created by jiho on 1/22/15.
  */
-public class DialogManager {
+public class DialogUtil {
     public static Dialog getDefaultProgressDialog(Context context) {
         ProgressDialog dialog = new ProgressDialog(context);
         dialog.setTitle(R.string.app_name);

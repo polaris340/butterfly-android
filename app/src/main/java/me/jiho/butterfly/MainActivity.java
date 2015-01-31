@@ -1,10 +1,12 @@
 package me.jiho.butterfly;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -23,16 +25,20 @@ import com.melnykov.fab.FloatingActionButton;
 
 import org.json.JSONException;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import me.jiho.butterfly.auth.Auth;
 import me.jiho.butterfly.auth.AuthActivity;
 import me.jiho.butterfly.picture.PictureUploadDialogFragment;
+import me.jiho.butterfly.util.FileUtil;
 
 
-public class MainActivity extends ActionBarActivity implements View.OnClickListener{
+public class MainActivity extends ActionBarActivity
+        implements View.OnClickListener, View.OnLongClickListener {
     private static final String TAG = "MainActivity";
+    public static final int SELECT_PICTURE = 128;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -101,6 +107,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         // set listener
         FloatingActionButton takePictureButton = (FloatingActionButton) findViewById(R.id.btn_take_picture);
         takePictureButton.setOnClickListener(this);
+        takePictureButton.setOnLongClickListener(this);
 
 
 
@@ -144,9 +151,29 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.btn_take_picture:
                 DialogFragment uploadDialogFragment = new PictureUploadDialogFragment();
-
                 uploadDialogFragment.show(getSupportFragmentManager(), PictureUploadDialogFragment.TAG);
                 break;
+        }
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, SELECT_PICTURE);
+        return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == SELECT_PICTURE) {
+                Uri selectedImage = data.getData();
+                PictureUploadDialogFragment uploadDialogFragment = new PictureUploadDialogFragment();
+                uploadDialogFragment.show(getSupportFragmentManager(), PictureUploadDialogFragment.TAG);
+                uploadDialogFragment.setUploadTargetFile(selectedImage);
+            }
         }
     }
 
@@ -258,6 +285,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
                     // Persist the regID - no need to register again.
                     storeRegistrationId(regid);
+                    Log.i(TAG, "register completed");
                 } catch (IOException ex) {
                     msg = "Error :" + ex.getMessage();
                     // If there is an error, don't just keep trying to register.
@@ -269,7 +297,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
             @Override
             protected void onPostExecute(String msg) {
-                Log.i(TAG, "register completed");
             }
 
         }.execute(null, null, null);
@@ -314,4 +341,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         editor.putInt(PROPERTY_APP_VERSION, appVersion);
         editor.commit();
     }
+
 }
+
+

@@ -17,7 +17,7 @@ import java.util.concurrent.Callable;
 
 import me.jiho.butterfly.MainActivity;
 import me.jiho.butterfly.R;
-import me.jiho.butterfly.util.DialogManager;
+import me.jiho.butterfly.util.DialogUtil;
 import me.jiho.butterfly.util.InputUtil;
 import me.jiho.butterfly.util.MessageUtil;
 
@@ -72,7 +72,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
         }
 
         // do login
-        Dialog dialog = DialogManager.getDefaultProgressDialog(getActivity());
+        Dialog dialog = DialogUtil.getDefaultProgressDialog(getActivity());
         dialog.show();
         try {
             Auth.getInstance().signup(

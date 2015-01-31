@@ -1,11 +1,14 @@
 package me.jiho.butterfly.view;
 
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
+import android.graphics.drawable.Drawable;
 import android.support.v7.graphics.Palette;
 import android.util.AttributeSet;
 import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
 
 import java.io.File;
 
@@ -17,18 +20,25 @@ import me.jiho.butterfly.util.ColorUtil;
  */
 public class UploadTargetImageView extends ImageView{
     private File currentImageFile;
-
+    private AnimationDrawable placeholder;
 
     public UploadTargetImageView(Context context) {
         super(context);
+        init();
     }
 
     public UploadTargetImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init();
     }
 
     public UploadTargetImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init();
+    }
+
+    private void init() {
+
     }
 
     @Override
@@ -44,14 +54,27 @@ public class UploadTargetImageView extends ImageView{
     }
 
 
+    @Override
+    public void setImageDrawable(Drawable drawable) {
+        super.setImageDrawable(drawable);
+        getImagePrimaryColor();
+    }
+
     public void setImageFile(File file) {
+        this.currentImageFile = file;
+        Glide.with(getContext())
+                .load(file)
+                .placeholder(R.drawable.loading_placeholder)
+                .into(this);
+        /*
         this.currentImageFile = file;
         if (file == null)
             setImageURI(null);
         else {
             setImageURI(Uri.fromFile(file));
-            getImagePrimaryColor();
+            //getImagePrimaryColor();
         }
+        //*/
     }
 
     public File getImageFile() {
@@ -59,8 +82,13 @@ public class UploadTargetImageView extends ImageView{
     }
 
     public String getImagePrimaryColor() {
-        Palette palette = Palette.generate(((BitmapDrawable)getDrawable()).getBitmap(), 1);
-        int color = palette.getMutedColor(getResources().getColor(R.color.lightgray));
+        int color = getResources().getColor(R.color.lightgray);
+        try {
+            Palette palette = Palette.generate(((BitmapDrawable)getDrawable()).getBitmap(), 1);
+            color = palette.getMutedColor(getResources().getColor(R.color.lightgray));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return ColorUtil.toHexString(color);
     }
 }
