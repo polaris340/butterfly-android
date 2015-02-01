@@ -275,13 +275,6 @@ public class PictureUploadDialogFragment extends DialogFragment
                         }
                         uploading = false;
 
-
-                        // TODO : move uploaded file to gallery
-
-
-                        // delete file after upload completed
-                        //uploadTargetFile.delete();
-
                         showNotification(NotificationType.UPLOAD_COMPLETE);
 
                     }
@@ -388,55 +381,49 @@ public class PictureUploadDialogFragment extends DialogFragment
     }
 
 
-    // TODO : merge to one function
     public void setUploadTargetFile(Uri contentUri) {
         try {
-            uploadTargetFile = createImageFile();
-            FileUtil.copy(contentUri, uploadTargetFile, new Callable() {
-                @Override
-                public Object call() throws Exception {
-                    if (getDialog() != null) {
+            setUploadTargetFile(App.getContext().getContentResolver().openInputStream(contentUri));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
-                        //uploadTargetImageView.setImageFile(null);
-                        uploadTargetImageView.setImageFile(uploadTargetFile);
-                    }
-                    return null;
-                }
-            }, new Callable() {
-                @Override
-                public Object call() throws Exception {
-                    MessageUtil.showDefaultErrorMessage();
-                    return null;
-                }
-            });
+    public void setUploadTargetFile(File file) {
+        try {
+            InputStream is = new FileInputStream(file);
+            setUploadTargetFile(is);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
-    public void setUploadTargetFile(File file) {
-        try {
-            uploadTargetFile = createImageFile();
-            FileUtil.copy(file, uploadTargetFile, new Callable() {
-                @Override
-                public Object call() throws Exception {
-                    if (getDialog() != null) {
-                        //uploadTargetImageView.setImageFile(null);
-                        uploadTargetImageView.setImageFile(uploadTargetFile);
-                    }
-                    return null;
-                }
-            }, new Callable() {
-                @Override
-                public Object call() throws Exception {
-                    MessageUtil.showDefaultErrorMessage();
-                    return null;
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void setUploadTargetFile(InputStream is) {
+        if (uploadTargetFile == null) {
+            try {
+                uploadTargetFile = createImageFile();
+            } catch (IOException e) {
+                MessageUtil.showDefaultErrorMessage();
+                e.printStackTrace();
+                return;
+            }
         }
-
+        FileUtil.copy(is, uploadTargetFile, new Callable() {
+            @Override
+            public Object call() throws Exception {
+                if (getDialog() != null) {
+                    //uploadTargetImageView.setImageFile(null);
+                    uploadTargetImageView.setImageFile(uploadTargetFile);
+                }
+                return null;
+            }
+        }, new Callable() {
+            @Override
+            public Object call() throws Exception {
+                MessageUtil.showDefaultErrorMessage();
+                return null;
+            }
+        });
     }
 }

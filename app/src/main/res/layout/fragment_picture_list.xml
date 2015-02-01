@@ -17,11 +17,11 @@
 
     <ImageView
         android:id="@+id/picturelist_fragment_header"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/span_1"
         android:layout_height="@dimen/span_1"
         android:src="@drawable/ic_received_24"
         android:scaleType="center"
-        android:layout_gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
         />
 
 </RelativeLayout>

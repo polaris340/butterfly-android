@@ -27,7 +27,7 @@
     <string name="label_cancel">Cancel</string>
     <string name="label_upload">Upload</string>
     <string name="label_edit">Edit</string>
-    <string name="label_captured_by">Captured by</string>
+    <string name="label_captured_by">by</string>
     <string name="label_untitled">Untitled</string>
     <string name="message_uploading_picture">Now uploading your picture. Please wait a moment!</string>
     <string name="label_confirm">OK</string>

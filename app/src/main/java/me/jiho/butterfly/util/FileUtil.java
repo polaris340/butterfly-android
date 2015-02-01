@@ -9,6 +9,7 @@ import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,71 +43,50 @@ public class FileUtil {
         return new File(filePath);
     }
 
-
-    // TODO : merge to one function
     public static void copy(final File src, final File dst, final Callable successCallback, final Callable errorCallback) {
-        new AsyncTask<Object, Void, Boolean>() {
-
-            @Override
-            protected Boolean doInBackground(Object[] params) {
-                try {
-                    FileInputStream fis = new FileInputStream(src);
-                    FileOutputStream newfos = new FileOutputStream(dst);
-                    int readcount = 0;
-                    byte[] buffer = new byte[1024];
-                    while ((readcount = fis.read(buffer, 0, 1024)) != -1) {
-                        newfos.write(buffer, 0, readcount);
-                    }
-                    newfos.close();
-                    fis.close();
-                    return true;
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return false;
-                }
+        try {
+            InputStream is = new FileInputStream(src);
+            copy(is, dst, successCallback, errorCallback);
+        } catch (FileNotFoundException e) {
+            try {
+                errorCallback.call();
+            } catch (Exception e1) {
+                MessageUtil.showDefaultErrorMessage();
+                e1.printStackTrace();
             }
-
-            @Override
-            protected void onPostExecute(Boolean result) {
-                super.onPostExecute(result);
-                if (result) {
-                    try {
-                        successCallback.call();
-                    } catch (Exception e) {
-                        MessageUtil.showDefaultErrorMessage();
-                        e.printStackTrace();
-                    }
-                } else {
-                    try {
-                        errorCallback.call();
-                    } catch (Exception e) {
-                        MessageUtil.showDefaultErrorMessage();
-                        e.printStackTrace();
-                    }
-                }
-
-            }
-        }.execute();
-
+            e.printStackTrace();
+        }
     }
 
-    // TODO : merge to one function
     public static void copy(final Uri src, final File dst, final Callable successCallback, final Callable errorCallback) {
+        try {
+            InputStream is = App.getContext().getContentResolver().openInputStream(src);
+            copy(is, dst, successCallback, errorCallback);
+        } catch (FileNotFoundException e) {
+            try {
+                errorCallback.call();
+            } catch (Exception e1) {
+                MessageUtil.showDefaultErrorMessage();
+                e1.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    public static void copy(final InputStream is, final File dst, final Callable successCallback, final Callable errorCallback) {
         new AsyncTask<Object, Void, Boolean>() {
 
             @Override
             protected Boolean doInBackground(Object[] params) {
                 try {
-                    InputStream fis = App.getContext().getContentResolver().openInputStream(src);
                     FileOutputStream newfos = new FileOutputStream(dst);
                     int readcount = 0;
                     byte[] buffer = new byte[1024];
-                    while ((readcount = fis.read(buffer, 0, 1024)) != -1) {
+                    while ((readcount = is.read(buffer, 0, 1024)) != -1) {
                         newfos.write(buffer, 0, readcount);
                     }
                     newfos.close();
-                    fis.close();
+                    is.close();
                     return true;
 
                 } catch (IOException e) {
@@ -136,6 +116,7 @@ public class FileUtil {
 
             }
         }.execute();
+
     }
 
 
