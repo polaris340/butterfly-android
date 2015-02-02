@@ -22,6 +22,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
+import me.jiho.animatedtogglebutton.MenuAnimatedToggleButton;
 import me.jiho.butterfly.App;
 import me.jiho.butterfly.R;
 import me.jiho.butterfly.db.Picture;
@@ -236,6 +237,7 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
         private Button userNameButton;
         private PictureLikeButton likeButton;
         private Button showFullImageButton;
+        private MenuAnimatedToggleButton menuButton;
 
         private Picture pictureData;
 
@@ -246,6 +248,10 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
             userNameButton = (Button) rootView.findViewById(R.id.picturelist_btn_uploader);
             likeButton = (PictureLikeButton) rootView.findViewById(R.id.picturelist_btn_like);
             showFullImageButton = (Button) rootView.findViewById(R.id.picturelist_btn_show_image);
+            menuButton = (MenuAnimatedToggleButton) rootView.findViewById(R.id.picturelist_tb_menu);
+            menuButton.setColor(
+                    App.getContext().getResources().getColor(R.color.black_54)
+            );
 
             userNameButton.setOnClickListener(this);
             mainImageView.setOnClickListener(this);
@@ -277,6 +283,7 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
                 this.mainImageView.setScaleType(ImageView.ScaleType.FIT_XY);
             }
 
+            menuButton.setChecked(false);
 
 
             Glide.with(App.getContext())
