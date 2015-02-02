@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -249,9 +251,13 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
             likeButton = (PictureLikeButton) rootView.findViewById(R.id.picturelist_btn_like);
             showFullImageButton = (Button) rootView.findViewById(R.id.picturelist_btn_show_image);
             menuButton = (MenuAnimatedToggleButton) rootView.findViewById(R.id.picturelist_tb_menu);
+            menuButton.setInterpolator(new DecelerateInterpolator(), true);
+            menuButton.setInterpolator(new AccelerateInterpolator(), false);
+            menuButton.setRotateAngle(90f);
             menuButton.setColor(
                     App.getContext().getResources().getColor(R.color.black_54)
             );
+
 
             userNameButton.setOnClickListener(this);
             mainImageView.setOnClickListener(this);

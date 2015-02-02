@@ -16,6 +16,7 @@ public class MenuAnimatedToggleButton extends AnimatedToggleButton {
     private static final int RIGHT  = 0b0100;
     private static final int BOTTOM = 0b1000;
 
+
     private Paint paint;
 
     public MenuAnimatedToggleButton(Context context) {

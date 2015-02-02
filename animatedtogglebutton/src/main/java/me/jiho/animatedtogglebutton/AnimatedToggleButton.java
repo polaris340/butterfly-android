@@ -1,5 +1,6 @@
 package me.jiho.animatedtogglebutton;
 
+import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -12,10 +13,12 @@ import android.widget.CompoundButton;
  */
 public abstract class AnimatedToggleButton extends CompoundButton {
     public static final int DEFAULT_ANIMATION_DURATION = 200;
+
     protected float animationProgress = 0f;
 
     private ValueAnimator checkAnimator;
     private ValueAnimator uncheckAnimator;
+    private float rotateAngle = 0f;
 
     public AnimatedToggleButton(Context context) {
         super(context);
@@ -72,9 +75,25 @@ public abstract class AnimatedToggleButton extends CompoundButton {
             throw new IllegalArgumentException("Progress must in range 0f to 1f");
         }
         this.animationProgress = newProgress;
+        setRotation(rotateAngle * animationProgress);
         invalidate();
     }
 
+    public void setRotateAngle(float newAngle) {
+        this.rotateAngle = newAngle;
+    }
+
+    public void setInterpolator(TimeInterpolator interpolator) {
+        setInterpolator(interpolator, true);
+        setInterpolator(interpolator, false);
+    }
+    public void setInterpolator(TimeInterpolator interpolator, boolean checked) {
+        if (checked) {
+            checkAnimator.setInterpolator(interpolator);
+        } else {
+            uncheckAnimator.setInterpolator(interpolator);
+        }
+    }
 
     @Override
     public void setChecked(boolean checked) {
