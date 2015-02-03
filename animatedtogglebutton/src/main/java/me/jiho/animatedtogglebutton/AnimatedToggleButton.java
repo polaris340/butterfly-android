@@ -97,12 +97,15 @@ public abstract class AnimatedToggleButton extends CompoundButton {
 
     @Override
     public void setChecked(boolean checked) {
-        super.setChecked(checked);
-        try {
-            if (checked) checkAnimator.start();
-            else uncheckAnimator.start();
-        } catch (NullPointerException e) {
-            Log.i("AnimatedToggleButton", "Animator not initialized yet.");
+        if (isChecked() != checked) {
+            try {
+                if (checked) checkAnimator.start();
+                else uncheckAnimator.start();
+            } catch (NullPointerException e) {
+                Log.i("AnimatedToggleButton", "Animator may not initialized yet.");
+            }
         }
+        super.setChecked(checked);
+
     }
 }
