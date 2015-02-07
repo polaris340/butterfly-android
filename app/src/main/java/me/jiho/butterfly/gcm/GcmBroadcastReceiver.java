@@ -1,12 +1,12 @@
 package me.jiho.butterfly.gcm;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
@@ -17,7 +17,6 @@ import me.jiho.butterfly.R;
  * Created by jiho on 1/25/15.
  */
 public class GcmBroadcastReceiver extends BroadcastReceiver {
-    public static final int VIBRATE_DURATION = 500;
 
     private static final String KEY_GCM_NOTIFICATION_ID = "gcm_notification_id";
     private static final String KEY_MESSAGE = "message";
@@ -29,10 +28,6 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
         if (notificationId == 0 || message == null) {
             return;
         }
-
-        // notification with vibrate
-        Vibrator vibe = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-        vibe.vibrate(VIBRATE_DURATION);
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(context)
@@ -61,7 +56,10 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
         mBuilder.setContentIntent(resultPendingIntent);
         NotificationManager mNotificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        Notification notification = mBuilder.build();
+        notification.defaults |= Notification.DEFAULT_ALL;
 // mId allows you to update the notification later on.
-        mNotificationManager.notify(notificationId, mBuilder.build());
+        mNotificationManager.notify(notificationId, notification);
     }
 }

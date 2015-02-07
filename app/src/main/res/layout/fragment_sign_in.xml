@@ -8,27 +8,104 @@
     tools:context="me.jiho.butterfly.auth.AuthActivity$PlaceholderFragment">
 
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_centerInParent="true">
 
-        <ImageView
-            android:id="@+id/auth_iv_logo"
-            android:layout_width="@dimen/logo_width"
+
+
+        <LinearLayout
+            android:id="@+id/auth_ll_login_buttons"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/logo"
-            android:layout_margin="@dimen/margin_2"
-            />
+            android:layout_centerInParent="true"
+            >
+
+            <ImageView
+                android:id="@+id/auth_iv_logo"
+                android:layout_width="@dimen/logo_width"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/logo"
+                android:layout_margin="@dimen/margin_2"
+                />
+
+
+            <LinearLayout
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+                <me.jiho.butterfly.view.CustomFacebookLoginButton
+                    xmlns:fb="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/auth_btn_facebook_login"
+                    style="?android:borderlessButtonStyle"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="@dimen/span_1"
+                    android:layout_height="@dimen/span_1"
+                    fb:login_text="@string/fa_facebook"
+                    fb:logout_text="@string/fa_facebook"
+
+
+                    />
+
+                <me.jiho.butterfly.view.FontAwesomeButton
+                    style="?android:borderlessButtonStyle"
+                    android:text="@string/fa_google_plus"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="@dimen/span_1"
+                    android:layout_height="@dimen/span_1"
+                    android:visibility="gone"/>
+
+                <me.jiho.butterfly.view.FontAwesomeButton
+                    android:id="@+id/auth_btn_email_login"
+                    style="?android:borderlessButtonStyle"
+                    android:text="@string/fa_envelope_o"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="@dimen/span_1"
+                    android:layout_height="@dimen/span_1" />
+
+
+            </LinearLayout>
+            <me.jiho.butterfly.view.ThemeFontButton
+                android:id="@+id/auth_btn_sign_up"
+
+                android:layout_gravity="center_horizontal"
+                android:text="@string/label_sign_up_with_email"
+                android:textColor="@android:color/black"
+                android:alpha=".54"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                style="?android:borderlessButtonStyle" />
+        </LinearLayout>
+
+
         <LinearLayout
             android:id="@+id/auth_ll_login_form"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:orientation="vertical"
             android:visibility="gone"
             >
+            <me.jiho.butterfly.view.ThemeFontTextView
+                android:drawableTop="@drawable/ic_sent_48"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/label_sign_in"
+                android:layout_margin="@dimen/margin_2"
+                />
             <me.jiho.butterfly.view.BaseFontEditText
                 android:id="@+id/auth_et_email"
                 android:layout_gravity="center_horizontal"
@@ -72,62 +149,10 @@
                 />
 
 
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/auth_ll_login_buttons"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:orientation="horizontal">
-            <me.jiho.butterfly.view.CustomFacebookLoginButton
-                xmlns:fb="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/auth_btn_facebook_login"
-                style="?android:borderlessButtonStyle"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:layout_gravity="center_horizontal"
-                android:layout_width="@dimen/span_1"
-                android:layout_height="@dimen/span_1"
-                fb:login_text="@string/fa_facebook"
-                fb:logout_text="@string/fa_facebook"
-
-
-                />
-
-            <me.jiho.butterfly.view.FontAwesomeButton
-                style="?android:borderlessButtonStyle"
-                android:text="@string/fa_google_plus"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:layout_gravity="center_horizontal"
-                android:layout_width="@dimen/span_1"
-                android:layout_height="@dimen/span_1" />
-
-            <me.jiho.butterfly.view.FontAwesomeButton
-                android:id="@+id/auth_btn_email_login"
-                style="?android:borderlessButtonStyle"
-                android:text="@string/fa_envelope_o"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:layout_gravity="center_horizontal"
-                android:layout_width="@dimen/span_1"
-                android:layout_height="@dimen/span_1" />
-
 
         </LinearLayout>
 
-
-        <me.jiho.butterfly.view.ThemeFontButton
-            android:id="@+id/auth_btn_sign_up"
-
-            android:layout_gravity="center_horizontal"
-            android:text="@string/label_sign_up_with_email"
-            android:textColor="@android:color/black"
-            android:alpha=".54"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            style="?android:borderlessButtonStyle" />
-
-    </LinearLayout>
+    </RelativeLayout>
 
 
 </RelativeLayout>

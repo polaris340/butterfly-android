@@ -8,10 +8,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import me.jiho.butterfly.R;
+import me.jiho.butterfly.util.MessageUtil;
 
 public class AuthActivity extends ActionBarActivity {
     public static final int POSITION_SIGN_IN = 0;
     public static final int POSITION_SIGN_UP = 1;
+    private static final int PRESS_BACK_INTERVAL = 2000;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -27,6 +29,7 @@ public class AuthActivity extends ActionBarActivity {
      */
     ViewPager mViewPager;
 
+    long lastBackPressedTime = 0;
 
 
     @Override
@@ -73,4 +76,18 @@ public class AuthActivity extends ActionBarActivity {
         mViewPager.setCurrentItem(position);
     }
 
+    @Override
+    public void onBackPressed() {
+        if (mViewPager.getCurrentItem() == 1) {
+            setCurrentItem(0);
+        } else {
+            long pressedTime = System.currentTimeMillis();
+            if (pressedTime - lastBackPressedTime < PRESS_BACK_INTERVAL) {
+                super.onBackPressed();
+            } else {
+                MessageUtil.showMessage(R.string.message_press_back_again);
+            }
+            lastBackPressedTime = pressedTime;
+        }
+    }
 }

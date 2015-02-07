@@ -1,5 +1,7 @@
 package me.jiho.butterfly.auth;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,6 +29,7 @@ import java.util.concurrent.Callable;
 
 import me.jiho.butterfly.MainActivity;
 import me.jiho.butterfly.R;
+import me.jiho.butterfly.statics.Constants;
 import me.jiho.butterfly.util.DialogUtil;
 import me.jiho.butterfly.util.MessageUtil;
 
@@ -52,6 +55,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
     private EditText emailInput;
     private EditText passwordInput;
 
+    private ValueAnimator toEmailSignIn;
+    private ValueAnimator toAuthMain;
 
 
     @Override
@@ -60,6 +65,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
         uiHelper = new UiLifecycleHelper(getActivity(), callback);
         uiHelper.onCreate(savedInstanceState);
 
+        createValueAnimators();
 
         /* create key hash
         try {
@@ -134,13 +140,14 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                                                 new Callable() {
                                                     @Override
                                                     public Object call() throws Exception {
+
                                                         Intent intent = new Intent(getActivity(), MainActivity.class);
                                                         intent.addFlags(
                                                                 Intent.FLAG_ACTIVITY_CLEAR_TASK
                                                                 |Intent.FLAG_ACTIVITY_NEW_TASK
                                                         );
-                                                        dialog.dismiss();
                                                         getActivity().startActivity(intent);
+                                                        dialog.dismiss();
                                                         return null;
                                                     }
                                                 },
@@ -163,6 +170,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                     }
                 }
             });
+
             Request.executeBatchAsync(request);
 
         } else if (state.isClosed()) {
@@ -178,11 +186,11 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
         // For scenarios where the main activity is launched and user
         // session is not null, the session state change notification
         // may not be triggered. Trigger it if it's open/closed.
-        Session session = Session.getActiveSession();
-        if (session != null &&
-                (session.isOpened() || session.isClosed()) ) {
-            onSessionStateChange(session, session.getState(), null);
-        }
+//        Session session = Session.getActiveSession();
+//        if (session != null &&
+//                (session.isOpened() || session.isClosed()) ) {
+//            onSessionStateChange(session, session.getState(), null);
+//        }
 
         uiHelper.onResume();
     }
@@ -231,12 +239,14 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                 ((AuthActivity) getActivity()).setCurrentItem(AuthActivity.POSITION_SIGN_UP);
                 break;
             case R.id.auth_btn_email_login:
-                signinButtonset.setVisibility(View.GONE);
-                loginForm.setVisibility(View.VISIBLE);
+                //signinButtonset.setVisibility(View.GONE);
+                //loginForm.setVisibility(View.VISIBLE);
+                toEmailSignIn.start();
                 break;
             case R.id.auth_btn_cancel:
-                loginForm.setVisibility(View.GONE);
-                signinButtonset.setVisibility(View.VISIBLE);
+                //loginForm.setVisibility(View.GONE);
+                //signinButtonset.setVisibility(View.VISIBLE);
+                toAuthMain.start();
                 break;
             case R.id.auth_btn_submit:
                 String email = emailInput.getText().toString();
@@ -291,4 +301,70 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
 
         }
     }
+
+    private void createValueAnimators() {
+        toEmailSignIn = ValueAnimator.ofFloat(0f, 1f);
+        toEmailSignIn.setDuration(Constants.Integers.ANIMATION_DURATION * 2);
+        toEmailSignIn.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float progress = (float) animation.getAnimatedValue();
+                loginForm.setAlpha(progress < .5f ? 0f : (progress-.5f)*2);
+                signinButtonset.setAlpha(progress > .5f ? 0f : 1f - (progress)*2);
+            }
+        });
+        toEmailSignIn.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                loginForm.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                signinButtonset.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        toAuthMain= ValueAnimator.ofFloat(0f, 1f);
+        toAuthMain.setDuration(Constants.Integers.ANIMATION_DURATION * 2);
+        toAuthMain.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float progress = (float) animation.getAnimatedValue();
+                signinButtonset.setAlpha(progress < .5f ? 0f : (progress-.5f)*2);
+                loginForm.setAlpha(progress > .5f ? 0f : 1f - (progress)*2);
+            }
+        });
+        toAuthMain.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                signinButtonset.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                loginForm.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+    }
+
 }
