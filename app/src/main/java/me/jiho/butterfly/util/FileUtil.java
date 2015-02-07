@@ -4,23 +4,126 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import org.apache.http.util.ByteArrayBuffer;
+
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.Callable;
 
 import me.jiho.butterfly.App;
+import me.jiho.butterfly.R;
 
 /**
  * Created by jiho on 1/30/15.
  */
 public class FileUtil {
+    public static File createNewImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + ".jpg";
+
+
+        File storageDir = new File(
+                Environment.getExternalStorageDirectory()
+                , App.getContext().getString(R.string.app_name)
+        );
+
+
+        if (!storageDir.exists()) {
+            storageDir.mkdirs();
+        }
+
+        File newImageFile = new File(
+                storageDir,
+                imageFileName
+        );
+
+        newImageFile.createNewFile();
+
+        return newImageFile;
+    }
+
+    public static void download(final String stringUrl, final File into, final Callable successCallback, final Callable errorCallback) {
+        new AsyncTask<Object, Object, Boolean>() {
+
+            @Override
+            protected Boolean doInBackground(Object[] params) {
+                try {
+                    URL url = new URL(stringUrl);
+
+                    URLConnection connection = url.openConnection();
+                    InputStream is = connection.getInputStream();
+                    BufferedInputStream bis = new BufferedInputStream(is);
+
+
+                    // TODO : check buffer size
+                    ByteArrayBuffer baf = new ByteArrayBuffer(50);
+                    int current;
+                    while ((current = bis.read()) != -1) {
+                        baf.append((byte) current);
+                    }
+
+                    /* Convert the Bytes read to a String. */
+                    FileOutputStream fos = new FileOutputStream(into);
+                    fos.write(baf.toByteArray());
+                    fos.close();
+
+                    return true;
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                    return false;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+
+
+            }
+
+            @Override
+            protected void onPostExecute(Boolean success) {
+                super.onPostExecute(success);
+
+                if (success) {
+                    if (successCallback != null) {
+                        try {
+                            successCallback.call();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            MessageUtil.showDefaultErrorMessage();
+                        }
+                    }
+                } else {
+                    if (errorCallback != null) {
+                        try {
+                            errorCallback.call();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            MessageUtil.showDefaultErrorMessage();
+                        }
+                    } else {
+                        MessageUtil.showDefaultErrorMessage();
+                    }
+                }
+            }
+        }.execute();
+    }
+
+
     public static File fromUri(Uri uri) {
         // And to convert the image URI (content:// format) to the direct file system path of the image file
         // From "http://www.androidsnippets.com/get-file-path-of-gallery-image"

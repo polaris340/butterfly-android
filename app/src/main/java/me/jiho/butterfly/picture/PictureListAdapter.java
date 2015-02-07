@@ -6,8 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,7 +22,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
-import me.jiho.animatedtogglebutton.MenuAnimatedToggleButton;
 import me.jiho.butterfly.App;
 import me.jiho.butterfly.R;
 import me.jiho.butterfly.db.Picture;
@@ -239,7 +236,7 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
         private Button userNameButton;
         private PictureLikeButton likeButton;
         private Button showFullImageButton;
-        private MenuAnimatedToggleButton menuButton;
+        private PictureMenuToggleButton menuButton;
 
         private Picture pictureData;
 
@@ -250,14 +247,22 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
             userNameButton = (Button) rootView.findViewById(R.id.picturelist_btn_uploader);
             likeButton = (PictureLikeButton) rootView.findViewById(R.id.picturelist_btn_like);
             showFullImageButton = (Button) rootView.findViewById(R.id.picturelist_btn_show_image);
-            menuButton = (MenuAnimatedToggleButton) rootView.findViewById(R.id.picturelist_tb_menu);
-            menuButton.setInterpolator(new DecelerateInterpolator(), true);
-            menuButton.setInterpolator(new AccelerateInterpolator(), false);
-            menuButton.setRotateAngle(90f);
-            menuButton.setColor(
-                    App.getContext().getResources().getColor(R.color.black_54)
+
+            PictureMenuToggleButton.Builder builder = new PictureMenuToggleButton.Builder(rootView.getContext());
+            builder.setLayout(R.layout.btn_picture_menu)
+                    .setMenuToggleButtonId(R.id.picturemenu_btn_menu)
+                    .addButton(R.id.picturemenu_btn_save)
+                    .addButton(R.id.picturemenu_btn_delete);
+
+            menuButton = builder.create();
+
+
+            menuButton.getMenuToggleButton().setColor(
+                    rootView.getContext().getResources().getColor(R.color.black_54)
             );
 
+            ((ViewGroup)rootView.findViewById(R.id.picturelist_tb_menu))
+                    .addView(menuButton.getRootView());
 
             userNameButton.setOnClickListener(this);
             mainImageView.setOnClickListener(this);
@@ -290,12 +295,14 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
             }
 
             menuButton.setChecked(false);
+            menuButton.setPictureId(pictureData.getId());
 
 
             Glide.with(App.getContext())
                     .load(pictureData.getPictureUrl())
-                    //.dontAnimate()
+                            //.dontAnimate()
                     .into(this.mainImageView);
+
         }
 
         @Override

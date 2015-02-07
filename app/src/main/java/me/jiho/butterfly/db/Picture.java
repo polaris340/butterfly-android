@@ -28,6 +28,8 @@ public class Picture {
     private boolean isLiked;
     private String primaryColor;
     private long sendPictureId;
+    private String countryName;
+    private boolean isMine;
 
 
     public Picture() {
@@ -144,6 +146,20 @@ public class Picture {
     }
     public String getPrimaryColor() {
         return primaryColor;
+    }
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
+    }
+    public String getCountryName() {
+        return countryName;
+    }
+
+    public void setIsMine(boolean isMine) {
+        this.isMine = isMine;
+    }
+    public boolean getIsMine() {
+        return isMine;
     }
 
     public int getColor() {

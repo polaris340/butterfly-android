@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide;
 
 import me.jiho.butterfly.R;
 import me.jiho.butterfly.db.Picture;
-import me.jiho.butterfly.view.Hideable;
+import me.jiho.butterfly.view.HideableViewWrapper;
 import me.jiho.butterfly.view.PictureLikeButton;
 import me.jiho.butterfly.view.PinchZoomImageView;
 import uk.co.senab.photoview.PhotoViewAttacher;
@@ -23,8 +23,8 @@ import uk.co.senab.photoview.PhotoViewAttacher;
  */
 public class PictureViewFragment extends Fragment {
 
-    private Hideable header;
-    private Hideable footer;
+    private HideableViewWrapper header;
+    private HideableViewWrapper footer;
 
 
     public static PictureViewFragment newInstance(PictureDataManager.Type type, int position) {
@@ -69,8 +69,23 @@ public class PictureViewFragment extends Fragment {
         PictureLikeButton likeButton = (PictureLikeButton) rootView.findViewById(R.id.pictureview_btn_like);
         likeButton.setPictureId(pictureData.getId());
 
-        header = new Hideable(rootView.findViewById(R.id.pictureview_rl_header));
-        footer = new Hideable(rootView.findViewById(R.id.pictureview_rl_footer));
+        header = new HideableViewWrapper(rootView.findViewById(R.id.pictureview_rl_header));
+        footer = new HideableViewWrapper(rootView.findViewById(R.id.pictureview_rl_footer));
+
+        // set PictureMenuButton
+        PictureMenuToggleButton.Builder builder = new PictureMenuToggleButton.Builder(getActivity())
+                .setLayout(R.layout.btn_picture_menu)
+                .setMenuToggleButtonId(R.id.picturemenu_btn_menu)
+                .addButton(R.id.picturemenu_btn_delete)
+                .addButton(R.id.picturemenu_btn_save);
+        PictureMenuToggleButton pictureMenuToggleButton = builder.create();
+        pictureMenuToggleButton.getMenuToggleButton().setColor(
+                getResources().getColor(R.color.white_70)
+        );
+        pictureMenuToggleButton.setPictureId(pictureData.getId());
+        ((ViewGroup) rootView.findViewById(R.id.pictureview_tb_menu))
+                .addView(pictureMenuToggleButton.getRootView());
+
 
         mainImageView
                 .getPhotoViewAttacher()

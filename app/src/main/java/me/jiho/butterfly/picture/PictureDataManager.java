@@ -55,6 +55,16 @@ public class PictureDataManager implements PictureDataObservable {
         return pictureHashMap.get(pictureId);
     }
 
+    public void delete(long pictureId) {
+        for (Type t:Type.values()) {
+            ArrayList<Long> pictureIdList = pictureIdListHashMap.get(t);
+            if (pictureIdList.remove(pictureId)) {
+                update(t);
+            }
+        }
+
+    }
+
     public ArrayList<Long> getPictureIdList(Type type) {
         if (!pictureIdListHashMap.containsKey(type)) {
             pictureIdListHashMap.put(type, new ArrayList<Long>());

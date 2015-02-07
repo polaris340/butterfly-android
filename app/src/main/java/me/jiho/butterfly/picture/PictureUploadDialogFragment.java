@@ -11,7 +11,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -40,8 +39,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.concurrent.Callable;
 
 import me.jiho.butterfly.App;
@@ -148,7 +145,7 @@ public class PictureUploadDialogFragment extends DialogFragment
                 // 현재 파일이 없는 경우에만 생성
                 // 있으면 덮어씀
                 try {
-                    uploadTargetFile = createImageFile();
+                    uploadTargetFile = FileUtil.createNewImageFile();
                 } catch (IOException ex) {
                     // Error occurred while creating the File
                     ex.printStackTrace();
@@ -198,32 +195,6 @@ public class PictureUploadDialogFragment extends DialogFragment
     }
 
 
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + ".jpg";
-
-
-        File storageDir = new File(
-                Environment.getExternalStorageDirectory()
-                , App.getContext().getString(R.string.app_name)
-        );
-
-
-        if (!storageDir.exists()) {
-            Log.e("storageDir", "not exists");
-            Log.e("mkdirs", storageDir.mkdirs() + "");
-        }
-
-        File newImageFile = new File(
-                storageDir,
-                imageFileName
-        );
-
-        newImageFile.createNewFile();
-
-        return newImageFile;
-    }
 
 
     @Override
@@ -408,7 +379,7 @@ public class PictureUploadDialogFragment extends DialogFragment
     public void setUploadTargetFile(InputStream is) {
         if (uploadTargetFile == null) {
             try {
-                uploadTargetFile = createImageFile();
+                uploadTargetFile = FileUtil.createNewImageFile();
             } catch (IOException e) {
                 MessageUtil.showDefaultErrorMessage();
                 e.printStackTrace();

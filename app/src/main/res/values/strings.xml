@@ -44,6 +44,10 @@
     <string name="message_default_progress">Please wait...</string>
     <string name="error_default">An unexpected error occured. Please try again later</string>
     <string name="label_send">Send</string>
+    <string name="message_picture_download_start">Downloading image...</string>
+    <string name="message_picture_download_complete">Download complete</string>
+    <string name="confirm_delete">Are you sure you want to delete this picture?\nYou can\'t see this picture again.</string>
+    <string name="label_ok">OK</string>
 
     <plurals name="message_send_count">
         <item quantity="one">%d person received this picture.</item>

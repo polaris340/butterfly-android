@@ -4,6 +4,8 @@ import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.CompoundButton;
@@ -12,9 +14,11 @@ import android.widget.CompoundButton;
  * Created by user on 2015. 2. 2..
  */
 public abstract class AnimatedToggleButton extends CompoundButton {
+    private static final String TAG = "AnimatedToggleButton";
     public static final int DEFAULT_ANIMATION_DURATION = 200;
 
     protected float animationProgress = 0f;
+    protected Paint paint;
 
     private ValueAnimator checkAnimator;
     private ValueAnimator uncheckAnimator;
@@ -35,8 +39,13 @@ public abstract class AnimatedToggleButton extends CompoundButton {
         init();
     }
 
-    private void init() {
+    protected void init() {
+        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setColor(Color.BLACK);
+        paint.setStyle(Paint.Style.FILL);
+
         setClickable(true);
+        if (isChecked()) animationProgress = 1f;
         checkAnimator = ValueAnimator.ofFloat(0f, 1f);
         uncheckAnimator = ValueAnimator.ofFloat(1f, 0f);
 
@@ -59,10 +68,14 @@ public abstract class AnimatedToggleButton extends CompoundButton {
     @Override
     final protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        draw(canvas, animationProgress);
+        drawIcon(canvas);
     }
 
-    protected abstract void draw(Canvas canvas, float animationProgress);
+    protected abstract void drawIcon(Canvas canvas);
+
+    public void setColor(int color) {
+        paint.setColor(color);
+    }
 
     public void setDuration(int duration) {
         checkAnimator.setDuration(duration);
@@ -102,10 +115,11 @@ public abstract class AnimatedToggleButton extends CompoundButton {
                 if (checked) checkAnimator.start();
                 else uncheckAnimator.start();
             } catch (NullPointerException e) {
-                Log.i("AnimatedToggleButton", "Animator may not initialized yet.");
+                Log.i(TAG, "Animator may not initialized yet.");
             }
         }
         super.setChecked(checked);
 
     }
+
 }

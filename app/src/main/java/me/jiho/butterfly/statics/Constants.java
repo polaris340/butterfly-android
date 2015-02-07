@@ -12,4 +12,8 @@ public interface Constants {
     public interface Keys {
         public static final String MESSAGE = "message";
     }
+
+    public interface Integers {
+        public static final int ANIMATION_DURATION = 200;
+    }
 }
