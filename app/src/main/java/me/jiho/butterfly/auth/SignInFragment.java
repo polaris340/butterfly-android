@@ -141,11 +141,16 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                                                     @Override
                                                     public Object call() throws Exception {
 
-                                                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                                                        Intent intent = new Intent(
+                                                                getActivity(),
+                                                                MainActivity.class
+                                                        );
+
                                                         intent.addFlags(
                                                                 Intent.FLAG_ACTIVITY_CLEAR_TASK
                                                                 |Intent.FLAG_ACTIVITY_NEW_TASK
                                                         );
+
                                                         getActivity().startActivity(intent);
                                                         dialog.dismiss();
                                                         return null;

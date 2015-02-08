@@ -74,7 +74,7 @@
 
 
             </LinearLayout>
-            <me.jiho.butterfly.view.ThemeFontButton
+            <me.jiho.butterfly.view.BaseFontButton
                 android:id="@+id/auth_btn_sign_up"
 
                 android:layout_gravity="center_horizontal"

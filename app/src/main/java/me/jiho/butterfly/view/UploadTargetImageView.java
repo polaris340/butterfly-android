@@ -46,11 +46,10 @@ public class UploadTargetImageView extends ImageView{
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
         // set size to square when image is not set
+        int width = getMeasuredWidth();
         if (getDrawable() == null) {
-            int width = getMeasuredWidth();
             setMeasuredDimension(width, width);
         }
-
     }
 
 
