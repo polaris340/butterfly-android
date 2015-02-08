@@ -11,6 +11,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
 import me.jiho.butterfly.App;
@@ -33,9 +34,15 @@ public class Auth {
     public static final String KEY_PASSWORD = "password";
     public static final String KEY_GCM_REG_ID = "gcm_reg_id";
 
-
+    public enum LoginState {
+        NOT_LOGGED_IN,
+        PENDING,
+        LOGGED_IN
+    }
 
     private String accessToken;
+    private ArrayList<LoginStateChangeObserver> loginStateChangeObservers;
+    private LoginState currentLoginState = LoginState.NOT_LOGGED_IN;
 
     private static Auth instance = new Auth();
 
@@ -44,6 +51,7 @@ public class Auth {
     }
 
     private Auth() {
+        loginStateChangeObservers = new ArrayList<>();
         accessToken = Auth.getAuthPreference()
                 .getString(KEY_ACCESS_TOKEN, null);
     }
@@ -60,10 +68,13 @@ public class Auth {
         return accessToken;
     }
 
-    public boolean isLogin() {
+    public boolean hasAccessToken() {
         return accessToken != null;
     }
 
+    public boolean isLogin() {
+        return currentLoginState == LoginState.LOGGED_IN;
+    }
 
 
     public void loginWithAccessToken() throws JSONException {
@@ -112,6 +123,7 @@ public class Auth {
                                 e.printStackTrace();
                             }
                         }
+                        setCurrentLoginState(LoginState.LOGGED_IN);
                     }
                 },
                 new DefaultErrorListener() {
@@ -126,9 +138,10 @@ public class Auth {
                                 e.printStackTrace();
                             }
                         }
+                        setCurrentLoginState(LoginState.NOT_LOGGED_IN);
                     }
                 });
-
+        setCurrentLoginState(LoginState.PENDING);
         VolleyRequestQueue.add(request);
     }
 
@@ -170,6 +183,8 @@ public class Auth {
                             e.printStackTrace();
                         }
 
+                        setCurrentLoginState(LoginState.LOGGED_IN);
+
                     }
                 },
                 new DefaultErrorListener() {
@@ -179,8 +194,10 @@ public class Auth {
                         if (dialog != null) {
                             dialog.dismiss();
                         }
+                        setCurrentLoginState(LoginState.NOT_LOGGED_IN);
                     }
                 });
+        setCurrentLoginState(LoginState.PENDING);
         VolleyRequestQueue.add(request);
     }
 
@@ -188,5 +205,14 @@ public class Auth {
         return App.getContext().getSharedPreferences(KEY_PREF_AUTH, Context.MODE_PRIVATE);
     }
 
+    private void setCurrentLoginState(LoginState newState) {
+        currentLoginState = newState;
+        for (LoginStateChangeObserver o:loginStateChangeObservers) {
+            o.onLoginStateChanged(currentLoginState);
+        }
+    }
 
+    public void addLoginStateChangeObserver(LoginStateChangeObserver observer) {
+        loginStateChangeObservers.add(observer);
+    }
 }

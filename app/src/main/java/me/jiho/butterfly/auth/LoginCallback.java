@@ -15,8 +15,9 @@ public class LoginCallback implements Response.Listener<JSONObject> {
     @Override
     public void onResponse(JSONObject response) {
         if (response.has(Auth.KEY_ACCESS_TOKEN)) {
+            Auth auth = Auth.getInstance();
             try {
-                Auth.getInstance().setAccessToken(response.getString(Auth.KEY_ACCESS_TOKEN));
+                auth.setAccessToken(response.getString(Auth.KEY_ACCESS_TOKEN));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -39,6 +40,7 @@ public class LoginCallback implements Response.Listener<JSONObject> {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
         }
     }
 

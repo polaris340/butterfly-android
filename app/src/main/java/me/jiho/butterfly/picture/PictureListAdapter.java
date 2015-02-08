@@ -40,6 +40,9 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
         implements NetworkRecyclerViewAdapter<Picture>, PictureDataObserver, SwipeRefreshLayout.OnRefreshListener {
     public static final String URL_GET_PICTURE = Constants.URLs.API_URL + "picture/";
 
+    public static final int LAYOUT_LIST = 0;
+    public static final int LAYOUT_GRID = 1;
+
     private PictureDataManager.Type type;
     private PictureListFragment fragment;
     private boolean end = false;
@@ -47,6 +50,9 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
 
     private Callable onPreLoading;
     private Callable onLoadingComplete;
+
+    private int currentLayout = LAYOUT_LIST;
+
 
     public PictureListAdapter(PictureListFragment fragment, PictureDataManager.Type type) {
         this.fragment = fragment;
@@ -168,7 +174,12 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
     @Override
     public PictureListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View v = inflater.inflate(R.layout.listitem_picture, parent, false);
+        View v;
+        if (currentLayout == LAYOUT_LIST)
+            v = inflater.inflate(R.layout.listitem_picture_linear, parent, false);
+        else {
+            v = inflater.inflate(R.layout.listitem_picture_grid, parent, false);
+        }
         return new PictureListViewHolder(v);
     }
 
@@ -229,10 +240,18 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
         loadMore(true);
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return currentLayout;
+    }
+
+    public void setLayout(int layout) {
+        this.currentLayout = layout;
+    }
 
     public class PictureListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView titleView;
-        private PictureListImageView mainImageView;
+        private ImageView mainImageView;
         private Button userNameButton;
         private PictureLikeButton likeButton;
         private Button showFullImageButton;
@@ -242,65 +261,75 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
 
         public PictureListViewHolder(View rootView) {
             super(rootView);
-            titleView = (TextView) rootView.findViewById(R.id.picturelist_tv_title);
-            mainImageView = (PictureListImageView) rootView.findViewById(R.id.picturelist_main_image);
-            userNameButton = (Button) rootView.findViewById(R.id.picturelist_btn_uploader);
-            likeButton = (PictureLikeButton) rootView.findViewById(R.id.picturelist_btn_like);
-            showFullImageButton = (Button) rootView.findViewById(R.id.picturelist_btn_show_image);
 
-            PictureMenuToggleButton.Builder builder = new PictureMenuToggleButton.Builder(rootView.getContext());
-            builder.setLayout(R.layout.btn_picture_menu)
-                    .setMenuToggleButtonId(R.id.picturemenu_btn_menu)
-                    .addButton(R.id.picturemenu_btn_save)
-                    .addButton(R.id.picturemenu_btn_delete);
-
-            menuButton = builder.create();
-
-
-            menuButton.getMenuToggleButton().setColor(
-                    rootView.getContext().getResources().getColor(R.color.black_54)
-            );
-
-            ((ViewGroup)rootView.findViewById(R.id.picturelist_tb_menu))
-                    .addView(menuButton.getRootView());
-
-            userNameButton.setOnClickListener(this);
+            mainImageView = (ImageView) rootView.findViewById(R.id.picturelist_main_image);
             mainImageView.setOnClickListener(this);
-            showFullImageButton.setOnClickListener(this);
+            if (currentLayout == LAYOUT_LIST) {
+                titleView = (TextView) rootView.findViewById(R.id.picturelist_tv_title);
+                userNameButton = (Button) rootView.findViewById(R.id.picturelist_btn_uploader);
+                likeButton = (PictureLikeButton) rootView.findViewById(R.id.picturelist_btn_like);
+                showFullImageButton = (Button) rootView.findViewById(R.id.picturelist_btn_show_image);
+
+                PictureMenuToggleButton.Builder builder = new PictureMenuToggleButton.Builder(rootView.getContext());
+                builder.setLayout(R.layout.btn_picture_menu)
+                        .setMenuToggleButtonId(R.id.picturemenu_btn_menu)
+                        .addButton(R.id.picturemenu_btn_save)
+                        .addButton(R.id.picturemenu_btn_delete);
+
+                menuButton = builder.create();
+
+
+                menuButton.getMenuToggleButton().setColor(
+                        rootView.getContext().getResources().getColor(R.color.black_54)
+                );
+
+                ((ViewGroup)rootView.findViewById(R.id.picturelist_tb_menu))
+                        .addView(menuButton.getRootView());
+
+                userNameButton.setOnClickListener(this);
+                showFullImageButton.setOnClickListener(this);
+            }
         }
 
         public void setPictureData(Picture pictureData) {
             this.pictureData = pictureData;
-            String title = pictureData.getTitle();
-            if (title == null || title.equals("null")) {
-                title = App.getContext().getString(R.string.label_untitled);
-                this.titleView.setTextColor(App.getContext().getResources().getColor(R.color.black_26));
-            } else {
-                this.titleView.setTextColor(App.getContext().getResources().getColor(R.color.black_87));
-            }
-            this.titleView.setText(title);
-
-
-            this.likeButton.setPictureId(pictureData.getId());
-
-            this.userNameButton.setText(pictureData.getUploaderName());
-            this.mainImageView.setImageRatio(pictureData.getImageRatio());
             this.mainImageView.setBackgroundColor(pictureData.getColor());
-            if (pictureData.getImageRatio() > 1) {
-                this.showFullImageButton.setVisibility(View.VISIBLE);
-                this.mainImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            } else {
-                this.showFullImageButton.setVisibility(View.GONE);
-                this.mainImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+
+            if (currentLayout == LAYOUT_LIST) {
+                String title = pictureData.getTitle();
+                if (title == null || title.equals("null")) {
+                    title = App.getContext().getString(R.string.label_untitled);
+                    this.titleView.setTextColor(App.getContext().getResources().getColor(R.color.black_26));
+                } else {
+                    this.titleView.setTextColor(App.getContext().getResources().getColor(R.color.black_87));
+                }
+                this.titleView.setText(title);
+
+
+                this.likeButton.setPictureId(pictureData.getId());
+
+                this.userNameButton.setText(pictureData.getUploaderName());
+                ((PictureListImageView) this.mainImageView).setImageRatio(pictureData.getImageRatio());
+                if (pictureData.getImageRatio() > 1) {
+                    this.showFullImageButton.setVisibility(View.VISIBLE);
+                    this.mainImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                } else {
+                    this.showFullImageButton.setVisibility(View.GONE);
+                    this.mainImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                }
+
+                menuButton.setChecked(false);
+                menuButton.setPictureId(pictureData.getId());
             }
 
-            menuButton.setChecked(false);
-            menuButton.setPictureId(pictureData.getId());
+            String pictureUrl;
+            if (currentLayout == LAYOUT_LIST) {
+                pictureUrl = pictureData.getPictureUrl();
+            } else {pictureUrl = pictureData.getThumbnailUrl();
 
-
+            }
             Glide.with(App.getContext())
-                    .load(pictureData.getPictureUrl())
-                            //.dontAnimate()
+                    .load(pictureUrl)
                     .into(this.mainImageView);
 
         }
@@ -321,5 +350,7 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
 
             }
         }
+
+
     }
 }

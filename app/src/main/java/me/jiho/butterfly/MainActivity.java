@@ -25,14 +25,12 @@ import com.melnykov.fab.FloatingActionButton;
 
 import org.json.JSONException;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import me.jiho.butterfly.auth.Auth;
 import me.jiho.butterfly.auth.AuthActivity;
 import me.jiho.butterfly.picture.PictureUploadDialogFragment;
-import me.jiho.butterfly.util.FileUtil;
 
 
 public class MainActivity extends ActionBarActivity
@@ -73,7 +71,7 @@ public class MainActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!Auth.getInstance().isLogin()) {
+        if (!Auth.getInstance().hasAccessToken()) {
             Intent intent = new Intent(this, AuthActivity.class);
             intent.addFlags(
                     Intent.FLAG_ACTIVITY_CLEAR_TASK

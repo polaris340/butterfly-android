@@ -12,16 +12,35 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/picture_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/span_1"
+            android:clipToPadding="false"
+            />
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <ImageView
+    <RelativeLayout
         android:id="@+id/picturelist_fragment_header"
-        android:layout_width="@dimen/span_1"
-        android:layout_height="@dimen/span_1"
-        android:src="@drawable/ic_received_24"
-        android:scaleType="center"
-        android:layout_centerHorizontal="true"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/picturelist_list_icon"
+            android:layout_width="@dimen/span_1"
+            android:layout_height="@dimen/span_1"
+            android:src="@drawable/ic_received_24"
+            android:scaleType="center"
+            android:layout_centerHorizontal="true"
+            />
+
+        <me.jiho.animatedtogglebutton.ListGridToggleButton
+            android:id="@+id/picturelist_tb_layout"
+            android:layout_width="@dimen/span_1"
+            android:layout_height="@dimen/span_1"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/margin_2"
+            android:checked="true"
+            />
+        </RelativeLayout>
+
 
 </RelativeLayout>

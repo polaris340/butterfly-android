@@ -28,7 +28,9 @@
         android:id="@+id/confirm_message"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/margin_2"
+        android:paddingLeft="@dimen/margin_4"
+        android:paddingRight="@dimen/margin_4"
+        android:paddingBottom="@dimen/margin_2"
         android:textAppearance="?android:attr/textAppearanceMedium"
         />
     <LinearLayout

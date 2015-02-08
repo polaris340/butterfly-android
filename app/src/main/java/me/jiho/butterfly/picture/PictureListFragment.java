@@ -6,33 +6,43 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 
 import java.util.concurrent.Callable;
 
+import me.jiho.animatedtogglebutton.ListGridToggleButton;
 import me.jiho.butterfly.R;
+import me.jiho.butterfly.auth.Auth;
+import me.jiho.butterfly.auth.LoginStateChangeObserver;
 
 /**
  * Created by jiho on 1/13/15.
  */
 public class PictureListFragment extends Fragment
-    implements View.OnClickListener {
+        implements View.OnClickListener, LoginStateChangeObserver {
 
     public static final String KEY_TYPE = "type";
     public static final int REQUEST_CODE_PICTURE_VIEW = 16;
 
 
     private PictureDataManager.Type type;
-    private LinearLayoutManager layoutManager;
+    private LinearLayoutManager linearLayoutManager;
+    private GridLayoutManager gridLayoutManager;
     private RecyclerView recyclerView;
     private PictureListAdapter adapter;
-    private ImageView fragmentHeader;
+    private ImageView fragmentHeaderIcon;
+    private View fragmentHeader;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private ListGridToggleButton layoutToggleButton;
 
     public static PictureListFragment newInstance(PictureDataManager.Type type) {
         Bundle args = new Bundle();
@@ -51,12 +61,18 @@ public class PictureListFragment extends Fragment
         recyclerView = (RecyclerView) rootView.findViewById(R.id.picture_recycler_view);
         adapter = new PictureListAdapter(this, type);
         PictureDataManager.getInstance().addObserver(type, adapter);
-        recyclerView.setAdapter(adapter);
-        layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
+        Auth.getInstance().addLoginStateChangeObserver(this);
+
+        linearLayoutManager = new LinearLayoutManager(getActivity());
+        gridLayoutManager = new GridLayoutManager(getActivity(), 3);
+        gridLayoutManager.setOrientation(OrientationHelper.VERTICAL);
+
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.picturelist_refresh_layout);
-        swipeRefreshLayout.setOnRefreshListener(adapter);
+        swipeRefreshLayout.setRefreshing(true);
+
 
         adapter.setOnPreLoading(new Callable() {
             @Override
@@ -73,17 +89,18 @@ public class PictureListFragment extends Fragment
             }
         });
 
-        fragmentHeader = (ImageView) rootView.findViewById(R.id.picturelist_fragment_header);
-        fragmentHeader.setOnClickListener(this);
+        fragmentHeaderIcon = (ImageView) rootView.findViewById(R.id.picturelist_list_icon);
+        fragmentHeaderIcon.setOnClickListener(this);
         switch (type) {
             case SENT:
-                fragmentHeader.setImageResource(R.drawable.ic_sent_24);
+                fragmentHeaderIcon.setImageResource(R.drawable.ic_sent_24);
                 break;
             case RECEIVED:
-                fragmentHeader.setImageResource(R.drawable.ic_received_24);
+                fragmentHeaderIcon.setImageResource(R.drawable.ic_received_24);
                 break;
         }
 
+        fragmentHeader = rootView.findViewById(R.id.picturelist_fragment_header);
         recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -101,12 +118,37 @@ public class PictureListFragment extends Fragment
                 }
                 fragmentHeader.setTranslationY(newY);
 
-                if (layoutManager.findLastVisibleItemPosition() == layoutManager.getItemCount()-1) {
+                if (linearLayoutManager.findLastVisibleItemPosition() == linearLayoutManager.getItemCount()-1) {
                     adapter.loadMore();
                 }
             }
         });
 
+
+
+
+        // toggle layout
+        layoutToggleButton = (ListGridToggleButton) rootView.findViewById(R.id.picturelist_tb_layout);
+        layoutToggleButton.setAlpha(.5f);
+        layoutToggleButton.setColor(getResources().getColor(R.color.primary));
+        layoutToggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                int firstVisibleItemPosition;
+                if (isChecked) {
+                    firstVisibleItemPosition = gridLayoutManager.findFirstVisibleItemPosition();
+                    adapter.setLayout(PictureListAdapter.LAYOUT_LIST);
+                    recyclerView.setLayoutManager(linearLayoutManager);
+
+                    recyclerView.scrollToPosition(firstVisibleItemPosition);
+                } else {
+                    firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
+                    adapter.setLayout(PictureListAdapter.LAYOUT_GRID);
+                    recyclerView.setLayoutManager(gridLayoutManager);
+                    recyclerView.scrollToPosition(firstVisibleItemPosition);
+                }
+            }
+        });
 
 
         return rootView;
@@ -115,7 +157,7 @@ public class PictureListFragment extends Fragment
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.picturelist_fragment_header:
+            case R.id.picturelist_list_icon:
                 recyclerView.smoothScrollToPosition(0);
                 break;
         }
@@ -129,6 +171,30 @@ public class PictureListFragment extends Fragment
                 int position = data.getIntExtra(PictureDataManager.KEY_POSITION,0);
                 recyclerView.scrollToPosition(position);
             }
+        }
+    }
+
+    @Override
+    public void onLoginStateChanged(Auth.LoginState loginState) {
+        switch (loginState) {
+            case LOGGED_IN:
+                // add adapter after logged in
+                recyclerView.setAdapter(adapter);
+                recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                    @Override
+                    public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                        LinearLayoutManager currentLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                        if (currentLayoutManager.findLastVisibleItemPosition()
+                                == adapter.getItemCount() - 1) {
+                            adapter.loadMore();
+                        }
+
+                    }
+                });
+
+                swipeRefreshLayout.setRefreshing(false);
+                swipeRefreshLayout.setOnRefreshListener(adapter);
+                break;
         }
     }
 }

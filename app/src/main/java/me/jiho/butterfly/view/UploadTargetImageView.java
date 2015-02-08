@@ -56,7 +56,6 @@ public class UploadTargetImageView extends ImageView{
     @Override
     public void setImageDrawable(Drawable drawable) {
         super.setImageDrawable(drawable);
-        getImagePrimaryColor();
     }
 
     public void setImageFile(File file) {
