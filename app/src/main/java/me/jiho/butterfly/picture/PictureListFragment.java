@@ -23,6 +23,7 @@ import me.jiho.animatedtogglebutton.ListGridToggleButton;
 import me.jiho.butterfly.R;
 import me.jiho.butterfly.auth.Auth;
 import me.jiho.butterfly.auth.LoginStateChangeObserver;
+import me.jiho.butterfly.view.FadeHideableViewWrapper;
 
 /**
  * Created by jiho on 1/13/15.
@@ -129,26 +130,9 @@ public class PictureListFragment extends Fragment
 
         // toggle layout
         layoutToggleButton = (ListGridToggleButton) rootView.findViewById(R.id.picturelist_tb_layout);
-        layoutToggleButton.setAlpha(.5f);
+        layoutToggleButton.setVisibility(View.GONE);
         layoutToggleButton.setColor(getResources().getColor(R.color.primary));
-        layoutToggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                int firstVisibleItemPosition;
-                if (isChecked) {
-                    firstVisibleItemPosition = gridLayoutManager.findFirstVisibleItemPosition();
-                    adapter.setLayout(PictureListAdapter.LAYOUT_LIST);
-                    recyclerView.setLayoutManager(linearLayoutManager);
 
-                    recyclerView.scrollToPosition(firstVisibleItemPosition);
-                } else {
-                    firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
-                    adapter.setLayout(PictureListAdapter.LAYOUT_GRID);
-                    recyclerView.setLayoutManager(gridLayoutManager);
-                    recyclerView.scrollToPosition(firstVisibleItemPosition);
-                }
-            }
-        });
 
 
         return rootView;
@@ -191,6 +175,27 @@ public class PictureListFragment extends Fragment
 
                     }
                 });
+
+                new FadeHideableViewWrapper(layoutToggleButton).show();
+                layoutToggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        int firstVisibleItemPosition;
+                        if (isChecked) {
+                            firstVisibleItemPosition = gridLayoutManager.findFirstVisibleItemPosition();
+                            adapter.setLayout(PictureListAdapter.LAYOUT_LIST);
+                            recyclerView.setLayoutManager(linearLayoutManager);
+
+                            recyclerView.scrollToPosition(firstVisibleItemPosition);
+                        } else {
+                            firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
+                            adapter.setLayout(PictureListAdapter.LAYOUT_GRID);
+                            recyclerView.setLayoutManager(gridLayoutManager);
+                            recyclerView.scrollToPosition(firstVisibleItemPosition);
+                        }
+                    }
+                });
+
 
                 swipeRefreshLayout.setRefreshing(false);
                 swipeRefreshLayout.setOnRefreshListener(adapter);
