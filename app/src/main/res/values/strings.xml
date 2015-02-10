@@ -27,7 +27,7 @@
     <string name="label_cancel">Cancel</string>
     <string name="label_upload">Upload</string>
     <string name="label_edit">Edit</string>
-    <string name="label_captured_by">by</string>
+    <string name="label_from">from</string>
     <string name="label_untitled">Untitled</string>
     <string name="message_uploading_picture">Now uploading your picture. Please wait a moment!</string>
     <string name="label_confirm">OK</string>
@@ -50,7 +50,10 @@
     <string name="label_ok">OK</string>
     <string name="message_press_back_again">Press back again to leave</string>
     <string name="label_sign_in">Sign In</string>
-    <plurals name="message_send_count">
+    <string name="label_unknown">Unknown</string>
+    <string name="message_send_count">%d people received this picture.</string>
+    <string name="label_close">Close</string>
+    <plurals name="message_send_count_plural">
         <item quantity="one">%d person received this picture.</item>
         <item quantity="other">%d people received this picture.</item>
     </plurals>

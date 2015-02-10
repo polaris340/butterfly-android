@@ -189,4 +189,8 @@ public class Picture {
             return likeCount + " ";
         }
     }
+
+    public String getSendCountString() {
+        return " " + sendCount;
+    }
 }

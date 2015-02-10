@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_100">
+    <me.jiho.butterfly.view.SquareImageView
+        android:id="@+id/mapdialog_iv_map"
+        android:background="@color/black_12"
+        android:layout_width="match_parent"
+        android:layout_height="0dp" />
+    <me.jiho.butterfly.view.BaseFontButton
+        android:id="@+id/mapdialog_btn_close"
+        style="?android:borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/span_1"
+        android:text="@string/label_close"
+        />
+</LinearLayout>

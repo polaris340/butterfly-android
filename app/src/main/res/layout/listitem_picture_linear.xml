@@ -68,6 +68,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
+            android:id="@+id/picturelist_ll_country_button_wrap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -78,11 +79,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="@string/label_captured_by"
+                android:text="@string/label_from"
                 android:layout_marginLeft="@dimen/margin_2"
                 />
             <me.jiho.butterfly.view.BaseFontButton
-                android:id="@+id/picturelist_btn_uploader"
+                android:id="@+id/picturelist_btn_country"
                 style="?android:borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -94,6 +95,17 @@
 
                 />
         </LinearLayout>
+        <me.jiho.butterfly.view.BaseFontButton
+            android:id="@+id/picturelist_btn_send_count"
+            style="?android:borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/span_1"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:layout_centerVertical="true"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:drawableLeft="@drawable/ic_sent_18"
+            />
 
 
         <me.jiho.butterfly.view.PictureLikeButton

@@ -29,6 +29,7 @@ import me.jiho.butterfly.network.DefaultErrorListener;
 import me.jiho.butterfly.network.NetworkRecyclerViewAdapter;
 import me.jiho.butterfly.network.VolleyRequestQueue;
 import me.jiho.butterfly.statics.Constants;
+import me.jiho.butterfly.util.DialogUtil;
 import me.jiho.butterfly.util.MessageUtil;
 import me.jiho.butterfly.view.PictureLikeButton;
 import me.jiho.butterfly.view.PictureListImageView;
@@ -252,10 +253,12 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
     public class PictureListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView titleView;
         private ImageView mainImageView;
-        private Button userNameButton;
+        private Button countryNameButton;
         private PictureLikeButton likeButton;
         private Button showFullImageButton;
         private PictureMenuToggleButton menuButton;
+        private View countryButtonWrapper;
+        private Button sendCountButton;
 
         private Picture pictureData;
 
@@ -266,7 +269,9 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
             mainImageView.setOnClickListener(this);
             if (currentLayout == LAYOUT_LIST) {
                 titleView = (TextView) rootView.findViewById(R.id.picturelist_tv_title);
-                userNameButton = (Button) rootView.findViewById(R.id.picturelist_btn_uploader);
+                countryNameButton = (Button) rootView.findViewById(R.id.picturelist_btn_country);
+                countryButtonWrapper = rootView.findViewById(R.id.picturelist_ll_country_button_wrap);
+                sendCountButton = (Button) rootView.findViewById(R.id.picturelist_btn_send_count);
                 likeButton = (PictureLikeButton) rootView.findViewById(R.id.picturelist_btn_like);
                 showFullImageButton = (Button) rootView.findViewById(R.id.picturelist_btn_show_image);
 
@@ -286,8 +291,9 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
                 ((ViewGroup)rootView.findViewById(R.id.picturelist_tb_menu))
                         .addView(menuButton.getRootView());
 
-                userNameButton.setOnClickListener(this);
+                countryNameButton.setOnClickListener(this);
                 showFullImageButton.setOnClickListener(this);
+                sendCountButton.setOnClickListener(this);
             }
         }
 
@@ -308,7 +314,22 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
 
                 this.likeButton.setPictureId(pictureData.getId());
 
-                this.userNameButton.setText(pictureData.getUploaderName());
+                if (type == PictureDataManager.Type.RECEIVED) {
+                    this.countryButtonWrapper.setVisibility(View.VISIBLE);
+                    this.sendCountButton.setVisibility(View.GONE);
+                    String countryName = pictureData.getCountryName();
+                    if (countryName == null || countryName.equals("null") || countryName.equals("")) {
+                        countryName = App.getContext().getResources().getString(R.string.label_unknown);
+                        this.countryNameButton.setEnabled(false);
+                    } else {
+                        this.countryNameButton.setEnabled(true);
+                    }
+                    this.countryNameButton.setText(countryName);
+                } else {
+                    this.countryButtonWrapper.setVisibility(View.GONE);
+                    this.sendCountButton.setVisibility(View.VISIBLE);
+                    this.sendCountButton.setText(pictureData.getSendCountString());
+                }
                 ((PictureListImageView) this.mainImageView).setImageRatio(pictureData.getImageRatio());
                 if (pictureData.getImageRatio() > 1) {
                     this.showFullImageButton.setVisibility(View.VISIBLE);
@@ -347,7 +368,19 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
                             .indexOf(pictureData.getId()));
                     fragment.startActivityForResult(intent, PictureListFragment.REQUEST_CODE_PICTURE_VIEW);
                     break;
-
+                case R.id.picturelist_btn_send_count:
+                    MessageUtil.showMessage(
+                            String.format(App.getContext().getString(R.string.message_send_count),
+                                    pictureData.getSendCount())
+                    );
+                    break;
+                case R.id.picturelist_btn_country:
+                    DialogUtil.getMapDialog(
+                            v.getContext(),
+                            pictureData.getLatitude(),
+                            pictureData.getLongitude()
+                    ).show();
+                    break;
             }
         }
 

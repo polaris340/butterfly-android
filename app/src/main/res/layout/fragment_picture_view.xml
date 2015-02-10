@@ -54,6 +54,7 @@
         android:background="@color/black_54"
         >
         <LinearLayout
+            android:id="@+id/pictureview_ll_country_button_wrap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -64,13 +65,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="@string/label_captured_by"
+                android:text="@string/label_from"
                 android:textColor="@color/white_70"
                 android:layout_marginLeft="@dimen/margin_2"
 
                 />
             <me.jiho.butterfly.view.BaseFontButton
-                android:id="@+id/pictureview_btn_uploader"
+                android:id="@+id/pictureview_btn_country_name"
                 style="?android:borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -83,6 +84,18 @@
 
                 />
         </LinearLayout>
+        <me.jiho.butterfly.view.BaseFontButton
+            android:id="@+id/pictureview_btn_send_count"
+            style="?android:borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/span_1"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/white_100"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:drawableLeft="@drawable/ic_sent_18"
+            />
 
 
         <me.jiho.butterfly.view.PictureLikeButton
