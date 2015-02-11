@@ -72,7 +72,6 @@ public class MainActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DialogUtil.getDefaultProgressDialog(this).show();
 
         if (!Auth.getInstance().hasAccessToken()) {
             Intent intent = new Intent(this, AuthActivity.class);

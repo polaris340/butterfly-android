@@ -8,7 +8,11 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.concurrent.Callable;
+
 import me.jiho.butterfly.R;
+import me.jiho.butterfly.view.FadeHideableViewWrapper;
+import me.jiho.butterfly.view.HideableViewWrapper;
 
 public class PictureViewActivity extends ActionBarActivity {
     private static final int LOAD_DATA_OFFSET_COUNT = 3;
@@ -18,6 +22,7 @@ public class PictureViewActivity extends ActionBarActivity {
      */
     ViewPager mViewPager;
     PictureDataManager.Type type;
+    HideableViewWrapper progressBarWrapper;
 
     private PictureViewFragmentPagerAdapter mFragmentPagerAdapter;
     @Override
@@ -35,6 +40,9 @@ public class PictureViewActivity extends ActionBarActivity {
         // primary sections of the activity.
         mFragmentPagerAdapter = new PictureViewFragmentPagerAdapter(getSupportFragmentManager(), type);
 
+        progressBarWrapper = new FadeHideableViewWrapper(findViewById(R.id.pictureview_progress_bar));
+
+
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mFragmentPagerAdapter);
@@ -49,7 +57,19 @@ public class PictureViewActivity extends ActionBarActivity {
             public void onPageSelected(int position) {
                 if (position > mFragmentPagerAdapter.getCount() - LOAD_DATA_OFFSET_COUNT) {
 
-                    PictureDataManager.getInstance().loadMore(type, false, null, null);
+                    PictureDataManager.getInstance().loadMore(type, false, new Callable() {
+                        @Override
+                        public Object call() throws Exception {
+                            progressBarWrapper.show();
+                            return null;
+                        }
+                    }, new Callable() {
+                        @Override
+                        public Object call() throws Exception {
+                            progressBarWrapper.hide();
+                            return null;
+                        }
+                    });
                 }
             }
 
