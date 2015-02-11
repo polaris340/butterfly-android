@@ -14,9 +14,10 @@ import com.bumptech.glide.Glide;
 import me.jiho.butterfly.App;
 import me.jiho.butterfly.R;
 import me.jiho.butterfly.db.Picture;
+import me.jiho.butterfly.statics.Constants;
 import me.jiho.butterfly.util.DialogUtil;
 import me.jiho.butterfly.util.MessageUtil;
-import me.jiho.butterfly.view.HideableViewWrapper;
+import me.jiho.butterfly.view.FadeHideableViewWrapper;
 import me.jiho.butterfly.view.PictureLikeButton;
 import me.jiho.butterfly.view.PinchZoomImageView;
 import uk.co.senab.photoview.PhotoViewAttacher;
@@ -25,9 +26,10 @@ import uk.co.senab.photoview.PhotoViewAttacher;
  * Created by jiho on 1/15/15.
  */
 public class PictureViewFragment extends Fragment implements View.OnClickListener {
+    private static final long HEADER_FOOTER_HIDE_DELAY = 1000;
 
-    private HideableViewWrapper header;
-    private HideableViewWrapper footer;
+    private FadeHideableViewWrapper header;
+    private FadeHideableViewWrapper footer;
     private Picture pictureData;
 
 
@@ -101,8 +103,12 @@ public class PictureViewFragment extends Fragment implements View.OnClickListene
         View footerView = rootView.findViewById(R.id.pictureview_rl_footer);
         headerView.setBackgroundColor(getResources().getColor(R.color.black_54));
         footerView.setBackgroundColor(getResources().getColor(R.color.black_54));
-        header = new HideableViewWrapper(headerView);
-        footer = new HideableViewWrapper(footerView);
+        header = new FadeHideableViewWrapper(headerView);
+        footer = new FadeHideableViewWrapper(footerView);
+        header.setDuration(Constants.Integers.ANIMATION_DURATION_LONG);
+        footer.setDuration(Constants.Integers.ANIMATION_DURATION_LONG);
+        header.hide(HEADER_FOOTER_HIDE_DELAY);
+        footer.hide(HEADER_FOOTER_HIDE_DELAY);
 
         TextView fromLabel = (TextView) rootView.findViewById(R.id.pictureview_label_from);
         fromLabel.setTextColor(getResources().getColor(R.color.white_70));

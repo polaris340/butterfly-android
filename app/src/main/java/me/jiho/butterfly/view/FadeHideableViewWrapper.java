@@ -48,6 +48,11 @@ public class FadeHideableViewWrapper extends HideableViewWrapper implements Valu
         });
     }
 
+    public void setDuration(long duration) {
+        showAnimator.setDuration(duration);
+        hideAnimator.setDuration(duration);
+    }
+
     @Override
     public void onAnimationUpdate(ValueAnimator animation) {
         view.setAlpha((float) animation.getAnimatedValue());
@@ -55,11 +60,20 @@ public class FadeHideableViewWrapper extends HideableViewWrapper implements Valu
 
     @Override
     public void show() {
-        showAnimator.start();
+        show(0);
     }
 
     @Override
     public void hide() {
+        hide(0);
+    }
+
+    public void show(long delay) {
+        showAnimator.setStartDelay(delay);
+        showAnimator.start();
+    }
+    public void hide(long delay) {
+        hideAnimator.setStartDelay(delay);
         hideAnimator.start();
     }
 }
