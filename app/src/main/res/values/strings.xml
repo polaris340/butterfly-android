@@ -57,5 +57,6 @@
         <item quantity="one">%d person received this picture.</item>
         <item quantity="other">%d people received this picture.</item>
     </plurals>
+    <string name="title_activity_sign_up">SignUpActivity</string>
 
 </resources>

@@ -90,4 +90,8 @@ public class AuthActivity extends ActionBarActivity {
         }
     }
 
+    public void changePage(int position) {
+        mViewPager.setCurrentItem(position);
+    }
+
 }

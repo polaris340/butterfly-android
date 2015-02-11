@@ -16,9 +16,9 @@ public class AuthFragmentPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new SignInFragment();
+                return new AuthMainFragment();
             case 1:
-                return new SignUpFragment();
+                return new SignInFragment();
             default:
                 return null;
         }
