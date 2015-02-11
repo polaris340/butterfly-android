@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +44,7 @@ import java.io.InputStream;
 import java.util.concurrent.Callable;
 
 import me.jiho.butterfly.App;
+import me.jiho.butterfly.MainActivity;
 import me.jiho.butterfly.R;
 import me.jiho.butterfly.db.Picture;
 import me.jiho.butterfly.network.DefaultErrorListener;
@@ -346,12 +349,30 @@ public class PictureUploadDialogFragment extends DialogFragment
                         .setContentTitle(App.getContext().getString(R.string.app_name))
                         .setContentText(App.getContext().getString(message));
 
-//        if (type == NotificationType.UPLOAD_START) {
-//            mBuilder.setOngoing(true);
-//        } else {
-//            mBuilder.setOngoing(false);
-//        }
-        // mId allows you to update the notification later on.
+        if (type == NotificationType.UPLOAD_COMPLETE) {
+            // Creates an explicit intent for an Activity in your app
+            Intent resultIntent = new Intent(App.getContext(), MainActivity.class);
+
+            resultIntent.putExtra(MainActivity.KEY_FRAGMENT_TYPE, PictureDataManager.Type.SENT.name());
+
+            // The stack builder object will contain an artificial back stack for the
+            // started Activity.
+            // This ensures that navigating backward from the Activity leads out of
+            // your application to the Home screen.
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(App.getContext());
+            // Adds the back stack for the Intent (but not the Intent itself)
+            stackBuilder.addParentStack(MainActivity.class);
+            // Adds the Intent that starts the Activity to the top of the stack
+            stackBuilder.addNextIntent(resultIntent);
+            PendingIntent resultPendingIntent =
+                    stackBuilder.getPendingIntent(
+                            0,
+                            PendingIntent.FLAG_UPDATE_CURRENT
+                    );
+            mBuilder.setContentIntent(resultPendingIntent);
+            mBuilder.setAutoCancel(true);
+        }
+
         NotificationManager mNotificationManager =
                 (NotificationManager) App.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());

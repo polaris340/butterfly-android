@@ -30,13 +30,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import me.jiho.butterfly.auth.Auth;
 import me.jiho.butterfly.auth.AuthActivity;
+import me.jiho.butterfly.picture.PictureDataManager;
 import me.jiho.butterfly.picture.PictureUploadDialogFragment;
-import me.jiho.butterfly.util.DialogUtil;
 
 
 public class MainActivity extends ActionBarActivity
         implements View.OnClickListener, View.OnLongClickListener {
     private static final String TAG = "MainActivity";
+    public static final String KEY_FRAGMENT_TYPE = "fragment_type";
     public static final int SELECT_PICTURE = 128;
 
     /**
@@ -102,6 +103,11 @@ public class MainActivity extends ActionBarActivity
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mFragmentPagerAdapter);
+
+        String type = getIntent().getStringExtra(KEY_FRAGMENT_TYPE);
+        if (type != null && type.equals(PictureDataManager.Type.SENT.name())) {
+            mViewPager.setCurrentItem(1);
+        }
 
 
         // set listener
