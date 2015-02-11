@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white_100">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="@dimen/span_1"
+            android:layout_height="@dimen/span_1"
+            android:src="@drawable/ic_sent_24"
+            android:scaleType="center"
+            />
+        <me.jiho.butterfly.view.BaseFontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/message_default_progress"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/black_87"
+            />
+        </LinearLayout>
+    <me.jiho.butterfly.view.ColorAnimatedProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/progress_bar_height" />
+</LinearLayout>

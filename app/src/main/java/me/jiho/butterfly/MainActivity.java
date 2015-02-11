@@ -31,6 +31,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import me.jiho.butterfly.auth.Auth;
 import me.jiho.butterfly.auth.AuthActivity;
 import me.jiho.butterfly.picture.PictureUploadDialogFragment;
+import me.jiho.butterfly.util.DialogUtil;
 
 
 public class MainActivity extends ActionBarActivity
@@ -70,6 +71,8 @@ public class MainActivity extends ActionBarActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        DialogUtil.getDefaultProgressDialog(this).show();
 
         if (!Auth.getInstance().hasAccessToken()) {
             Intent intent = new Intent(this, AuthActivity.class);

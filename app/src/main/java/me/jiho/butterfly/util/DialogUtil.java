@@ -2,7 +2,6 @@ package me.jiho.butterfly.util;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,10 +18,11 @@ import me.jiho.butterfly.R;
  */
 public class DialogUtil {
     public static Dialog getDefaultProgressDialog(Context context) {
-        ProgressDialog dialog = new ProgressDialog(context);
-        dialog.setTitle(R.string.app_name);
-        dialog.setMessage(context.getString(R.string.message_default_progress));
-        dialog.setCancelable(false);
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_progress, null);
+        Dialog dialog = new AlertDialog.Builder(context)
+                .setCancelable(false)
+                .setView(view)
+                .create();
         return dialog;
     }
 

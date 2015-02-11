@@ -34,6 +34,7 @@
     <dimen name="elevation_1">3dp</dimen>
     <dimen name="padding_picture_menu_button">12dp</dimen>
     <dimen name="divider_height">1dp</dimen>
+    <dimen name="progress_bar_height">2dp</dimen>
 
 
 </resources>
