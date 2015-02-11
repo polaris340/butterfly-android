@@ -65,14 +65,18 @@ public class PictureViewFragment extends Fragment implements View.OnClickListene
             titleView.setText(R.string.label_untitled);
         } else {
             titleView.setText(title);
+            titleView.setTextColor(getResources().getColor(R.color.white_100));
         }
 
         View countryButtonWrapper = rootView.findViewById(R.id.pictureview_ll_country_button_wrap);
         Button sendCountButton = (Button) rootView.findViewById(R.id.pictureview_btn_send_count);
+        sendCountButton.setTextColor(getResources().getColor(R.color.white_100));
         if (type == PictureDataManager.Type.RECEIVED) {
             sendCountButton.setVisibility(View.GONE);
             Button countryButton = (Button) rootView.findViewById(R.id.pictureview_btn_country_name);
+            countryButton.setTextColor(getResources().getColor(R.color.white_100));
             String countryName = pictureData.getCountryName();
+
             if (countryName == null || countryName.equals("null") || countryName.equals("")) {
                 countryButton.setText(getString(R.string.label_unknown));
                 countryButton.setEnabled(false);
@@ -83,6 +87,7 @@ public class PictureViewFragment extends Fragment implements View.OnClickListene
         } else {
             countryButtonWrapper.setVisibility(View.GONE);
             sendCountButton.setText(pictureData.getSendCountString());
+            sendCountButton.setTextColor(getResources().getColor(R.color.white_100));
             sendCountButton.setOnClickListener(this);
         }
 
@@ -90,9 +95,17 @@ public class PictureViewFragment extends Fragment implements View.OnClickListene
 
         PictureLikeButton likeButton = (PictureLikeButton) rootView.findViewById(R.id.pictureview_btn_like);
         likeButton.setPictureId(pictureData.getId());
+        likeButton.setTextColor(getResources().getColor(R.color.white_100));
 
-        header = new HideableViewWrapper(rootView.findViewById(R.id.pictureview_rl_header));
-        footer = new HideableViewWrapper(rootView.findViewById(R.id.pictureview_rl_footer));
+        View headerView = rootView.findViewById(R.id.pictureview_rl_header);
+        View footerView = rootView.findViewById(R.id.pictureview_rl_footer);
+        headerView.setBackgroundColor(getResources().getColor(R.color.black_54));
+        footerView.setBackgroundColor(getResources().getColor(R.color.black_54));
+        header = new HideableViewWrapper(headerView);
+        footer = new HideableViewWrapper(footerView);
+
+        TextView fromLabel = (TextView) rootView.findViewById(R.id.pictureview_label_from);
+        fromLabel.setTextColor(getResources().getColor(R.color.white_70));
 
         // set PictureMenuButton
         PictureMenuToggleButton.Builder builder = new PictureMenuToggleButton.Builder(getActivity())

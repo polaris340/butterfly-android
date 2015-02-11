@@ -133,11 +133,11 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
             mainImageView = (ImageView) rootView.findViewById(R.id.picturelist_main_image);
             mainImageView.setOnClickListener(this);
             if (currentLayout == LAYOUT_LIST) {
-                titleView = (TextView) rootView.findViewById(R.id.picturelist_tv_title);
-                countryNameButton = (Button) rootView.findViewById(R.id.picturelist_btn_country);
-                countryButtonWrapper = rootView.findViewById(R.id.picturelist_ll_country_button_wrap);
-                sendCountButton = (Button) rootView.findViewById(R.id.picturelist_btn_send_count);
-                likeButton = (PictureLikeButton) rootView.findViewById(R.id.picturelist_btn_like);
+                titleView = (TextView) rootView.findViewById(R.id.pictureview_tv_title);
+                countryNameButton = (Button) rootView.findViewById(R.id.pictureview_btn_country_name);
+                countryButtonWrapper = rootView.findViewById(R.id.pictureview_ll_country_button_wrap);
+                sendCountButton = (Button) rootView.findViewById(R.id.pictureview_btn_send_count);
+                likeButton = (PictureLikeButton) rootView.findViewById(R.id.pictureview_btn_like);
                 showFullImageButton = (Button) rootView.findViewById(R.id.picturelist_btn_show_image);
 
                 PictureMenuToggleButton.Builder builder = new PictureMenuToggleButton.Builder(rootView.getContext());
@@ -153,7 +153,7 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
                         rootView.getContext().getResources().getColor(R.color.black_54)
                 );
 
-                ((ViewGroup)rootView.findViewById(R.id.picturelist_tb_menu))
+                ((ViewGroup)rootView.findViewById(R.id.pictureview_tb_menu))
                         .addView(menuButton.getRootView());
 
                 countryNameButton.setOnClickListener(this);
@@ -233,13 +233,13 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
                             .indexOf(pictureData.getId()));
                     fragment.startActivityForResult(intent, PictureListFragment.REQUEST_CODE_PICTURE_VIEW);
                     break;
-                case R.id.picturelist_btn_send_count:
+                case R.id.pictureview_btn_send_count:
                     MessageUtil.showMessage(
                             String.format(App.getContext().getString(R.string.message_send_count),
                                     pictureData.getSendCount())
                     );
                     break;
-                case R.id.picturelist_btn_country:
+                case R.id.pictureview_btn_country_name:
                     DialogUtil.getMapDialog(
                             v.getContext(),
                             pictureData.getLatitude(),

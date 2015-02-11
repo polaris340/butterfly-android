@@ -60,6 +60,7 @@ public class PictureDeleteButton extends PictureMenuItemButton {
                 } else {
                     url = URL_SEND_PICTURE_DELETE + pictureData.getSendPictureId();
                 }
+
                 Request request = new JsonObjectRequest(
                         Request.Method.DELETE,
                         url,

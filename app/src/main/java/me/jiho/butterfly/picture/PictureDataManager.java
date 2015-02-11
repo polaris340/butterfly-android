@@ -49,7 +49,7 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
     public void onLoginStateChanged(Auth.LoginState loginState) {
         switch (loginState) {
             case PENDING:
-            case LOGGED_IN:
+            //case LOGGED_IN:
                 // cancel all current request
                 for (Type t:currentRequestHashMap.keySet()) {
                     currentRequestHashMap.remove(t).cancel();
