@@ -7,8 +7,6 @@ import java.util.ArrayList;
  */
 public interface NetworkRecyclerViewAdapter<T> {
 
-
-    public void loadMore(boolean refresh);
     public long getItemId(int position);
     public T getItem(int position);
     public ArrayList<Long> getIdList();

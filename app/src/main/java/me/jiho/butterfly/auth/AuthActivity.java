@@ -46,7 +46,6 @@ public class AuthActivity extends ActionBarActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mFragmentPagerAdapter);
-
     }
 
 
@@ -90,4 +89,5 @@ public class AuthActivity extends ActionBarActivity {
             lastBackPressedTime = pressedTime;
         }
     }
+
 }

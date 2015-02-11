@@ -63,4 +63,5 @@ public class PictureViewFragmentPagerAdapter extends FragmentPagerAdapter
                 .getInstance()
                 .removeObserver(type, this);
     }
+
 }

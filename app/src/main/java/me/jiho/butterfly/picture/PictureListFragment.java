@@ -29,7 +29,7 @@ import me.jiho.butterfly.view.FadeHideableViewWrapper;
  * Created by jiho on 1/13/15.
  */
 public class PictureListFragment extends Fragment
-        implements View.OnClickListener, LoginStateChangeObserver {
+        implements View.OnClickListener, LoginStateChangeObserver, SwipeRefreshLayout.OnRefreshListener {
 
     public static final String KEY_TYPE = "type";
     public static final int REQUEST_CODE_PICTURE_VIEW = 16;
@@ -44,6 +44,9 @@ public class PictureListFragment extends Fragment
     private View fragmentHeader;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ListGridToggleButton layoutToggleButton;
+
+    private Callable onPreLoading;
+    private Callable onLoadingComplete;
 
     public static PictureListFragment newInstance(PictureDataManager.Type type) {
         Bundle args = new Bundle();
@@ -75,21 +78,6 @@ public class PictureListFragment extends Fragment
         swipeRefreshLayout.setRefreshing(true);
 
 
-        adapter.setOnPreLoading(new Callable() {
-            @Override
-            public Object call() throws Exception {
-                swipeRefreshLayout.setRefreshing(true);
-                return null;
-            }
-        });
-        adapter.setOnLoadingComplete(new Callable() {
-            @Override
-            public Object call() throws Exception {
-                swipeRefreshLayout.setRefreshing(false);
-                return null;
-            }
-        });
-
         fragmentHeaderIcon = (ImageView) rootView.findViewById(R.id.picturelist_list_icon);
         fragmentHeaderIcon.setOnClickListener(this);
         switch (type) {
@@ -100,6 +88,22 @@ public class PictureListFragment extends Fragment
                 fragmentHeaderIcon.setImageResource(R.drawable.ic_received_24);
                 break;
         }
+
+        onPreLoading = new Callable() {
+            @Override
+            public Object call() throws Exception {
+                swipeRefreshLayout.setRefreshing(true);
+                return null;
+            }
+        };
+        onLoadingComplete = new Callable() {
+            @Override
+            public Object call() throws Exception {
+                swipeRefreshLayout.setRefreshing(false);
+                return null;
+            }
+        };
+
 
         fragmentHeader = rootView.findViewById(R.id.picturelist_fragment_header);
         recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -120,7 +124,11 @@ public class PictureListFragment extends Fragment
                 fragmentHeader.setTranslationY(newY);
 
                 if (linearLayoutManager.findLastVisibleItemPosition() == linearLayoutManager.getItemCount()-1) {
-                    adapter.loadMore();
+                    PictureDataManager.getInstance().loadMore(
+                            type,
+                            false,
+                            onPreLoading,
+                            onLoadingComplete);
                 }
             }
         });
@@ -170,7 +178,7 @@ public class PictureListFragment extends Fragment
                         LinearLayoutManager currentLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                         if (currentLayoutManager.findLastVisibleItemPosition()
                                 == adapter.getItemCount() - 1) {
-                            adapter.loadMore();
+                            PictureDataManager.getInstance().loadMore(type, false, null, null);
                         }
 
                     }
@@ -198,8 +206,13 @@ public class PictureListFragment extends Fragment
 
 
                 swipeRefreshLayout.setRefreshing(false);
-                swipeRefreshLayout.setOnRefreshListener(adapter);
+                swipeRefreshLayout.setOnRefreshListener(this);
                 break;
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        PictureDataManager.getInstance().loadMore(type, true, null, onLoadingComplete);
     }
 }

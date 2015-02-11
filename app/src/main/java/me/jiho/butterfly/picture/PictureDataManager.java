@@ -1,15 +1,30 @@
 package me.jiho.butterfly.picture;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.concurrent.Callable;
 
+import me.jiho.butterfly.auth.Auth;
+import me.jiho.butterfly.auth.LoginStateChangeObserver;
 import me.jiho.butterfly.db.Picture;
+import me.jiho.butterfly.network.DefaultErrorListener;
+import me.jiho.butterfly.network.VolleyRequestQueue;
+import me.jiho.butterfly.statics.Constants;
+import me.jiho.butterfly.util.MessageUtil;
 
 /**
  * Created by jiho on 1/14/15.
  */
-public class PictureDataManager implements PictureDataObservable {
+public class PictureDataManager implements PictureDataObservable, LoginStateChangeObserver {
     private static PictureDataManager instance;
     public static final String KEY_TYPE = "type";
     public static final String KEY_POSITION = "position";
@@ -18,12 +33,28 @@ public class PictureDataManager implements PictureDataObservable {
     private HashMap<Type, ArrayList<Long>> pictureIdListHashMap;
     private HashMap<Type, ArrayList<PictureDataObserver>> observers;
 
+    private HashMap<Type, Request> currentRequestHashMap;
+
+    public static final String URL_GET_PICTURE = Constants.URLs.API_URL + "picture/";
 
 
     @Override
     public void update() {
         for (Type type:Type.values()) {
             update(type);
+        }
+    }
+
+    @Override
+    public void onLoginStateChanged(Auth.LoginState loginState) {
+        switch (loginState) {
+            case PENDING:
+            case LOGGED_IN:
+                // cancel all current request
+                for (Type t:currentRequestHashMap.keySet()) {
+                    currentRequestHashMap.remove(t).cancel();
+                }
+                break;
         }
     }
 
@@ -40,6 +71,8 @@ public class PictureDataManager implements PictureDataObservable {
         pictureHashMap = new HashMap<>();
         pictureIdListHashMap = new HashMap<>();
         observers = new HashMap<>();
+        currentRequestHashMap = new HashMap<>();
+        Auth.getInstance().addLoginStateChangeObserver(this);
     }
     public static PictureDataManager getInstance() {
         if (instance == null) instance = new PictureDataManager();
@@ -131,5 +164,102 @@ public class PictureDataManager implements PictureDataObservable {
                 update(type, pictureId);
         }
 
+    }
+
+    public void loadMore(final Type type, final boolean refresh,
+                         final Callable onPreLoading, final Callable onLoadingComplete) {
+        if (currentRequestHashMap.containsKey(type)) {
+            if (refresh) {
+                currentRequestHashMap.remove(type).cancel();
+            } else {
+                return;
+            }
+        }
+
+        String url = URL_GET_PICTURE;
+        if (type == PictureDataManager.Type.SENT) {
+            url += "1/";
+        } else {
+            url += "0/";
+        }
+        if (refresh)
+            url += "0";
+        else
+            url += getLastId(type);
+
+        Request request = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            PictureDataManager manager = PictureDataManager.getInstance();
+                            if (refresh) {
+                                manager.clear(type);
+                            }
+                            String dataList = response.getString(Constants.Keys.MESSAGE);
+                            Picture[] pictures = Picture.fromJsonArray(dataList);
+
+                            for (Picture p:pictures) {
+                                manager.add(type, p);
+                            }
+                            if (pictures.length > 0) {
+                                currentRequestHashMap.remove(type);
+                            }
+                            update(type);
+
+
+                        } catch (JSONException e) {
+                            MessageUtil.showDefaultErrorMessage();
+                            e.printStackTrace();
+                        }
+
+                        if (onLoadingComplete != null) {
+                            try {
+                                onLoadingComplete.call();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new DefaultErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        super.onErrorResponse(error);
+                        currentRequestHashMap.remove(type);
+
+                        if (onLoadingComplete != null) {
+                            try {
+                                onLoadingComplete.call();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
+
+        if (onPreLoading != null) {
+            try {
+                onPreLoading.call();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        currentRequestHashMap.put(type, request);
+        VolleyRequestQueue.add(request);
+    }
+
+    private long getLastId(Type type) {
+        ArrayList<Long> pictureIdList = getPictureIdList(type);
+        if (pictureIdList.size() > 0) {
+            Picture lastPicture = get(pictureIdList.get(pictureIdList.size() - 1));
+            if (lastPicture.getSendPictureId() > 0) return lastPicture.getSendPictureId();
+            else return lastPicture.getId();
+        } else {
+            return 0;
+        }
     }
 }

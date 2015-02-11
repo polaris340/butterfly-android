@@ -11,7 +11,7 @@ import android.view.MenuItem;
 import me.jiho.butterfly.R;
 
 public class PictureViewActivity extends ActionBarActivity {
-
+    private static final int LOAD_DATA_OFFSET_COUNT = 3;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -39,6 +39,25 @@ public class PictureViewActivity extends ActionBarActivity {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mFragmentPagerAdapter);
         mViewPager.setCurrentItem(position);
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position > mFragmentPagerAdapter.getCount() - LOAD_DATA_OFFSET_COUNT) {
+
+                    PictureDataManager.getInstance().loadMore(type, false, null, null);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
     }
 
