@@ -51,8 +51,9 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
             case PENDING:
             //case LOGGED_IN:
                 // cancel all current request
-                for (Type t:currentRequestHashMap.keySet()) {
-                    currentRequestHashMap.remove(t).cancel();
+                for (Type t:Type.values()) {
+                    if (currentRequestHashMap.containsKey(t))
+                        currentRequestHashMap.remove(t).cancel();
                 }
                 break;
         }

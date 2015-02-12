@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import me.jiho.butterfly.R;
-import me.jiho.butterfly.util.MessageUtil;
 
 public class AuthActivity extends ActionBarActivity {
     public static final int POSITION_SIGN_IN = 0;
@@ -80,13 +79,13 @@ public class AuthActivity extends ActionBarActivity {
         if (mViewPager.getCurrentItem() == 1) {
             setCurrentItem(0);
         } else {
-            long pressedTime = System.currentTimeMillis();
-            if (pressedTime - lastBackPressedTime < PRESS_BACK_INTERVAL) {
+            //long pressedTime = System.currentTimeMillis();
+            //if (pressedTime - lastBackPressedTime < PRESS_BACK_INTERVAL) {
                 super.onBackPressed();
-            } else {
-                MessageUtil.showMessage(R.string.message_press_back_again);
-            }
-            lastBackPressedTime = pressedTime;
+            //} else {
+            //    MessageUtil.showMessage(R.string.message_press_back_again);
+            //}
+            //lastBackPressedTime = pressedTime;
         }
     }
 

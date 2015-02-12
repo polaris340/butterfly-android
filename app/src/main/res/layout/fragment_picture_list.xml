@@ -4,6 +4,17 @@
     android:background="@color/lightgray"
     >
 
+    <me.jiho.butterfly.view.BaseFontTextView
+        android:id="@+id/picturelist_message_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:padding="@dimen/margin_2"
+        android:text="@string/message_empty_list"
+        android:visibility="gone"/>
+
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/picturelist_refresh_layout"
@@ -41,6 +52,7 @@
             android:checked="true"
             />
         </RelativeLayout>
+
 
 
 </RelativeLayout>

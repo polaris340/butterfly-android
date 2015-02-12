@@ -58,6 +58,7 @@
         <item quantity="other">%d people received this picture.</item>
     </plurals>
     <string name="title_activity_sign_up">SignUpActivity</string>
+    <string name="message_empty_list">You don\'t have any pictures.\nHow about take and send a picture first?</string>
 
 
 </resources>

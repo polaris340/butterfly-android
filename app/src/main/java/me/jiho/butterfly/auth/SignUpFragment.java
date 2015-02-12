@@ -29,7 +29,6 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
     private EditText emailInput;
     private EditText passwordInput;
     private EditText passwordConfirmInput;
-    private ImageButton submitButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -38,7 +37,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
         emailInput = (EditText) rootView.findViewById(R.id.signup_et_email);
         passwordInput = (EditText) rootView.findViewById(R.id.signup_et_password);
         passwordConfirmInput = (EditText) rootView.findViewById(R.id.signup_et_password_confirm);
-        submitButton = (ImageButton) rootView.findViewById(R.id.signup_btn_submit);
+        ImageButton submitButton = (ImageButton) rootView.findViewById(R.id.signup_btn_submit);
         submitButton.setOnClickListener(this);
 
         return rootView;

@@ -30,6 +30,7 @@ public class PinchZoomImageView extends ImageView {
 
     private void init() {
         mAttacher = new PhotoViewAttacher(this);
+
     }
 
     @Override

@@ -48,6 +48,8 @@ public class PictureListFragment extends Fragment
     private Callable onPreLoading;
     private Callable onLoadingComplete;
 
+    private FadeHideableViewWrapper emptyLabel;
+
     public static PictureListFragment newInstance(PictureDataManager.Type type) {
         Bundle args = new Bundle();
         args.putString(KEY_TYPE, type.name());
@@ -93,6 +95,7 @@ public class PictureListFragment extends Fragment
             @Override
             public Object call() throws Exception {
                 swipeRefreshLayout.setRefreshing(true);
+                emptyLabel.hide();
                 return null;
             }
         };
@@ -100,6 +103,9 @@ public class PictureListFragment extends Fragment
             @Override
             public Object call() throws Exception {
                 swipeRefreshLayout.setRefreshing(false);
+                if (adapter.getItemCount() == 0) {
+                    emptyLabel.show();
+                }
                 return null;
             }
         };
@@ -133,6 +139,10 @@ public class PictureListFragment extends Fragment
             }
         });
 
+
+        // empty label
+        View emptyLabelView = rootView.findViewById(R.id.picturelist_message_empty);
+        emptyLabel = new FadeHideableViewWrapper(emptyLabelView);
 
 
 
@@ -172,13 +182,18 @@ public class PictureListFragment extends Fragment
             case LOGGED_IN:
                 // add adapter after logged in
                 recyclerView.setAdapter(adapter);
+
+                if (adapter.getItemCount() == 0) {
+                    emptyLabel.show();
+                }
+
                 recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
                     @Override
                     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
                         LinearLayoutManager currentLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                         if (currentLayoutManager.findLastVisibleItemPosition()
                                 == adapter.getItemCount() - 1) {
-                            PictureDataManager.getInstance().loadMore(type, false, null, null);
+                            PictureDataManager.getInstance().loadMore(type, false, onPreLoading, onLoadingComplete);
                         }
 
                     }
@@ -213,6 +228,6 @@ public class PictureListFragment extends Fragment
 
     @Override
     public void onRefresh() {
-        PictureDataManager.getInstance().loadMore(type, true, null, onLoadingComplete);
+        PictureDataManager.getInstance().loadMore(type, true, onPreLoading, onLoadingComplete);
     }
 }
