@@ -6,7 +6,9 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
@@ -22,6 +24,13 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
     private static final String KEY_MESSAGE = "message";
     @Override
     public void onReceive(Context context, Intent intent) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean doNotification = preferences.getBoolean(
+                context.getString(R.string.key_pref_notification),
+                true
+        );
+
+        if (!doNotification) return;
 
         int notificationId = Integer.parseInt(intent.getStringExtra(KEY_GCM_NOTIFICATION_ID));
         String message = intent.getStringExtra(KEY_MESSAGE);
@@ -57,9 +66,23 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
         NotificationManager mNotificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
+
         Notification notification = mBuilder.build();
-        notification.defaults |= Notification.DEFAULT_ALL;
-// mId allows you to update the notification later on.
+        //notification.defaults |= Notification.DEFAULT_ALL;
+
+        boolean vibrate = preferences.getBoolean(
+                context.getString(R.string.key_pref_notification_vibrate),
+                true
+        );
+        boolean sound = preferences.getBoolean(
+                context.getString(R.string.key_pref_notification_sound),
+                true
+        );
+        if (vibrate) notification.defaults |= Notification.DEFAULT_VIBRATE;
+        if (sound) notification.defaults |= Notification.DEFAULT_SOUND;
+
+
+        // mId allows you to update the notification later on.
         mNotificationManager.notify(notificationId, notification);
     }
 }

@@ -47,6 +47,7 @@
     <string name="message_picture_download_start">Downloading image...</string>
     <string name="message_picture_download_complete">Download complete</string>
     <string name="confirm_delete">Are you sure you want to delete this picture?\nYou can\'t see this picture again.</string>
+    <string name="confirm_log_out">Are you sure you want to log out?</string>
     <string name="label_ok">OK</string>
     <string name="message_press_back_again">Press back again to leave</string>
     <string name="label_sign_in">Sign In</string>
@@ -60,5 +61,10 @@
     <string name="title_activity_sign_up">SignUpActivity</string>
     <string name="message_empty_list">You don\'t have any pictures.\nHow about take and send a picture first?</string>
 
+
+    <string-array name="main_drawer_menu">
+        <item>Settings</item>
+        <!-- <item>Log out</item> -->
+    </string-array>
 
 </resources>

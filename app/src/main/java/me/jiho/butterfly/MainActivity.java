@@ -12,8 +12,10 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,6 +56,7 @@ public class MainActivity extends ActionBarActivity
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
+    DrawerLayout drawer;
 
 
     // for gcm
@@ -68,6 +71,8 @@ public class MainActivity extends ActionBarActivity
     SharedPreferences prefs;
     Context context;
     String regid;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +97,8 @@ public class MainActivity extends ActionBarActivity
         }
 
         setContentView(R.layout.activity_main);
+
+        drawer = (DrawerLayout) findViewById(R.id.drawer);
 
         getSupportActionBar().hide();
 
@@ -180,6 +187,15 @@ public class MainActivity extends ActionBarActivity
                 uploadDialogFragment.show(getSupportFragmentManager(), PictureUploadDialogFragment.TAG);
                 uploadDialogFragment.setUploadTargetFile(selectedImage);
             }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(Gravity.START)) {
+            drawer.closeDrawer(Gravity.START);
+        } else {
+            super.onBackPressed();
         }
     }
 

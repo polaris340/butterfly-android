@@ -2,6 +2,7 @@ package me.jiho.butterfly.auth;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 
 import com.android.volley.Request;
@@ -201,6 +202,19 @@ public class Auth {
         VolleyRequestQueue.add(request);
     }
 
+    public static void logout() {
+
+        getAuthPreference().edit().clear().commit();
+        Intent intent = new Intent(App.getContext(), AuthActivity.class);
+        intent.addFlags(
+                Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        |Intent.FLAG_ACTIVITY_NEW_TASK
+        );
+
+        App.getContext().startActivity(intent);
+
+    }
+
     public static SharedPreferences getAuthPreference() {
         return App.getContext().getSharedPreferences(KEY_PREF_AUTH, Context.MODE_PRIVATE);
     }
@@ -215,4 +229,5 @@ public class Auth {
     public void addLoginStateChangeObserver(LoginStateChangeObserver observer) {
         loginStateChangeObservers.add(observer);
     }
+
 }

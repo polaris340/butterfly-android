@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/drawer_width"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white_100"
+    android:layout_gravity="start"
+    >
+    <ImageView
+        android:id="@+id/auth_iv_logo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/logo"
+        android:scaleType="center"
+        android:layout_margin="@dimen/margin_2"
+        />
+    <me.jiho.butterfly.view.MainDrawerListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/lv_drawer_main"
+        android:choiceMode="singleChoice"
+        android:divider="@color/lightgray"
+        android:dividerHeight="1dp"
+
+        />
+</LinearLayout>

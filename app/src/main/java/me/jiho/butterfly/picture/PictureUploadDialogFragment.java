@@ -8,10 +8,12 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -328,6 +330,14 @@ public class PictureUploadDialogFragment extends DialogFragment
 
 
     private static void showNotification(NotificationType type) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+        boolean doNotification = preferences.getBoolean(
+                App.getContext().getString(R.string.key_pref_notification),
+                true
+        );
+        if (!doNotification) return;
+
+
         int message = 0;
         switch (type) {
             case UPLOAD_START:

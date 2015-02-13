@@ -40,7 +40,6 @@ public class PictureListFragment extends Fragment
     private GridLayoutManager gridLayoutManager;
     private RecyclerView recyclerView;
     private PictureListAdapter adapter;
-    private ImageView fragmentHeaderIcon;
     private View fragmentHeader;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ListGridToggleButton layoutToggleButton;
@@ -80,7 +79,7 @@ public class PictureListFragment extends Fragment
         swipeRefreshLayout.setRefreshing(true);
 
 
-        fragmentHeaderIcon = (ImageView) rootView.findViewById(R.id.picturelist_list_icon);
+        ImageView fragmentHeaderIcon = (ImageView) rootView.findViewById(R.id.picturelist_list_icon);
         fragmentHeaderIcon.setOnClickListener(this);
         switch (type) {
             case SENT:
@@ -193,7 +192,9 @@ public class PictureListFragment extends Fragment
                         LinearLayoutManager currentLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                         if (currentLayoutManager.findLastVisibleItemPosition()
                                 == adapter.getItemCount() - 1) {
-                            PictureDataManager.getInstance().loadMore(type, false, onPreLoading, onLoadingComplete);
+                            PictureDataManager.getInstance().loadMore(type, false,
+                                    onPreLoading,// TODO : 그냥 null로 할까..
+                                    onLoadingComplete);
                         }
 
                     }

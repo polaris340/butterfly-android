@@ -51,6 +51,7 @@ public class AuthMainFragment extends Fragment implements View.OnClickListener{
         uiHelper = new UiLifecycleHelper(getActivity(), callback);
         uiHelper.onCreate(savedInstanceState);
 
+
         /* create key hash
         try {
             PackageInfo info = getActivity().getPackageManager().getPackageInfo(
