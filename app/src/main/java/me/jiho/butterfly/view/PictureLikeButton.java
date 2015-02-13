@@ -9,7 +9,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import me.jiho.butterfly.R;
@@ -18,7 +17,6 @@ import me.jiho.butterfly.network.DefaultErrorListener;
 import me.jiho.butterfly.network.VolleyRequestQueue;
 import me.jiho.butterfly.picture.PictureDataManager;
 import me.jiho.butterfly.statics.Constants;
-import me.jiho.butterfly.util.MessageUtil;
 
 /**
  * Created by jiho on 1/29/15.
@@ -51,6 +49,17 @@ public class PictureLikeButton extends BaseFontButton {
                 pictureData.setIsLiked(
                         !pictureData.getIsLiked()
                 );
+                if (pictureData.getIsLiked()) {
+                    pictureData.setLikeCount(
+                            pictureData.getLikeCount() + 1
+                    );
+                } else {
+                    pictureData.setLikeCount(
+                            pictureData.getLikeCount() - 1
+                    );
+                }
+                setText(pictureData.getLikeCountString());
+
                 setCompoundDrawablesWithIntrinsicBounds(
                         0,
                         0,
@@ -66,18 +75,6 @@ public class PictureLikeButton extends BaseFontButton {
                             public void onResponse(JSONObject response) {
                                 if (pictureData.getId() == pictureId) {// 그사이에 바뀌지 않았으면..
                                     setEnabled(true);
-                                    try {
-                                        Picture picture = Picture.fromJson(response.getString(Constants.Keys.MESSAGE));
-                                        PictureDataManager pictureDataManager = PictureDataManager.getInstance();
-                                        pictureDataManager.put(picture);
-                                        pictureDataManager.update(pictureId);
-
-                                        setText(picture.getLikeCountString());
-                                        //pictureDataManager.update(picture.getId());
-                                    } catch (JSONException e) {
-                                        MessageUtil.showDefaultErrorMessage();
-                                        e.printStackTrace();
-                                    }
                                 }
 
                             }
@@ -92,6 +89,14 @@ public class PictureLikeButton extends BaseFontButton {
                                     pictureData.setIsLiked(
                                             !pictureData.getIsLiked()
                                     );
+
+                                    if (pictureData.getIsLiked()) {
+                                        pictureData.setLikeCount(pictureData.getLikeCount() + 1);
+                                    } else {
+                                        pictureData.setLikeCount(pictureData.getLikeCount() - 1);
+                                    }
+                                    setText(pictureData.getLikeCountString());
+
                                     setCompoundDrawablesWithIntrinsicBounds(
                                             0,
                                             0,

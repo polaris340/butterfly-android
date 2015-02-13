@@ -48,6 +48,16 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
         // Creates an explicit intent for an Activity in your app
         Intent resultIntent = new Intent(context, MainActivity.class);
 
+
+        boolean vibrate = preferences.getBoolean(
+                context.getString(R.string.key_pref_notification_vibrate),
+                true
+        );
+        boolean sound = preferences.getBoolean(
+                context.getString(R.string.key_pref_notification_sound),
+                true
+        );
+
         // The stack builder object will contain an artificial back stack for the
         // started Activity.
         // This ensures that navigating backward from the Activity leads out of
@@ -69,17 +79,13 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
 
         Notification notification = mBuilder.build();
         //notification.defaults |= Notification.DEFAULT_ALL;
-
-        boolean vibrate = preferences.getBoolean(
-                context.getString(R.string.key_pref_notification_vibrate),
-                true
-        );
-        boolean sound = preferences.getBoolean(
-                context.getString(R.string.key_pref_notification_sound),
-                true
-        );
-        if (vibrate) notification.defaults |= Notification.DEFAULT_VIBRATE;
-        if (sound) notification.defaults |= Notification.DEFAULT_SOUND;
+        
+        if (vibrate) {
+            notification.defaults |= Notification.DEFAULT_VIBRATE;
+        }
+        if (sound) {
+            notification.defaults |= Notification.DEFAULT_SOUND;
+        }
 
 
         // mId allows you to update the notification later on.
