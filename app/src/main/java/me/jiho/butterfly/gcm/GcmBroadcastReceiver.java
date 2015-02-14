@@ -79,7 +79,7 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
 
         Notification notification = mBuilder.build();
         //notification.defaults |= Notification.DEFAULT_ALL;
-        
+
         if (vibrate) {
             notification.defaults |= Notification.DEFAULT_VIBRATE;
         }

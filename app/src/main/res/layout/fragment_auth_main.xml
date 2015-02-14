@@ -54,7 +54,7 @@
 
                     />
 
-                <me.jiho.butterfly.view.FontAwesomeButton
+                <me.jiho.butterfly.view.FAIconButton
                     style="?android:borderlessButtonStyle"
                     android:text="@string/fa_google_plus"
                     android:textAppearance="?android:attr/textAppearanceLarge"
@@ -63,7 +63,7 @@
                     android:layout_height="@dimen/span_1"
                     android:visibility="gone"/>
 
-                <me.jiho.butterfly.view.FontAwesomeButton
+                <me.jiho.butterfly.view.FAIconButton
                     android:id="@+id/auth_btn_email_login"
                     style="?android:borderlessButtonStyle"
                     android:text="@string/fa_envelope_o"

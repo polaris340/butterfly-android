@@ -41,8 +41,9 @@
     <string name="error_email_format">Please enter a valid email</string>
     <string name="error_password_length">The password must have a length of %1$d to %2$d characters</string>
     <string name="error_password_confirm">Password does not match the confirm password</string>
+    <string name="error_network">Can\'t connect to server. Please try again later.</string>
     <string name="message_default_progress">Please wait...</string>
-    <string name="error_default">An unexpected error occured. Please try again later</string>
+    <string name="error_default">An unexpected error occurred. Please try again later.</string>
     <string name="label_send">Send</string>
     <string name="message_picture_download_start">Downloading image...</string>
     <string name="message_picture_download_complete">Download complete</string>

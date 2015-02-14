@@ -6,6 +6,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v7.graphics.Palette;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -64,15 +65,6 @@ public class UploadTargetImageView extends ImageView{
                 .load(file)
                 .placeholder(R.drawable.loading_placeholder)
                 .into(this);
-        /*
-        this.currentImageFile = file;
-        if (file == null)
-            setImageURI(null);
-        else {
-            setImageURI(Uri.fromFile(file));
-            //getImagePrimaryColor();
-        }
-        //*/
     }
 
     public File getImageFile() {
@@ -87,6 +79,7 @@ public class UploadTargetImageView extends ImageView{
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Log.e("primary color", ColorUtil.toHexString(color));
         return ColorUtil.toHexString(color);
     }
 }
