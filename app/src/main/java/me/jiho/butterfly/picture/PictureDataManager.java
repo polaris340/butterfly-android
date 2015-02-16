@@ -219,7 +219,12 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
                             if (pictures.length > 0) {
                                 currentRequestHashMap.remove(type);
                             }
-                            addItems(type, addStartPosition, pictures.length);
+
+                            if (refresh) {
+                                update(type);
+                            } else {
+                                addItems(type, addStartPosition, pictures.length);
+                            }
 
 
                         } catch (JSONException e) {
