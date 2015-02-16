@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 
@@ -103,6 +103,16 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
         if (position >= 0) {
             notifyItemChanged(position);
         }
+    }
+
+    @Override
+    public void addItems(int startPosition, int itemCount) {
+        notifyItemRangeInserted(startPosition, itemCount);
+    }
+
+    @Override
+    public void removeItem(int position) {
+        notifyItemRemoved(position);
     }
 
 
@@ -214,9 +224,10 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
             } else {pictureUrl = pictureData.getThumbnailUrl();
 
             }
-            Glide.with(App.getContext())
-                    .load(pictureUrl)
-                    .into(this.mainImageView);
+//            Glide.with(App.getContext())
+//                    .load(pictureUrl)
+//                    .into(this.mainImageView);
+            ImageLoader.getInstance().displayImage(pictureUrl, this.mainImageView);
 
         }
 

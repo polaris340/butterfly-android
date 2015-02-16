@@ -6,4 +6,6 @@ package me.jiho.butterfly.picture;
 public interface PictureDataObserver {
     public void update();
     public void update(long pictureId);
+    public void addItems(int startPosition, int itemCount);
+    public void removeItem(int position);
 }

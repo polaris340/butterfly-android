@@ -9,8 +9,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
+import me.jiho.butterfly.App;
 import me.jiho.butterfly.R;
 
 /**
@@ -34,11 +36,18 @@ public class DialogUtil {
         builder.setView(view);
         final Dialog dialog = builder.create();
 
-        Glide.with(context)
-                .load("http://maps.googleapis.com/maps/api/staticmap?center="+latitude+","+longitude+"&zoom=6&size=640x640&maptype=terrain" +
-                        "&markers=size:small%7Ccolor:red%7C"+latitude+","+longitude+"&sensor=false")
-                .placeholder(R.drawable.loading_placeholder)
-                .into(mapImageView);
+        DisplayImageOptions options = App.getDefaultDisplayImageOptionBuilder()
+                .showImageOnLoading(R.drawable.loading_placeholder)
+                .build();
+        ImageLoader.getInstance().displayImage(
+                "http://maps.googleapis.com/maps/api/staticmap?center="+
+                        latitude+","+longitude+
+                        "&zoom=6&size=640x640&maptype=terrain" +
+                "&markers=size:small%7Ccolor:red%7C"+latitude+","+longitude+"&sensor=false",
+                mapImageView,
+                options
+        );
+
 
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -52,6 +52,16 @@ public class PictureViewFragmentPagerAdapter extends FragmentPagerAdapter
         notifyDataSetChanged();
     }
 
+    @Override
+    public void addItems(int startPosition, int itemCount) {
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void removeItem(int position) {
+        notifyDataSetChanged();
+    }
+
     public void addToObservable() {
         PictureDataManager
                 .getInstance()

@@ -4,15 +4,17 @@ import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.v7.graphics.Palette;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
 
+import me.jiho.butterfly.App;
 import me.jiho.butterfly.R;
 import me.jiho.butterfly.util.ColorUtil;
 
@@ -61,10 +63,12 @@ public class UploadTargetImageView extends ImageView{
 
     public void setImageFile(File file) {
         this.currentImageFile = file;
-        Glide.with(getContext())
-                .load(file)
-                .placeholder(R.drawable.loading_placeholder)
-                .into(this);
+
+
+        DisplayImageOptions options = App.getDefaultDisplayImageOptionBuilder()
+                .showImageOnLoading(R.drawable.loading_placeholder)
+                .build();
+        ImageLoader.getInstance().displayImage(Uri.fromFile(file).toString(), this, options);
     }
 
     public File getImageFile() {
@@ -79,7 +83,6 @@ public class UploadTargetImageView extends ImageView{
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Log.e("primary color", ColorUtil.toHexString(color));
         return ColorUtil.toHexString(color);
     }
 }

@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import me.jiho.butterfly.App;
 import me.jiho.butterfly.R;
@@ -55,10 +55,8 @@ public class PictureViewFragment extends Fragment implements View.OnClickListene
                         manager.getPictureIdList(type).get(position)
                 );
         //mainImageView.setBackgroundColor(pictureData.getColor());
-        Glide.with(this)
-                .load(pictureData.getPictureUrl())
-                .crossFade()
-                .into(mainImageView);
+        ImageLoader.getInstance().displayImage(pictureData.getPictureUrl(), mainImageView);
+
 
         TextView titleView = (TextView) rootView.findViewById(R.id.pictureview_tv_title);
         String title = pictureData.getTitle();

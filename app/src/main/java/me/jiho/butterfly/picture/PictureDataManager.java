@@ -46,10 +46,26 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
     }
 
     @Override
+    public void addItems(Type type, int startPosition, int itemCount) {
+        Iterator<PictureDataObserver> iterator = observers.get(type).iterator();
+        while (iterator.hasNext()) {
+            iterator.next().addItems(startPosition, itemCount);
+        }
+    }
+
+    @Override
+    public void removeItem(Type type, int position) {
+        Iterator<PictureDataObserver> iterator = observers.get(type).iterator();
+        while (iterator.hasNext()) {
+            iterator.next().removeItem(position);
+        }
+    }
+
+    @Override
     public void onLoginStateChanged(Auth.LoginState loginState) {
         switch (loginState) {
             case PENDING:
-            //case LOGGED_IN:
+                //case LOGGED_IN:
                 // cancel all current request
                 for (Type t:Type.values()) {
                     if (currentRequestHashMap.containsKey(t))
@@ -59,14 +75,7 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
         }
     }
 
-    public enum Type {
-        SENT,
-        RECEIVED;
 
-        public String getKey() {
-            return name().toLowerCase();
-        }
-    };
 
     private PictureDataManager() {
         pictureHashMap = new HashMap<>();
@@ -147,7 +156,6 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
         }
     }
 
-
     @Override
     public void update(Type type, long pictureId) {
         Iterator<PictureDataObserver> iterator = observers.get(type).iterator();
@@ -155,6 +163,7 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
             iterator.next().update(pictureId);
         }
     }
+
 
     @Override
     public void update(long pictureId) {
@@ -200,6 +209,7 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
                             if (refresh) {
                                 manager.clear(type);
                             }
+                            int addStartPosition = getPictureIdList(type).size();
                             String dataList = response.getString(Constants.Keys.MESSAGE);
                             Picture[] pictures = Picture.fromJsonArray(dataList);
 
@@ -209,7 +219,7 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
                             if (pictures.length > 0) {
                                 currentRequestHashMap.remove(type);
                             }
-                            update(type);
+                            addItems(type, addStartPosition, pictures.length);
 
 
                         } catch (JSONException e) {
@@ -263,4 +273,7 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
             return 0;
         }
     }
+
+
+
 }
