@@ -1,7 +1,6 @@
 package me.jiho.butterfly.view;
 
 import android.content.Context;
-import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -23,7 +22,6 @@ import me.jiho.butterfly.util.ColorUtil;
  */
 public class UploadTargetImageView extends ImageView{
     private File currentImageFile;
-    private AnimationDrawable placeholder;
 
     public UploadTargetImageView(Context context) {
         super(context);
@@ -78,8 +76,8 @@ public class UploadTargetImageView extends ImageView{
     public String getImagePrimaryColor() {
         int color = getResources().getColor(R.color.lightgray);
         try {
-            Palette palette = Palette.generate(((BitmapDrawable)getDrawable()).getBitmap(), 1);
-            color = palette.getMutedColor(getResources().getColor(R.color.lightgray));
+            Palette palette = Palette.generate(((BitmapDrawable)getDrawable()).getBitmap(), 6);
+            color = palette.getLightVibrantColor(getResources().getColor(R.color.lightgray));
         } catch (Exception e) {
             e.printStackTrace();
         }

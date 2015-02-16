@@ -224,9 +224,7 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
             } else {pictureUrl = pictureData.getThumbnailUrl();
 
             }
-//            Glide.with(App.getContext())
-//                    .load(pictureUrl)
-//                    .into(this.mainImageView);
+
             ImageLoader.getInstance().displayImage(pictureUrl, this.mainImageView);
 
         }
