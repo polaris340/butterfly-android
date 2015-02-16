@@ -40,6 +40,8 @@ public class App extends Application {
         faFont = Typeface.createFromAsset(getContext().getAssets(), "fonts/fontawesome-webfont.ttf");
     }
 
+
+
     public static Context getContext() {
         return context;
     }

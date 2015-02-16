@@ -79,6 +79,7 @@ public class PictureUploadDialogFragment extends DialogFragment
     private File uploadTargetFile;
     private EditText titleInput;
     private static boolean uploading = false;
+    private boolean mFileWrited = false;
 
 
 
@@ -116,6 +117,7 @@ public class PictureUploadDialogFragment extends DialogFragment
             dialog = builder.create();
             dialog.setCanceledOnTouchOutside(false);
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
             if (uploadTargetFile == null) {
                 dialog.setOnShowListener(new DialogInterface.OnShowListener() {
                     @Override
@@ -185,6 +187,7 @@ public class PictureUploadDialogFragment extends DialogFragment
                     setUploadTargetFile(selectedImage);
                     break;
                 case REQUEST_IMAGE_EDIT:
+                    mFileWrited = true; // 수정한 파일은 저장함
                     Uri savedImage = data.getData();
                     uploadTargetFile = new File(savedImage.getPath());
                 case REQUEST_IMAGE_CAPTURE:
@@ -234,16 +237,14 @@ public class PictureUploadDialogFragment extends DialogFragment
                 }
                 break;
             case R.id.upload_btn_cancel:
-                if (uploadTargetFile != null)
-                    uploadTargetFile.delete();
                 dismiss();
                 break;
             case R.id.upload_btn_submit:
-                FileUtil.addToGallery(uploadTargetFile);
                 if (uploadTargetFile == null) {
                     // TODO : show message
                     break;
                 }
+                mFileWrited = true;
                 Request request = new MultipartRequest(UPLOAD_URL, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -304,8 +305,6 @@ public class PictureUploadDialogFragment extends DialogFragment
                                     ContentType.APPLICATION_JSON);
 
                             return multipartEntity.build();
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -434,4 +433,17 @@ public class PictureUploadDialogFragment extends DialogFragment
             }
         });
     }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if (!mFileWrited) {
+            if (uploadTargetFile != null) {
+                uploadTargetFile.delete();
+            }
+        } else {
+            FileUtil.addToGallery(uploadTargetFile);
+        }
+    }
 }
+

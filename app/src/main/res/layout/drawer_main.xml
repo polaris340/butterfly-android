@@ -11,9 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/logo"
+        android:src="@drawable/drawer_header"
         android:scaleType="center"
-        android:layout_margin="@dimen/margin_2"
         />
     <me.jiho.butterfly.view.MainDrawerListView
         android:layout_width="match_parent"

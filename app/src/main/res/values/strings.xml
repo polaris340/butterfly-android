@@ -65,7 +65,7 @@
 
     <string-array name="main_drawer_menu">
         <item>Settings</item>
-        <!-- <item>Log out</item> -->
+        <!--<item>Log out</item>-->
     </string-array>
 
 </resources>

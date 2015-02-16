@@ -36,7 +36,7 @@ public class MainDrawerListView extends ListView {
         String[] menuList = getContext().getResources().getStringArray(R.array.main_drawer_menu);
         setAdapter(new MainDrawerArrayAdapter(
                 getContext(),
-                R.layout.listitem_simple_text,
+                R.layout.listitem_text_with_icon,
                 R.id.text,
                 menuList
         ));
