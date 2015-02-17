@@ -10,7 +10,7 @@ import java.util.concurrent.Callable;
 
 import me.jiho.butterfly.R;
 import me.jiho.butterfly.picture.PictureDataManager;
-import me.jiho.butterfly.util.FileUtil;
+import me.jiho.butterfly.util.ImageFileUtil;
 import me.jiho.butterfly.util.MessageUtil;
 
 /**
@@ -42,15 +42,15 @@ public class PictureSaveButton extends PictureMenuItemButton {
         String pictureUrl = PictureDataManager.getInstance().get(pictureId).getPictureUrl();
         MessageUtil.showMessage(R.string.message_picture_download_start);
         try {
-            final File targetFile = FileUtil.createNewImageFile();
-            FileUtil.download(
+            final File targetFile = ImageFileUtil.createNewImageFile();
+            ImageFileUtil.download(
                     pictureUrl,
                     targetFile,
                     new Callable() {
                         @Override
                         public Object call() throws Exception {
                             MessageUtil.showMessage(R.string.message_picture_download_complete);
-                            FileUtil.addToGallery(targetFile);
+                            ImageFileUtil.addToGallery(targetFile);
                             return null;
                         }
                     },
@@ -62,7 +62,7 @@ public class PictureSaveButton extends PictureMenuItemButton {
                             return null;
                         }
                     }
-                    );
+            );
         } catch (IOException e) {
             MessageUtil.showDefaultErrorMessage();
             e.printStackTrace();

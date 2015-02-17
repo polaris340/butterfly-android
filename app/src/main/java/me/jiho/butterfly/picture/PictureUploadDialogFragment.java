@@ -49,11 +49,12 @@ import me.jiho.butterfly.App;
 import me.jiho.butterfly.MainActivity;
 import me.jiho.butterfly.R;
 import me.jiho.butterfly.db.Picture;
+import me.jiho.butterfly.location.LastLocationManager;
 import me.jiho.butterfly.network.DefaultErrorListener;
 import me.jiho.butterfly.network.MultipartRequest;
 import me.jiho.butterfly.network.VolleyRequestQueue;
 import me.jiho.butterfly.statics.Constants;
-import me.jiho.butterfly.util.FileUtil;
+import me.jiho.butterfly.util.ImageFileUtil;
 import me.jiho.butterfly.util.MessageUtil;
 import me.jiho.butterfly.view.UploadTargetImageView;
 
@@ -152,7 +153,7 @@ public class PictureUploadDialogFragment extends DialogFragment
                 // 현재 파일이 없는 경우에만 생성
                 // 있으면 덮어씀
                 try {
-                    uploadTargetFile = FileUtil.createNewImageFile();
+                    uploadTargetFile = ImageFileUtil.createNewImageFile();
                 } catch (IOException ex) {
                     // Error occurred while creating the File
                     ex.printStackTrace();
@@ -300,6 +301,16 @@ public class PictureUploadDialogFragment extends DialogFragment
                                         ContentType.APPLICATION_JSON);
                             }
 
+                            float[] latLng = ImageFileUtil.getLoactionFromExif(uploadTargetFile);
+                            if (latLng != null) {
+                                multipartEntity.addTextBody(LastLocationManager.KEY_LATITUDE,
+                                        Float.toString(latLng[0]),
+                                        ContentType.APPLICATION_JSON);
+                                multipartEntity.addTextBody(LastLocationManager.KEY_LONGITUDE,
+                                        Float.toString(latLng[1]),
+                                        ContentType.APPLICATION_JSON);
+                            }
+
                             multipartEntity.addTextBody(KEY_IMAGE_PRIMARY_COLOR,
                                     uploadTargetImageView.getImagePrimaryColor(),
                                     ContentType.APPLICATION_JSON);
@@ -409,14 +420,14 @@ public class PictureUploadDialogFragment extends DialogFragment
     public void setUploadTargetFile(InputStream is) {
         if (uploadTargetFile == null) {
             try {
-                uploadTargetFile = FileUtil.createNewImageFile();
+                uploadTargetFile = ImageFileUtil.createNewImageFile();
             } catch (IOException e) {
                 MessageUtil.showDefaultErrorMessage();
                 e.printStackTrace();
                 return;
             }
         }
-        FileUtil.copy(is, uploadTargetFile, new Callable() {
+        ImageFileUtil.copy(is, uploadTargetFile, new Callable() {
             @Override
             public Object call() throws Exception {
                 if (getDialog() != null) {
@@ -442,7 +453,7 @@ public class PictureUploadDialogFragment extends DialogFragment
                 uploadTargetFile.delete();
             }
         } else {
-            FileUtil.addToGallery(uploadTargetFile);
+            ImageFileUtil.addToGallery(uploadTargetFile);
         }
     }
 }

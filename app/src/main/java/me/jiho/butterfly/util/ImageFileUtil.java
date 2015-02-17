@@ -2,6 +2,7 @@ package me.jiho.butterfly.util;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -30,7 +31,7 @@ import me.jiho.butterfly.R;
 /**
  * Created by jiho on 1/30/15.
  */
-public class FileUtil {
+public class ImageFileUtil {
     public static File createNewImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -228,6 +229,23 @@ public class FileUtil {
         Uri contentUri = Uri.fromFile(file);
         mediaScanIntent.setData(contentUri);
         App.getContext().sendBroadcast(mediaScanIntent);
+    }
+
+
+    public static float[] getLoactionFromExif(File file) {
+        try {
+            ExifInterface exif = new ExifInterface(file.getAbsolutePath());
+            float[] latLng = new float[2];
+
+            if (exif.getLatLong(latLng)) {
+                return latLng;
+            } else {
+                return null;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }
