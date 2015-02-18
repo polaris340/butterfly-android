@@ -15,6 +15,7 @@ import java.net.CookieHandler;
 import java.net.CookieManager;
 
 import me.jiho.butterfly.location.LastLocationManager;
+import me.jiho.butterfly.picture.PictureDataManager;
 import me.jiho.butterfly.statics.Constants;
 
 /**
@@ -71,6 +72,9 @@ public class App extends Application {
                 .diskCacheFileCount(DISK_CACHE_FILE_COUNT)
                 .build();
         ImageLoader.getInstance().init(config);
+
+        // to initialize
+        PictureDataManager.getInstance();
     }
 
 

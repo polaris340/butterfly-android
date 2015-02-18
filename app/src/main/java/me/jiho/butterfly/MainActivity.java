@@ -137,7 +137,8 @@ public class MainActivity extends ActionBarActivity
         }
 
         // handle share intent
-        if (intent.getAction().equals(Intent.ACTION_SEND)) {
+        String action = intent.getAction();
+        if (action != null && intent.getAction().equals(Intent.ACTION_SEND)) {
             Uri imageUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
             if (imageUri != null) {
                 showUploadDialogWithImageUri(imageUri);
