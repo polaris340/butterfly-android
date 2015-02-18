@@ -177,15 +177,6 @@ public class PictureUploadDialogFragment extends DialogFragment
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_IMAGE_SELECT:
-                    // 새로 찍은 사진이거나 복사된 사진이니까 지우자
-                    /*
-                    if (uploadTargetFile != null) {
-                        uploadTargetFile.delete();
-
-                        // 파일 새로 만들도록 null로 바꿔줌
-                        uploadTargetFile = null;
-                    }
-                    //*/
 
                     Uri selectedImage = data.getData();
                     setUploadTargetFile(selectedImage);
@@ -193,7 +184,13 @@ public class PictureUploadDialogFragment extends DialogFragment
                 case REQUEST_IMAGE_EDIT:
                     mFileWrited = true; // 수정한 파일은 저장함
                     Uri savedImage = data.getData();
-                    uploadTargetFile = new File(savedImage.getPath());
+
+                    if (savedImage.getScheme().equals("file")) {
+                        uploadTargetFile = new File(savedImage.getPath());
+                    } else {
+                        setUploadTargetFile(savedImage);
+                        break;
+                    }
                 case REQUEST_IMAGE_CAPTURE:
                     //uploadTargetImageView.setImageFile(null);
                     uploadTargetImageView.setImageFile(uploadTargetFile);
@@ -289,9 +286,13 @@ public class PictureUploadDialogFragment extends DialogFragment
                             byte[] data;
                             data = IOUtils.toByteArray(inputStream);
 
-                            InputStreamBody inputStreamBody = new InputStreamBody(new ByteArrayInputStream(data), uploadTargetFile.getName());
+                            InputStreamBody inputStreamBody = new InputStreamBody(
+                                    new ByteArrayInputStream(data),
+                                    uploadTargetFile.getName()
+                            );
 
-                            MultipartEntityBuilder multipartEntity = MultipartEntityBuilder.create();
+                            MultipartEntityBuilder multipartEntity
+                                    = MultipartEntityBuilder.create();
                             multipartEntity.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
                             multipartEntity.addPart(KEY_UPLOAD_IMAGE, inputStreamBody);
 

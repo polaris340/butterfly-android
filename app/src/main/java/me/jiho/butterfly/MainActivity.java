@@ -111,7 +111,8 @@ public class MainActivity extends ActionBarActivity
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mFragmentPagerAdapter);
 
-        String type = getIntent().getStringExtra(KEY_FRAGMENT_TYPE);
+        Intent intent = getIntent();
+        String type = intent.getStringExtra(KEY_FRAGMENT_TYPE);
         if (type != null && type.equals(PictureDataManager.Type.SENT.name())) {
             mViewPager.setCurrentItem(1);
         }
@@ -132,6 +133,14 @@ public class MainActivity extends ActionBarActivity
 
             if (regid.isEmpty()) {
                 registerInBackground();
+            }
+        }
+
+        // handle share intent
+        if (intent.getAction().equals(Intent.ACTION_SEND)) {
+            Uri imageUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+            if (imageUri != null) {
+                showUploadDialogWithImageUri(imageUri);
             }
         }
     }
@@ -183,11 +192,15 @@ public class MainActivity extends ActionBarActivity
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == SELECT_PICTURE) {
                 Uri selectedImage = data.getData();
-                PictureUploadDialogFragment uploadDialogFragment = new PictureUploadDialogFragment();
-                uploadDialogFragment.setUploadTargetFile(selectedImage);
-                uploadDialogFragment.show(getSupportFragmentManager(), PictureUploadDialogFragment.TAG);
+                showUploadDialogWithImageUri(selectedImage);
             }
         }
+    }
+
+    private void showUploadDialogWithImageUri(Uri uri) {
+        PictureUploadDialogFragment uploadDialogFragment = new PictureUploadDialogFragment();
+        uploadDialogFragment.setUploadTargetFile(uri);
+        uploadDialogFragment.show(getSupportFragmentManager(), PictureUploadDialogFragment.TAG);
     }
 
     @Override
