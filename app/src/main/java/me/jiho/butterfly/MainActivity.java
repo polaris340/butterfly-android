@@ -184,8 +184,8 @@ public class MainActivity extends ActionBarActivity
             if (requestCode == SELECT_PICTURE) {
                 Uri selectedImage = data.getData();
                 PictureUploadDialogFragment uploadDialogFragment = new PictureUploadDialogFragment();
-                uploadDialogFragment.show(getSupportFragmentManager(), PictureUploadDialogFragment.TAG);
                 uploadDialogFragment.setUploadTargetFile(selectedImage);
+                uploadDialogFragment.show(getSupportFragmentManager(), PictureUploadDialogFragment.TAG);
             }
         }
     }

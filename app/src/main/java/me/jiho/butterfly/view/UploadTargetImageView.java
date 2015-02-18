@@ -60,14 +60,16 @@ public class UploadTargetImageView extends ImageView{
 
     public void setImageFile(File file) {
         this.currentImageFile = file;
-
+        setImageDrawable(null);
 
         DisplayImageOptions options = App.getDefaultDisplayImageOptionBuilder()
                 .showImageOnLoading(R.drawable.loading_placeholder)
+                .cacheInMemory(false)
+                .cacheOnDisk(false)
                 .build();
-
         ImageLoader.getInstance().displayImage(Uri.fromFile(file).toString(), this, options);
     }
+
 
     public File getImageFile() {
         return currentImageFile;

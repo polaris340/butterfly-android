@@ -17,6 +17,7 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
@@ -177,12 +178,14 @@ public class PictureUploadDialogFragment extends DialogFragment
             switch (requestCode) {
                 case REQUEST_IMAGE_SELECT:
                     // 새로 찍은 사진이거나 복사된 사진이니까 지우자
+                    /*
                     if (uploadTargetFile != null) {
                         uploadTargetFile.delete();
 
                         // 파일 새로 만들도록 null로 바꿔줌
                         uploadTargetFile = null;
                     }
+                    //*/
 
                     Uri selectedImage = data.getData();
                     setUploadTargetFile(selectedImage);
@@ -443,6 +446,11 @@ public class PictureUploadDialogFragment extends DialogFragment
                 return null;
             }
         });
+    }
+
+    @Override
+    public void show(FragmentManager manager, String tag) {
+        super.show(manager, tag);
     }
 
     @Override
