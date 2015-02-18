@@ -39,7 +39,6 @@ public class UploadTargetImageView extends ImageView{
     }
 
     private void init() {
-
     }
 
     @Override
@@ -66,6 +65,7 @@ public class UploadTargetImageView extends ImageView{
         DisplayImageOptions options = App.getDefaultDisplayImageOptionBuilder()
                 .showImageOnLoading(R.drawable.loading_placeholder)
                 .build();
+
         ImageLoader.getInstance().displayImage(Uri.fromFile(file).toString(), this, options);
     }
 

@@ -20,6 +20,7 @@
             android:background="@color/black_12"
             android:scaleType="fitXY"
             android:adjustViewBounds="true"
+            android:layout_centerInParent="true"
             android:src="@drawable/loading_placeholder_base_white"
             />
         <ImageButton

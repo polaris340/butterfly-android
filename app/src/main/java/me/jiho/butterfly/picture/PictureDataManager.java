@@ -101,8 +101,10 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
     public void delete(long pictureId) {
         for (Type t:Type.values()) {
             ArrayList<Long> pictureIdList = pictureIdListHashMap.get(t);
-            if (pictureIdList.remove(pictureId)) {
-                update(t);
+            int index = pictureIdList.indexOf(pictureId);
+            if (index >= 0) {
+                pictureIdList.remove(index);
+                removeItem(t, index);
             }
         }
 

@@ -38,7 +38,7 @@ public class PictureViewActivity extends ActionBarActivity {
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mFragmentPagerAdapter = new PictureViewFragmentPagerAdapter(getSupportFragmentManager(), type);
+        mFragmentPagerAdapter = new PictureViewFragmentPagerAdapter(this, getSupportFragmentManager(), type);
 
         progressBarWrapper = new FadeHideableViewWrapper(findViewById(R.id.pictureview_progress_bar));
 
@@ -109,8 +109,10 @@ public class PictureViewActivity extends ActionBarActivity {
         Intent resultIntent = new Intent();
         resultIntent.putExtra(PictureDataManager.KEY_POSITION, mViewPager.getCurrentItem());
         setResult(Activity.RESULT_OK, resultIntent);
-        finish();
+        super.onBackPressed();
     }
+
+
 
     @Override
     protected void onResume() {

@@ -122,8 +122,10 @@ public class PictureViewFragment extends Fragment implements View.OnClickListene
                 getResources().getColor(R.color.white_70)
         );
         pictureMenuToggleButton.setPictureId(pictureData.getId());
+
+        View menuButtonRootView = pictureMenuToggleButton.getRootView();
         ((ViewGroup) rootView.findViewById(R.id.pictureview_tb_menu))
-                .addView(pictureMenuToggleButton.getRootView());
+                .addView(menuButtonRootView);
 
 
         mainImageView
