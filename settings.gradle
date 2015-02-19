@@ -1,1 +1,1 @@
-include ':app', ':volley', ':animatedtogglebutton'
+include ':app', ':animatedtogglebutton'

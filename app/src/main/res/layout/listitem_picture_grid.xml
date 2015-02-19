@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="wrap_content"
     android:layout_height="wrap_content">
-    <me.jiho.butterfly.view.SquareImageView
+    <co.bttrfly.view.SquareImageView
         android:id="@+id/picturelist_main_image"
         android:background="@color/black_12"
         android:layout_width="match_parent"

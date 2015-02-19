@@ -15,7 +15,7 @@
         android:layout_centerVertical="true"
 
         >
-        <me.jiho.butterfly.view.BaseFontTextView
+        <co.bttrfly.view.BaseFontTextView
             android:id="@+id/pictureview_label_from"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
             android:layout_marginLeft="@dimen/margin_2"
 
             />
-        <me.jiho.butterfly.view.BaseFontButton
+        <co.bttrfly.view.BaseFontButton
             android:id="@+id/pictureview_btn_country_name"
             style="?android:borderlessButtonStyle"
             android:layout_width="wrap_content"
@@ -39,7 +39,7 @@
 
             />
     </LinearLayout>
-    <me.jiho.butterfly.view.BaseFontButton
+    <co.bttrfly.view.BaseFontButton
         android:id="@+id/pictureview_btn_send_count"
         style="?android:borderlessButtonStyle"
         android:layout_width="wrap_content"
@@ -53,7 +53,7 @@
         />
 
 
-    <me.jiho.butterfly.view.PictureLikeButton
+    <co.bttrfly.view.PictureLikeButton
         style="?android:borderlessButtonStyle"
         android:id="@+id/pictureview_btn_like"
         android:layout_width="wrap_content"

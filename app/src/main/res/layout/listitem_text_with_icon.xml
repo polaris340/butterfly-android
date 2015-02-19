@@ -9,7 +9,7 @@
         android:src="@drawable/ic_settings_18"
         android:scaleType="center"
         />
-    <me.jiho.butterfly.view.BaseFontTextView
+    <co.bttrfly.view.BaseFontTextView
         android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

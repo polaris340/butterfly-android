@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="me.jiho.butterfly" >
+    package="co.bttrfly" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -11,10 +11,10 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
     <permission
-        android:name="me.jiho.butterfly.C2D_MESSAGE"
+        android:name="co.bttrfly.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="me.jiho.butterfly.C2D_MESSAGE" />
+    <uses-permission android:name="co.bttrfly.C2D_MESSAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <uses-feature
@@ -62,7 +62,7 @@
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
 
-                <category android:name="me.jiho.butterfly" />
+                <category android:name="co.bttrfly" />
             </intent-filter>
         </receiver>
 

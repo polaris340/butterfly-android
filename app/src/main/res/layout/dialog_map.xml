@@ -3,12 +3,12 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white_100">
-    <me.jiho.butterfly.view.SquareImageView
+    <co.bttrfly.view.SquareImageView
         android:id="@+id/mapdialog_iv_map"
         android:background="@color/black_12"
         android:layout_width="match_parent"
         android:layout_height="0dp" />
-    <me.jiho.butterfly.view.BaseFontButton
+    <co.bttrfly.view.BaseFontButton
         android:id="@+id/mapdialog_btn_close"
         style="?android:borderlessButtonStyle"
         android:layout_width="match_parent"

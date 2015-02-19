@@ -14,7 +14,7 @@
         android:src="@drawable/drawer_header"
         android:scaleType="center"
         />
-    <me.jiho.butterfly.view.MainDrawerListView
+    <co.bttrfly.view.MainDrawerListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/lv_drawer_main"

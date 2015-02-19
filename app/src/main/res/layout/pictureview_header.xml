@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     >
-    <me.jiho.butterfly.view.BaseFontTextView
+    <co.bttrfly.view.BaseFontTextView
         android:id="@+id/pictureview_tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

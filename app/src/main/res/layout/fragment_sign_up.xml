@@ -9,7 +9,7 @@
         android:orientation="vertical"
         android:layout_centerInParent="true">
 
-        <me.jiho.butterfly.view.ThemeFontTextView
+        <co.bttrfly.view.ThemeFontTextView
             android:drawableTop="@drawable/ic_sent_48"
             android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"
@@ -18,7 +18,7 @@
             android:text="@string/label_sign_up"
             android:layout_margin="@dimen/margin_2"
             />
-        <me.jiho.butterfly.view.BaseFontEditText
+        <co.bttrfly.view.BaseFontEditText
             android:id="@+id/signup_et_email"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
@@ -29,7 +29,7 @@
             android:inputType="textEmailAddress"
             android:singleLine="true"
             />
-        <me.jiho.butterfly.view.BaseFontEditText
+        <co.bttrfly.view.BaseFontEditText
             android:id="@+id/signup_et_password"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
@@ -40,7 +40,7 @@
             android:inputType="textPassword"
             android:singleLine="true"
             />
-        <me.jiho.butterfly.view.BaseFontEditText
+        <co.bttrfly.view.BaseFontEditText
             android:id="@+id/signup_et_password_confirm"
             android:layout_gravity="center_horizontal"
             android:gravity="center"

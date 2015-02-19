@@ -9,7 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <me.jiho.butterfly.view.BaseFontTextView
+        <co.bttrfly.view.BaseFontTextView
             android:id="@+id/pictureview_tv_title"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_width="match_parent"
@@ -42,14 +42,14 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <me.jiho.butterfly.view.PictureListImageView
+        <co.bttrfly.view.PictureListImageView
             android:id="@+id/picturelist_main_image"
             android:background="@color/black_12"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:scaleType="fitXY"
             android:adjustViewBounds="true"/>
-        <me.jiho.butterfly.view.BaseFontButton
+        <co.bttrfly.view.BaseFontButton
             android:id="@+id/picturelist_btn_show_image"
             style="?android:borderlessButtonStyle"
             android:layout_width="match_parent"

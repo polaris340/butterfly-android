@@ -13,7 +13,7 @@
             android:src="@drawable/ic_sent_24"
             android:scaleType="center"
             />
-        <me.jiho.butterfly.view.BaseFontTextView
+        <co.bttrfly.view.BaseFontTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -22,7 +22,7 @@
             android:textColor="@color/black_87"
             />
         </LinearLayout>
-    <me.jiho.butterfly.view.ColorAnimatedProgressBar
+    <co.bttrfly.view.ColorAnimatedProgressBar
         android:layout_width="match_parent"
         android:layout_height="@dimen/progress_bar_height" />
 </LinearLayout>

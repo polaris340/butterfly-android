@@ -4,7 +4,7 @@
     android:background="@color/lightgray"
     >
 
-    <me.jiho.butterfly.view.BaseFontTextView
+    <co.bttrfly.view.BaseFontTextView
         android:id="@+id/picturelist_message_empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,7 +42,7 @@
             android:layout_centerHorizontal="true"
             />
 
-        <me.jiho.animatedtogglebutton.ListGridToggleButton
+        <co.jiho.animatedtogglebutton.ListGridToggleButton
             android:id="@+id/picturelist_tb_layout"
             android:layout_width="@dimen/span_1"
             android:layout_height="@dimen/span_1"

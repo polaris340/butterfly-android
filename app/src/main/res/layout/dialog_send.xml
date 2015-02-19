@@ -13,7 +13,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <me.jiho.butterfly.view.UploadTargetImageView
+        <co.bttrfly.view.UploadTargetImageView
             android:id="@+id/upload_iv_target"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
             />
 
     </RelativeLayout>
-    <me.jiho.butterfly.view.BaseFontEditText
+    <co.bttrfly.view.BaseFontEditText
         android:id="@+id/upload_et_title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/span_1"
@@ -53,7 +53,7 @@
 
 
 
-        <me.jiho.butterfly.view.BaseFontButton
+        <co.bttrfly.view.BaseFontButton
             android:id="@+id/upload_btn_cancel"
             style="?android:borderlessButtonStyle"
             android:layout_width="0dp"
@@ -63,7 +63,7 @@
             android:textColor="@color/black_54"
             />
 
-        <me.jiho.butterfly.view.BaseFontButton
+        <co.bttrfly.view.BaseFontButton
             android:id="@+id/upload_btn_edit_picture"
 
             style="?android:borderlessButtonStyle"
@@ -74,7 +74,7 @@
             android:textColor="@color/black_87"
             />
 
-        <me.jiho.butterfly.view.BaseFontButton
+        <co.bttrfly.view.BaseFontButton
             android:id="@+id/upload_btn_submit"
             style="?android:borderlessButtonStyle"
             android:layout_width="0dp"
