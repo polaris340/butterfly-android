@@ -50,7 +50,7 @@ import co.bttrfly.App;
 import co.bttrfly.MainActivity;
 import co.bttrfly.R;
 import co.bttrfly.db.Picture;
-import co.bttrfly.location.LastLocationManager;
+import co.bttrfly.location.LocationData;
 import co.bttrfly.network.DefaultErrorListener;
 import co.bttrfly.network.MultipartRequest;
 import co.bttrfly.network.VolleyRequestQueue;
@@ -307,10 +307,10 @@ public class PictureUploadDialogFragment extends DialogFragment
 
                             float[] latLng = ImageFileUtil.getLoactionFromExif(uploadTargetFile);
                             if (latLng != null) {
-                                multipartEntity.addTextBody(LastLocationManager.KEY_LATITUDE,
+                                multipartEntity.addTextBody(LocationData.KEY_LATITUDE,
                                         Float.toString(latLng[0]),
                                         ContentType.APPLICATION_JSON);
-                                multipartEntity.addTextBody(LastLocationManager.KEY_LONGITUDE,
+                                multipartEntity.addTextBody(LocationData.KEY_LONGITUDE,
                                         Float.toString(latLng[1]),
                                         ContentType.APPLICATION_JSON);
                             }

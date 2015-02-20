@@ -5,7 +5,7 @@
     android:background="@color/white_100">
     <co.bttrfly.view.SquareImageView
         android:id="@+id/mapdialog_iv_map"
-        android:background="@color/black_12"
+        android:background="@color/white_100"
         android:layout_width="match_parent"
         android:layout_height="0dp" />
     <co.bttrfly.view.BaseFontButton

@@ -17,6 +17,7 @@ import java.util.concurrent.Callable;
 
 import co.bttrfly.App;
 import co.bttrfly.location.LastLocationManager;
+import co.bttrfly.location.LocationData;
 import co.bttrfly.network.DefaultErrorListener;
 import co.bttrfly.network.VolleyRequestQueue;
 import co.bttrfly.statics.Constants;
@@ -95,11 +96,11 @@ public class Auth {
     public void login(JSONObject requestData, final Callable loginCallback, final Callable errorCallback) throws JSONException {
 
         // add location data
-        LastLocationManager.LocationData lastLocation = LastLocationManager.getLocationData();
+        LocationData lastLocation = LastLocationManager.getLocationData();
         if (lastLocation != null) {
             requestData
-                    .put(LastLocationManager.KEY_LATITUDE, lastLocation.latitude)
-                    .put(LastLocationManager.KEY_LONGITUDE, lastLocation.longitude);
+                    .put(LocationData.KEY_LATITUDE, lastLocation.latitude)
+                    .put(LocationData.KEY_LONGITUDE, lastLocation.longitude);
         }
 
         // add gcm reg key
@@ -152,11 +153,11 @@ public class Auth {
                 .put(KEY_PASSWORD, password);
 
         // add location data
-        LastLocationManager.LocationData lastLocation = LastLocationManager.getLocationData();
+        LocationData lastLocation = LastLocationManager.getLocationData();
         if (lastLocation != null) {
             requestData
-                    .put(LastLocationManager.KEY_LATITUDE, lastLocation.latitude)
-                    .put(LastLocationManager.KEY_LONGITUDE, lastLocation.longitude);
+                    .put(LocationData.KEY_LATITUDE, lastLocation.latitude)
+                    .put(LocationData.KEY_LONGITUDE, lastLocation.longitude);
         }
 
         // add gcm reg key

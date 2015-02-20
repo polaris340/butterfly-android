@@ -11,12 +11,10 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import co.bttrfly.App;
 import co.bttrfly.R;
 import co.bttrfly.db.Picture;
 import co.bttrfly.statics.Constants;
 import co.bttrfly.util.DialogUtil;
-import co.bttrfly.util.MessageUtil;
 import co.bttrfly.view.FadeHideableViewWrapper;
 import co.bttrfly.view.PictureLikeButton;
 import co.bttrfly.view.PinchZoomImageView;
@@ -88,7 +86,7 @@ public class PictureViewFragment extends Fragment implements View.OnClickListene
             countryButtonWrapper.setVisibility(View.GONE);
             sendCountButton.setText(pictureData.getSendCountString());
             sendCountButton.setTextColor(getResources().getColor(R.color.white_100));
-            sendCountButton.setOnClickListener(this);
+            sendCountButton.setTag(pictureData);
         }
 
 
@@ -150,12 +148,6 @@ public class PictureViewFragment extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.pictureview_btn_send_count:
-                MessageUtil.showMessage(
-                        String.format(App.getContext().getString(R.string.message_send_count),
-                                pictureData.getSendCount())
-                );
-                break;
             case R.id.pictureview_btn_country_name:
                 DialogUtil.getMapDialog(
                         getActivity(),

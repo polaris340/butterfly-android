@@ -39,7 +39,7 @@
 
             />
     </LinearLayout>
-    <co.bttrfly.view.BaseFontButton
+    <co.bttrfly.view.SendCountButton
         android:id="@+id/pictureview_btn_send_count"
         style="?android:borderlessButtonStyle"
         android:layout_width="wrap_content"

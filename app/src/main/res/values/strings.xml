@@ -53,7 +53,7 @@
     <string name="message_press_back_again">Press back again to leave</string>
     <string name="label_sign_in">Sign In</string>
     <string name="label_unknown">Unknown</string>
-    <string name="message_send_count">%d people received this picture.</string>
+    <string name="message_send_count">%d people received this picture, but there are no location data.</string>
     <string name="label_close">Close</string>
     <plurals name="message_send_count_plural">
         <item quantity="one">%d person received this picture.</item>

@@ -16,8 +16,7 @@ import co.bttrfly.auth.Auth;
 public class LastLocationManager {
     private static volatile LocationData mLastLocation;
     public static GoogleApiClient mGoogleApiClient;
-    public static final String KEY_LATITUDE = "latitude";
-    public static final String KEY_LONGITUDE = "longitude";
+
 
     public static synchronized void getLastKnownLocation() {
 
@@ -32,8 +31,8 @@ public class LastLocationManager {
                             mLastLocation = new LocationData(lastLocation.getLatitude(), lastLocation.getLongitude());
                             Auth.getAuthPreference()
                                     .edit()
-                                    .putString(KEY_LATITUDE, Double.toString(mLastLocation.latitude))
-                                    .putString(KEY_LONGITUDE, Double.toString(mLastLocation.longitude))
+                                    .putString(LocationData.KEY_LATITUDE, Double.toString(mLastLocation.latitude))
+                                    .putString(LocationData.KEY_LONGITUDE, Double.toString(mLastLocation.longitude))
                                     .apply();
                         }
 
@@ -53,27 +52,15 @@ public class LastLocationManager {
         if (mLastLocation == null) { // get location data from preference
             mLastLocation = new LocationData();
             SharedPreferences authPreference = Auth.getAuthPreference();
-            if (!authPreference.contains(KEY_LATITUDE)
-                    || !authPreference.contains(KEY_LONGITUDE))
+            if (!authPreference.contains(LocationData.KEY_LATITUDE)
+                    || !authPreference.contains(LocationData.KEY_LONGITUDE))
                 return null;
-            mLastLocation.latitude = Double.parseDouble(authPreference.getString(KEY_LATITUDE, null));
-            mLastLocation.longitude = Double.parseDouble(authPreference.getString(KEY_LONGITUDE, null));
+            mLastLocation.latitude = Double.parseDouble(authPreference.getString(LocationData.KEY_LATITUDE, null));
+            mLastLocation.longitude = Double.parseDouble(authPreference.getString(LocationData.KEY_LONGITUDE, null));
         }
         return mLastLocation;
     }
 
-    public static class LocationData {
-        public double latitude;
-        public double longitude;
 
-        public LocationData() {
-
-        }
-
-        public LocationData(double latitude, double longitude) {
-            this.latitude = latitude;
-            this.longitude = longitude;
-        }
-    }
 
 }

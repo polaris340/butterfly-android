@@ -18,7 +18,6 @@ import co.bttrfly.R;
 import co.bttrfly.db.Picture;
 import co.bttrfly.network.NetworkRecyclerViewAdapter;
 import co.bttrfly.util.DialogUtil;
-import co.bttrfly.util.MessageUtil;
 import co.bttrfly.view.PictureLikeButton;
 import co.bttrfly.view.PictureListImageView;
 
@@ -27,6 +26,7 @@ import co.bttrfly.view.PictureListImageView;
  */
 public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.PictureListViewHolder>
         implements NetworkRecyclerViewAdapter<Picture>, PictureDataObserver {
+
 
     public static final int LAYOUT_LIST = 0;
     public static final int LAYOUT_GRID = 1;
@@ -168,7 +168,6 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
 
                 countryNameButton.setOnClickListener(this);
                 showFullImageButton.setOnClickListener(this);
-                sendCountButton.setOnClickListener(this);
             }
         }
 
@@ -216,6 +215,7 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
 
                 menuButton.setChecked(false);
                 menuButton.setPictureId(pictureData.getId());
+                sendCountButton.setTag(pictureData);
             }
 
             String pictureUrl;
@@ -230,7 +230,7 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
         }
 
         @Override
-        public void onClick(View v) {
+        public void onClick(final View v) {
             switch (v.getId()) {
                 case R.id.picturelist_btn_show_image:
                 case R.id.picturelist_main_image:
@@ -241,12 +241,6 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
                             .getPictureIdList(type)
                             .indexOf(pictureData.getId()));
                     fragment.startActivityForResult(intent, PictureListFragment.REQUEST_CODE_PICTURE_VIEW);
-                    break;
-                case R.id.pictureview_btn_send_count:
-                    MessageUtil.showMessage(
-                            String.format(App.getContext().getString(R.string.message_send_count),
-                                    pictureData.getSendCount())
-                    );
                     break;
                 case R.id.pictureview_btn_country_name:
                     DialogUtil.getMapDialog(

@@ -11,6 +11,7 @@ public interface Constants {
 
     public interface Keys {
         public static final String MESSAGE = "message";
+        public static final String DATA = "data";
     }
 
     public interface Integers {
