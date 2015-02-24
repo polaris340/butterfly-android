@@ -6,39 +6,7 @@
     android:orientation="vertical"
     android:layout_marginBottom="@dimen/divider_height"
     >
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <co.bttrfly.view.BaseFontTextView
-            android:id="@+id/pictureview_tv_title"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_2"
-            android:textColor="@color/black_87"
-            android:text="@string/label_untitled"
-            android:gravity="center_vertical"
-            android:paddingRight="@dimen/span_1"
-            />
-
-        <RelativeLayout
-            android:id="@+id/pictureview_tb_menu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true" />
-
-        <!--
-        <me.jiho.animatedtogglebutton.MenuAnimatedToggleButton
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:padding="18dp"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:id="@+id/picturelist_tb_menu"
-            android:layout_width="@dimen/span_1"
-            android:layout_height="@dimen/span_1"
-            />-->
-    </RelativeLayout>
+    <include layout="@layout/pictureview_header"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

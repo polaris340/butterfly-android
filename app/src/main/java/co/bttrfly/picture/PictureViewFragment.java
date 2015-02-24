@@ -66,6 +66,13 @@ public class PictureViewFragment extends Fragment implements View.OnClickListene
             titleView.setTextColor(getResources().getColor(R.color.white_100));
         }
 
+
+        ((TextView) rootView.findViewById(R.id.pictureview_label_by))
+                .setTextColor(getResources().getColor(R.color.white_12));
+        TextView uploaderName = (TextView) rootView.findViewById(R.id.pictureview_tv_uploader);
+        uploaderName.setTextColor(getResources().getColor(R.color.white_30));
+        uploaderName.setText(pictureData.getUploaderName());
+
         View countryButtonWrapper = rootView.findViewById(R.id.pictureview_ll_country_button_wrap);
         Button sendCountButton = (Button) rootView.findViewById(R.id.pictureview_btn_send_count);
         sendCountButton.setTextColor(getResources().getColor(R.color.white_100));

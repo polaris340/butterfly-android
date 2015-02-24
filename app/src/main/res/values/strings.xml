@@ -61,6 +61,8 @@
     </plurals>
     <string name="title_activity_sign_up">SignUpActivity</string>
     <string name="message_empty_list">You don\'t have any pictures.\nHow about take and send a picture first?</string>
+    <string name="format_uploader_name">by  %s</string>
+    <string name="label_by">by</string>
 
 
     <string-array name="main_drawer_menu">

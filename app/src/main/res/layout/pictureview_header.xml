@@ -6,16 +6,48 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     >
-    <co.bttrfly.view.BaseFontTextView
-        android:id="@+id/pictureview_tv_title"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:paddingRight="@dimen/span_1"
-        android:textColor="@color/black_87"
-        android:layout_margin="@dimen/margin_2"
-        android:text="Untitled"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        />
+        android:layout_marginLeft="@dimen/margin_2"
+        android:layout_marginRight="@dimen/margin_2"
+        android:layout_marginTop="@dimen/margin_1"
+        android:layout_marginBottom="@dimen/margin_1"
+        >
+        <co.bttrfly.view.BaseFontTextView
+            android:id="@+id/pictureview_tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black_87"
+
+            android:text="Untitled"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <co.bttrfly.view.BaseFontTextView
+                android:id="@+id/pictureview_label_by"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_by"
+                android:layout_marginRight="@dimen/margin_1"
+                android:textColor="@color/black_26"/>
+            <co.bttrfly.view.BaseFontTextView
+                android:id="@+id/pictureview_tv_uploader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Jiho Hong"
+                android:textColor="@color/black_54"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+
 
     <RelativeLayout
         android:id="@+id/pictureview_tb_menu"

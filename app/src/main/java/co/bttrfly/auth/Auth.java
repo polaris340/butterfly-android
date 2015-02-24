@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
@@ -107,8 +108,10 @@ public class Auth {
         // TODO : 항상 보내면 안되는데..
         SharedPreferences sharedPreferences = getAuthPreference();
         String regid = sharedPreferences.getString(KEY_GCM_REG_ID, null);
+
         if (regid != null) {
             requestData.put(KEY_GCM_REG_ID, regid);
+            Log.e("regid", regid);
         }
 
 

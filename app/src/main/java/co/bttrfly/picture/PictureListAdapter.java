@@ -134,6 +134,7 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
         private PictureMenuToggleButton menuButton;
         private View countryButtonWrapper;
         private Button sendCountButton;
+        private TextView uploaderName;
 
         private Picture pictureData;
 
@@ -149,6 +150,7 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
                 sendCountButton = (Button) rootView.findViewById(R.id.pictureview_btn_send_count);
                 likeButton = (PictureLikeButton) rootView.findViewById(R.id.pictureview_btn_like);
                 showFullImageButton = (Button) rootView.findViewById(R.id.picturelist_btn_show_image);
+                uploaderName = (TextView) rootView.findViewById(R.id.pictureview_tv_uploader);
 
                 PictureMenuToggleButton.Builder builder = new PictureMenuToggleButton.Builder(rootView.getContext());
                 builder.setLayout(R.layout.btn_picture_menu)
@@ -184,6 +186,7 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
                     this.titleView.setTextColor(App.getContext().getResources().getColor(R.color.black_87));
                 }
                 this.titleView.setText(title);
+                this.uploaderName.setText(pictureData.getUploaderName());
 
 
                 this.likeButton.setPictureId(pictureData.getId());

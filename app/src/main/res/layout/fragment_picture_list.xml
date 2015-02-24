@@ -29,29 +29,7 @@
             />
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <RelativeLayout
-        android:id="@+id/picturelist_fragment_header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/picturelist_list_icon"
-            android:layout_width="@dimen/span_1"
-            android:layout_height="@dimen/span_1"
-            android:src="@drawable/ic_received_24"
-            android:scaleType="center"
-            android:layout_centerHorizontal="true"
-            />
-
-        <co.jiho.animatedtogglebutton.ListGridToggleButton
-            android:id="@+id/picturelist_tb_layout"
-            android:layout_width="@dimen/span_1"
-            android:layout_height="@dimen/span_1"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:padding="@dimen/margin_2"
-            android:checked="true"
-            />
-        </RelativeLayout>
+    <include layout="@layout/fragment_header"/>
 
 
 

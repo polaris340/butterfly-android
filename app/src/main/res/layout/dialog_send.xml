@@ -17,7 +17,7 @@
             android:id="@+id/upload_iv_target"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/black_12"
+            android:background="@color/white_100"
             android:scaleType="fitXY"
             android:adjustViewBounds="true"
             android:layout_centerInParent="true"
