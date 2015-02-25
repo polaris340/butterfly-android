@@ -4,7 +4,8 @@
     android:id="@+id/picturelist_fragment_header"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <ImageView
+    <ImageButton
+        style="?android:borderlessButtonStyle"
         android:id="@+id/picturelist_list_icon"
         android:layout_width="@dimen/span_1"
         android:layout_height="@dimen/span_1"

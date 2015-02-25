@@ -15,21 +15,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 
 import java.util.concurrent.Callable;
 
-import co.jiho.animatedtogglebutton.ListGridToggleButton;
 import co.bttrfly.R;
 import co.bttrfly.auth.Auth;
 import co.bttrfly.auth.LoginStateChangeObserver;
 import co.bttrfly.view.FadeHideableViewWrapper;
+import co.jiho.animatedtogglebutton.ListGridToggleButton;
 
 /**
  * Created by jiho on 1/13/15.
  */
 public class PictureListFragment extends Fragment
-        implements View.OnClickListener, LoginStateChangeObserver, SwipeRefreshLayout.OnRefreshListener {
+        implements View.OnClickListener, View.OnLongClickListener, LoginStateChangeObserver, SwipeRefreshLayout.OnRefreshListener {
 
     public static final String KEY_TYPE = "type";
     public static final int REQUEST_CODE_PICTURE_VIEW = 16;
@@ -96,8 +96,9 @@ public class PictureListFragment extends Fragment
         swipeRefreshLayout.setRefreshing(true);
 
 
-        ImageView fragmentHeaderIcon = (ImageView) rootView.findViewById(R.id.picturelist_list_icon);
+        ImageButton fragmentHeaderIcon = (ImageButton) rootView.findViewById(R.id.picturelist_list_icon);
         fragmentHeaderIcon.setOnClickListener(this);
+        fragmentHeaderIcon.setOnLongClickListener(this);
         switch (type) {
             case SENT:
                 fragmentHeaderIcon.setImageResource(R.drawable.ic_sent_24);
@@ -109,6 +110,8 @@ public class PictureListFragment extends Fragment
                 fragmentHeaderIcon.setImageResource(R.drawable.ic_settings_18);
                 break;
         }
+
+
 
         onPreLoading = new Callable() {
             @Override
@@ -256,4 +259,18 @@ public class PictureListFragment extends Fragment
         swipeRefreshLayout.setOnRefreshListener(this);
     }
 
+    @Override
+    public boolean onLongClick(View v) {
+        switch (type) {
+            case SENT:
+            case RECEIVED:
+                Intent intent = new Intent(getActivity(), DiscoverActivity.class);
+                startActivity(intent);
+                break;
+            case DISCOVER:
+                getActivity().finish();
+                break;
+        }
+        return false;
+    }
 }

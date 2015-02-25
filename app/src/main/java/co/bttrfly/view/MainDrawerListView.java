@@ -10,7 +10,6 @@ import android.widget.ListView;
 
 import co.bttrfly.R;
 import co.bttrfly.auth.Auth;
-import co.bttrfly.picture.DiscoverActivity;
 import co.bttrfly.settings.SettingsActivity;
 import co.bttrfly.util.DialogUtil;
 
@@ -47,14 +46,10 @@ public class MainDrawerListView extends ListView {
                 Intent intent;
                 switch (position) {
                     case 0:
-                        intent = new Intent(getContext(), DiscoverActivity.class);
-                        getContext().startActivity(intent);
-                        break;
-                    case 1:
                         intent = new Intent(getContext(), SettingsActivity.class);
                         getContext().startActivity(intent);
                         break;
-                    case 2:
+                    case 1:
                         new DialogUtil.ConfirmDialog(getContext()) {
 
                             @Override
