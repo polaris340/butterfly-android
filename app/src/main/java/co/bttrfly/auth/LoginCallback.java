@@ -27,6 +27,7 @@ public class LoginCallback implements Response.Listener<JSONObject> {
 
                 for (PictureDataManager.Type type: PictureDataManager.Type.values()) {
                     PictureDataManager.getInstance().clear(type);
+                    if (!response.has(type.getKey())) continue;
                     String pictureArrayString = response.getString(type.getKey());
                     Picture[] pictures = Picture.fromJsonArray(pictureArrayString);
                     for (int i = 0; i < pictures.length; i++) {

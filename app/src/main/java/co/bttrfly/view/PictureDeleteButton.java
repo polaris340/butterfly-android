@@ -42,7 +42,7 @@ public class PictureDeleteButton extends PictureMenuItemButton {
     @Override
     public void onAnimationUpdate(ValueAnimator animation) {
         float progress = (float) animation.getAnimatedValue();
-        setTranslationX(getMeasuredWidth() * (-progress));
+        setTranslationX(getMeasuredWidth() * (-progress) * 2);
         setAlpha(progress);
     }
 

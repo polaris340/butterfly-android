@@ -155,8 +155,11 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
                 PictureMenuToggleButton.Builder builder = new PictureMenuToggleButton.Builder(rootView.getContext());
                 builder.setLayout(R.layout.btn_picture_menu)
                         .setMenuToggleButtonId(R.id.picturemenu_btn_menu)
-                        .addButton(R.id.picturemenu_btn_save)
-                        .addButton(R.id.picturemenu_btn_delete);
+                        .addButton(R.id.picturemenu_btn_save);
+
+                if (type != PictureDataObservable.Type.DISCOVER) {
+                    builder.addButton(R.id.picturemenu_btn_delete);
+                }
 
                 menuButton = builder.create();
 
@@ -191,7 +194,11 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
 
                 this.likeButton.setPictureId(pictureData.getId());
 
-                if (type == PictureDataManager.Type.RECEIVED) {
+                if (type == PictureDataManager.Type.SENT) {
+                    this.countryButtonWrapper.setVisibility(View.GONE);
+                    this.sendCountButton.setVisibility(View.VISIBLE);
+                    this.sendCountButton.setText(pictureData.getSendCountString());
+                } else {
                     this.countryButtonWrapper.setVisibility(View.VISIBLE);
                     this.sendCountButton.setVisibility(View.GONE);
                     String countryName = pictureData.getCountryName();
@@ -202,10 +209,6 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
                         this.countryNameButton.setEnabled(true);
                     }
                     this.countryNameButton.setText(countryName);
-                } else {
-                    this.countryButtonWrapper.setVisibility(View.GONE);
-                    this.sendCountButton.setVisibility(View.VISIBLE);
-                    this.sendCountButton.setText(pictureData.getSendCountString());
                 }
                 ((PictureListImageView) this.mainImageView).setImageRatio(pictureData.getImageRatio());
                 if (pictureData.getImageRatio() > 1) {

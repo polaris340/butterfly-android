@@ -76,7 +76,12 @@ public class PictureViewFragment extends Fragment implements View.OnClickListene
         View countryButtonWrapper = rootView.findViewById(R.id.pictureview_ll_country_button_wrap);
         Button sendCountButton = (Button) rootView.findViewById(R.id.pictureview_btn_send_count);
         sendCountButton.setTextColor(getResources().getColor(R.color.white_100));
-        if (type == PictureDataManager.Type.RECEIVED) {
+        if (type == PictureDataManager.Type.SENT) {
+            countryButtonWrapper.setVisibility(View.GONE);
+            sendCountButton.setText(pictureData.getSendCountString());
+            sendCountButton.setTextColor(getResources().getColor(R.color.white_100));
+            sendCountButton.setTag(pictureData);
+        } else {
             sendCountButton.setVisibility(View.GONE);
             Button countryButton = (Button) rootView.findViewById(R.id.pictureview_btn_country_name);
             countryButton.setTextColor(getResources().getColor(R.color.white_100));
@@ -89,11 +94,6 @@ public class PictureViewFragment extends Fragment implements View.OnClickListene
                 countryButton.setText(countryName);
             }
             countryButton.setOnClickListener(this);
-        } else {
-            countryButtonWrapper.setVisibility(View.GONE);
-            sendCountButton.setText(pictureData.getSendCountString());
-            sendCountButton.setTextColor(getResources().getColor(R.color.white_100));
-            sendCountButton.setTag(pictureData);
         }
 
 
@@ -120,8 +120,10 @@ public class PictureViewFragment extends Fragment implements View.OnClickListene
         PictureMenuToggleButton.Builder builder = new PictureMenuToggleButton.Builder(getActivity())
                 .setLayout(R.layout.btn_picture_menu)
                 .setMenuToggleButtonId(R.id.picturemenu_btn_menu)
-                .addButton(R.id.picturemenu_btn_delete)
                 .addButton(R.id.picturemenu_btn_save);
+        if (type != PictureDataObservable.Type.DISCOVER) {
+            builder.addButton(R.id.picturemenu_btn_delete);
+        }
         PictureMenuToggleButton pictureMenuToggleButton = builder.create();
         pictureMenuToggleButton.getMenuToggleButton().setColor(
                 getResources().getColor(R.color.white_70)

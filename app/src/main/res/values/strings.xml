@@ -66,8 +66,10 @@
 
 
     <string-array name="main_drawer_menu">
+        <item>Discover</item>
         <item>Settings</item>
         <!--<item>Log out</item>-->
     </string-array>
+    <string name="title_activity_discover">DiscoverActivity</string>
 
 </resources>

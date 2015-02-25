@@ -42,7 +42,9 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="image/*" />
             </intent-filter>
         </activity>
@@ -74,6 +76,10 @@
             android:name=".settings.SettingsActivity"
             android:exported="false"
             android:label="@string/title_activity_settings" >
+        </activity>
+        <activity
+            android:name=".picture.DiscoverActivity"
+            android:label="@string/title_activity_discover" >
         </activity>
     </application>
 

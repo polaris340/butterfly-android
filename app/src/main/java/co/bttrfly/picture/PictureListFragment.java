@@ -66,7 +66,24 @@ public class PictureListFragment extends Fragment
         recyclerView = (RecyclerView) rootView.findViewById(R.id.picture_recycler_view);
         adapter = new PictureListAdapter(this, type);
         PictureDataManager.getInstance().addObserver(type, adapter);
-        Auth.getInstance().addLoginStateChangeObserver(this);
+        if (type == PictureDataObservable.Type.DISCOVER) {
+            PictureDataManager
+                    .getInstance()
+                    .loadMore(
+                            PictureDataObservable.Type.DISCOVER,
+                            true,
+                            null,
+                            new Callable() {
+                                @Override
+                                public Object call() throws Exception {
+                                    loadedAfterInitialData();
+                                    return null;
+                                }
+                            });
+
+        } else {
+            Auth.getInstance().addLoginStateChangeObserver(this);
+        }
 
         linearLayoutManager = new LinearLayoutManager(getActivity());
         gridLayoutManager = new GridLayoutManager(getActivity(), 3);
@@ -87,6 +104,9 @@ public class PictureListFragment extends Fragment
                 break;
             case RECEIVED:
                 fragmentHeaderIcon.setImageResource(R.drawable.ic_received_24);
+                break;
+            case DISCOVER:
+                fragmentHeaderIcon.setImageResource(R.drawable.ic_settings_18);
                 break;
         }
 
@@ -179,50 +199,7 @@ public class PictureListFragment extends Fragment
     public void onLoginStateChanged(Auth.LoginState loginState) {
         switch (loginState) {
             case LOGGED_IN:
-                // add adapter after logged in
-                recyclerView.setAdapter(adapter);
-
-                if (adapter.getItemCount() == 0) {
-                    emptyLabel.show();
-                }
-
-                recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-                    @Override
-                    public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                        LinearLayoutManager currentLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                        if (currentLayoutManager.findLastVisibleItemPosition()
-                                == adapter.getItemCount() - 1) {
-                            PictureDataManager.getInstance().loadMore(type, false,
-                                    onPreLoading,// TODO : 그냥 null로 할까..
-                                    onLoadingComplete);
-                        }
-
-                    }
-                });
-
-                new FadeHideableViewWrapper(layoutToggleButton).show();
-                layoutToggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        int firstVisibleItemPosition;
-                        if (isChecked) {
-                            firstVisibleItemPosition = gridLayoutManager.findFirstVisibleItemPosition();
-                            adapter.setLayout(PictureListAdapter.LAYOUT_LIST);
-                            recyclerView.setLayoutManager(linearLayoutManager);
-
-                            recyclerView.scrollToPosition(firstVisibleItemPosition);
-                        } else {
-                            firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
-                            adapter.setLayout(PictureListAdapter.LAYOUT_GRID);
-                            recyclerView.setLayoutManager(gridLayoutManager);
-                            recyclerView.scrollToPosition(firstVisibleItemPosition);
-                        }
-                    }
-                });
-
-
-                swipeRefreshLayout.setRefreshing(false);
-                swipeRefreshLayout.setOnRefreshListener(this);
+                loadedAfterInitialData();
                 break;
         }
     }
@@ -231,4 +208,52 @@ public class PictureListFragment extends Fragment
     public void onRefresh() {
         PictureDataManager.getInstance().loadMore(type, true, onPreLoading, onLoadingComplete);
     }
+
+    private void loadedAfterInitialData() {
+        // add adapter after logged in
+        recyclerView.setAdapter(adapter);
+
+        if (adapter.getItemCount() == 0) {
+            emptyLabel.show();
+        }
+
+        recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                LinearLayoutManager currentLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                if (currentLayoutManager.findLastVisibleItemPosition()
+                        == adapter.getItemCount() - 1) {
+                    PictureDataManager.getInstance().loadMore(type, false,
+                            onPreLoading,// TODO : 그냥 null로 할까..
+                            onLoadingComplete);
+                }
+
+            }
+        });
+
+        new FadeHideableViewWrapper(layoutToggleButton).show();
+        layoutToggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                int firstVisibleItemPosition;
+                if (isChecked) {
+                    firstVisibleItemPosition = gridLayoutManager.findFirstVisibleItemPosition();
+                    adapter.setLayout(PictureListAdapter.LAYOUT_LIST);
+                    recyclerView.setLayoutManager(linearLayoutManager);
+
+                    recyclerView.scrollToPosition(firstVisibleItemPosition);
+                } else {
+                    firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
+                    adapter.setLayout(PictureListAdapter.LAYOUT_GRID);
+                    recyclerView.setLayoutManager(gridLayoutManager);
+                    recyclerView.scrollToPosition(firstVisibleItemPosition);
+                }
+            }
+        });
+
+
+        swipeRefreshLayout.setRefreshing(false);
+        swipeRefreshLayout.setOnRefreshListener(this);
+    }
+
 }

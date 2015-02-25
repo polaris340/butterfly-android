@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
@@ -111,7 +110,6 @@ public class Auth {
 
         if (regid != null) {
             requestData.put(KEY_GCM_REG_ID, regid);
-            Log.e("regid", regid);
         }
 
 

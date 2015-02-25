@@ -189,11 +189,8 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
         }
 
         String url = URL_GET_PICTURE;
-        if (type == PictureDataManager.Type.SENT) {
-            url += "1/";
-        } else {
-            url += "0/";
-        }
+        url += type.getKey() + "/";
+
         if (refresh)
             url += "0";
         else

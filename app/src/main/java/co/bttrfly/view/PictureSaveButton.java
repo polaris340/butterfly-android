@@ -33,7 +33,7 @@ public class PictureSaveButton extends PictureMenuItemButton {
     @Override
     public void onAnimationUpdate(ValueAnimator animation) {
         float progress = (float) animation.getAnimatedValue();
-        setTranslationX(getMeasuredWidth() * (-progress) * 2);
+        setTranslationX(getMeasuredWidth() * (-progress));
         setAlpha(progress);
     }
 
