@@ -84,6 +84,9 @@
             android:name=".picture.DiscoverActivity"
             android:label="@string/title_activity_discover" >
         </activity>
+        <meta-data
+            android:name="com.crashlytics.ApiKey"
+            android:value="da84c0dd60259292d68c1a3b1cec901461f8a230" />
     </application>
 
 </manifest>
