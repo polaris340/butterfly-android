@@ -26,6 +26,7 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 public class PictureViewFragment extends Fragment implements View.OnClickListener {
     private static final long HEADER_FOOTER_HIDE_DELAY = 1000;
 
+
     private FadeHideableViewWrapper header;
     private FadeHideableViewWrapper footer;
     private Picture pictureData;
@@ -45,7 +46,7 @@ public class PictureViewFragment extends Fragment implements View.OnClickListene
         View rootView = inflater.inflate(R.layout.fragment_picture_view, container, false);
 
         PinchZoomImageView mainImageView = (PinchZoomImageView) rootView.findViewById(R.id.pictureview_main_image);
-        PictureDataManager.Type type = PictureDataManager.Type.valueOf(getArguments().getString(PictureDataManager.KEY_TYPE));
+        PictureDataObservable.Type type = PictureDataManager.Type.valueOf(getArguments().getString(PictureDataManager.KEY_TYPE));
         int position = getArguments().getInt(PictureDataManager.KEY_POSITION);
         PictureDataManager manager = PictureDataManager.getInstance();
         pictureData = manager
@@ -166,4 +167,7 @@ public class PictureViewFragment extends Fragment implements View.OnClickListene
                 break;
         }
     }
+
+
+
 }

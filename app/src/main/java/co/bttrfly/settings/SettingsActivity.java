@@ -5,6 +5,7 @@ import android.preference.PreferenceActivity;
 
 import co.bttrfly.R;
 
+
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
  * handset devices, settings are presented as a single list. On tablets,
@@ -28,4 +29,6 @@ public class SettingsActivity extends PreferenceActivity {
                 .commit();
 
     }
+
+
 }

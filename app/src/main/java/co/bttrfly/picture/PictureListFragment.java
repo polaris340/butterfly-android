@@ -31,9 +31,10 @@ import co.jiho.animatedtogglebutton.ListGridToggleButton;
 public class PictureListFragment extends Fragment
         implements View.OnClickListener, View.OnLongClickListener, LoginStateChangeObserver, SwipeRefreshLayout.OnRefreshListener {
 
+    private static final String TAG = "FRAGMENT_PICTURE_LIST";
+
     public static final String KEY_TYPE = "type";
     public static final int REQUEST_CODE_PICTURE_VIEW = 16;
-
 
     private PictureDataManager.Type type;
     private LinearLayoutManager linearLayoutManager;
@@ -272,5 +273,9 @@ public class PictureListFragment extends Fragment
                 break;
         }
         return false;
+    }
+
+    public String getScreenName() {
+        return TAG + "|" + type.name();
     }
 }

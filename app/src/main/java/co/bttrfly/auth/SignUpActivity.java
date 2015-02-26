@@ -1,11 +1,11 @@
 package co.bttrfly.auth;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 
+import co.bttrfly.BaseActivity;
 import co.bttrfly.R;
 
-public class SignUpActivity extends ActionBarActivity {
+public class SignUpActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -3,13 +3,13 @@ package co.bttrfly.auth;
 import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import co.bttrfly.BaseActivity;
 import co.bttrfly.R;
 
-public class AuthActivity extends ActionBarActivity {
+public class AuthActivity extends BaseActivity {
     public static final int POSITION_SIGN_IN = 0;
     public static final int POSITION_SIGN_UP = 1;
     private static final int PRESS_BACK_INTERVAL = 2000;

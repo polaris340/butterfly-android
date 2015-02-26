@@ -17,6 +17,9 @@
     <uses-permission android:name="co.bttrfly.permission.C2D_MESSAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
+    <meta-data android:name="com.google.android.gms.version"
+        android:value="@integer/google_play_services_version" />
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />

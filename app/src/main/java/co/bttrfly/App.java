@@ -5,6 +5,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -13,6 +15,7 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
+import java.util.HashMap;
 
 import co.bttrfly.location.LastLocationManager;
 import co.bttrfly.picture.PictureDataManager;
@@ -32,6 +35,14 @@ public class App extends Application {
     private static Typeface faFont;
 
     private static DisplayImageOptions.Builder mDefaultDisplayImageOptionBuilder;
+
+    public enum TrackerName {
+        APP_TRACKER
+    }
+
+    private HashMap<TrackerName, Tracker> mTrackers = new HashMap<>();
+
+
 
     @Override
     public void onCreate() {
@@ -98,4 +109,14 @@ public class App extends Application {
     }
 
 
+    public synchronized Tracker getTracker(TrackerName trackerName) {
+        if (!mTrackers.containsKey(trackerName)) {
+
+            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+            Tracker t = analytics.newTracker(R.xml.tracker);
+            mTrackers.put(trackerName, t);
+
+        }
+        return mTrackers.get(trackerName);
+    }
 }

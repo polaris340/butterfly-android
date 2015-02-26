@@ -1,11 +1,11 @@
 package co.bttrfly.picture;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 
+import co.bttrfly.BaseActivity;
 import co.bttrfly.R;
 
-public class DiscoverActivity extends ActionBarActivity {
+public class DiscoverActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -13,13 +13,14 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -30,15 +31,17 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import co.bttrfly.R;
 import co.bttrfly.auth.Auth;
 import co.bttrfly.auth.AuthActivity;
 import co.bttrfly.picture.PictureDataManager;
+import co.bttrfly.picture.PictureListFragment;
 import co.bttrfly.picture.PictureUploadDialogFragment;
+import co.bttrfly.picture.PictureViewFragment;
 
 
-public class MainActivity extends ActionBarActivity
-        implements View.OnClickListener, View.OnLongClickListener {
+
+public class MainActivity extends BaseActivity
+        implements View.OnClickListener, View.OnLongClickListener, ViewPager.OnPageChangeListener {
     private static final String TAG = "MainActivity";
     public static final String KEY_FRAGMENT_TYPE = "fragment_type";
     public static final int SELECT_PICTURE = 128;
@@ -58,6 +61,7 @@ public class MainActivity extends ActionBarActivity
      */
     ViewPager mViewPager;
     DrawerLayout drawer;
+    private Tracker mTracker;
 
 
     // for gcm
@@ -118,6 +122,9 @@ public class MainActivity extends ActionBarActivity
             mViewPager.setCurrentItem(1);
         }
 
+        mViewPager.setOnPageChangeListener(this);
+
+
 
         // set listener
         FloatingActionButton takePictureButton = (FloatingActionButton) findViewById(R.id.btn_take_picture);
@@ -145,6 +152,10 @@ public class MainActivity extends ActionBarActivity
                 showUploadDialogWithImageUri(imageUri);
             }
         }
+
+
+        mTracker = ((App) App.getContext()).getTracker(App.TrackerName.APP_TRACKER);
+
     }
 
 
@@ -379,6 +390,33 @@ public class MainActivity extends ActionBarActivity
         editor.commit();
     }
 
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        setScreen(position);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
+    private void setScreen(int position) {
+        PictureListFragment currentFragment
+                = (PictureListFragment) getSupportFragmentManager()
+                .getFragments()
+                .get(position);
+
+        // Set screen name.
+        mTracker.setScreenName(currentFragment.getScreenName());
+        // Send a screen view.
+        mTracker.send(new HitBuilders.AppViewBuilder().build());
+
+    }
 }
 
 

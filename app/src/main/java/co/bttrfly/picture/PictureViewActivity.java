@@ -4,17 +4,17 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import java.util.concurrent.Callable;
 
+import co.bttrfly.BaseActivity;
 import co.bttrfly.R;
 import co.bttrfly.view.FadeHideableViewWrapper;
 import co.bttrfly.view.HideableViewWrapper;
 
-public class PictureViewActivity extends ActionBarActivity {
+public class PictureViewActivity extends BaseActivity {
     private static final int LOAD_DATA_OFFSET_COUNT = 3;
 
     /**
