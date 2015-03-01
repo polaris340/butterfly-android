@@ -196,6 +196,7 @@ public class PictureUploadDialogFragment extends DialogFragment
                     uploadTargetImageView.setImageFile(uploadTargetFile);
                     break;
             }
+
         } else {
             // 실패하면 이전파일 되돌림
             uploadTargetFile = uploadTargetImageView.getImageFile();
@@ -305,7 +306,7 @@ public class PictureUploadDialogFragment extends DialogFragment
                                         ContentType.APPLICATION_JSON);
                             }
 
-                            float[] latLng = ImageFileUtil.getLocationFromExif(uploadTargetFile);
+                            float[] latLng = uploadTargetImageView.getLocation();
                             if (latLng != null) {
                                 multipartEntity.addTextBody(LocationData.KEY_LATITUDE,
                                         Float.toString(latLng[0]),
@@ -404,6 +405,7 @@ public class PictureUploadDialogFragment extends DialogFragment
 
 
     public void setUploadTargetFile(Uri contentUri) {
+
         try {
             setUploadTargetFile(App.getContext().getContentResolver().openInputStream(contentUri));
         } catch (FileNotFoundException e) {

@@ -16,12 +16,14 @@ import java.io.File;
 import co.bttrfly.App;
 import co.bttrfly.R;
 import co.bttrfly.util.ColorUtil;
+import co.bttrfly.util.ImageFileUtil;
 
 /**
  * Created by jiho on 1/12/15.
  */
 public class UploadTargetImageView extends ImageView{
     private File currentImageFile;
+    private float[] location;
 
     public UploadTargetImageView(Context context) {
         super(context);
@@ -60,6 +62,7 @@ public class UploadTargetImageView extends ImageView{
 
     public void setImageFile(File file) {
         this.currentImageFile = file;
+
         setImageDrawable(null);
 
         DisplayImageOptions options = App.getDefaultDisplayImageOptionBuilder()
@@ -68,6 +71,13 @@ public class UploadTargetImageView extends ImageView{
                 .cacheOnDisk(false)
                 .build();
         ImageLoader.getInstance().displayImage(Uri.fromFile(file).toString(), this, options);
+
+
+        if (currentImageFile != null) {
+            location = ImageFileUtil.getLocationFromExif(currentImageFile);
+        } else {
+            location = null;
+        }
     }
 
 
@@ -85,4 +95,9 @@ public class UploadTargetImageView extends ImageView{
         }
         return ColorUtil.toHexString(color);
     }
+
+    public float[] getLocation() {
+        return location;
+    }
+
 }
