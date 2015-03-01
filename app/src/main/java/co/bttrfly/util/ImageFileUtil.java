@@ -232,7 +232,7 @@ public class ImageFileUtil {
     }
 
 
-    public static float[] getLoactionFromExif(File file) {
+    public static float[] getLocationFromExif(File file) {
         try {
             ExifInterface exif = new ExifInterface(file.getAbsolutePath());
             float[] latLng = new float[2];

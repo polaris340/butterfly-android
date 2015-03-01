@@ -305,7 +305,7 @@ public class PictureUploadDialogFragment extends DialogFragment
                                         ContentType.APPLICATION_JSON);
                             }
 
-                            float[] latLng = ImageFileUtil.getLoactionFromExif(uploadTargetFile);
+                            float[] latLng = ImageFileUtil.getLocationFromExif(uploadTargetFile);
                             if (latLng != null) {
                                 multipartEntity.addTextBody(LocationData.KEY_LATITUDE,
                                         Float.toString(latLng[0]),
@@ -455,8 +455,8 @@ public class PictureUploadDialogFragment extends DialogFragment
     }
 
     @Override
-    public void onDismiss(DialogInterface dialog) {
-        super.onDismiss(dialog);
+    public void onDestroy() {
+        super.onDestroy();
         if (!mFileWrited) {
             if (uploadTargetFile != null) {
                 uploadTargetFile.delete();
