@@ -262,6 +262,7 @@ public class PictureListFragment extends Fragment
 
     @Override
     public boolean onLongClick(View v) {
+        /*
         switch (type) {
             case SENT:
             case RECEIVED:
@@ -272,6 +273,7 @@ public class PictureListFragment extends Fragment
                 getActivity().finish();
                 break;
         }
+        //*/
         return false;
     }
 

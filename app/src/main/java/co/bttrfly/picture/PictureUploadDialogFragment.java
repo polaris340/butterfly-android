@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,8 +18,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -35,7 +32,6 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.InputStreamBody;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
@@ -47,9 +43,8 @@ import java.io.InputStream;
 import java.util.concurrent.Callable;
 
 import co.bttrfly.App;
-import co.bttrfly.MainActivity;
 import co.bttrfly.R;
-import co.bttrfly.db.Picture;
+import co.bttrfly.gcm.GcmBroadcastReceiver;
 import co.bttrfly.location.LocationData;
 import co.bttrfly.network.DefaultErrorListener;
 import co.bttrfly.network.MultipartRequest;
@@ -70,18 +65,17 @@ public class PictureUploadDialogFragment extends DialogFragment
     public static final String TAG = "dialog_send";
     public static final String UPLOAD_URL = Constants.URLs.API_URL + "picture";
     public static final String KEY_UPLOAD_IMAGE = "image";
-    //public static final String KEY_IMAGE_RATIO = "image_ratio";
     public static final String KEY_IMAGE_TITLE = "title";
     public static final String KEY_IMAGE_PRIMARY_COLOR = "primary_color";
-
-
-    private static final int NOTIFICATION_ID = 4096;
 
     private UploadTargetImageView uploadTargetImageView;
     private File uploadTargetFile;
     private EditText titleInput;
     private static boolean uploading = false;
     private boolean mFileWrited = false;
+
+    private static NotificationCompat.Builder mNotificationBuilder;
+    private static NotificationManager mNotificationManager;
 
 
 
@@ -250,14 +244,6 @@ public class PictureUploadDialogFragment extends DialogFragment
                 Request request = new MultipartRequest(UPLOAD_URL, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Picture picture = null;
-                        try {
-                            picture = Picture.fromJson(response.getString(Constants.Keys.MESSAGE));
-                            PictureDataManager.getInstance().add(PictureDataManager.Type.SENT, 0, picture);
-                            PictureDataManager.getInstance().update(PictureDataManager.Type.SENT);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
                         uploading = false;
 
                         showNotification(NotificationType.UPLOAD_COMPLETE);
@@ -275,10 +261,14 @@ public class PictureUploadDialogFragment extends DialogFragment
                         },
                         new MultipartRequest.ProgressReporter() {
                             @Override
-                            public void transferred(int transferredBytes, int totalSize) {
-                                Log.i("transferred", transferredBytes + "/" + totalSize);
+                            public void transferred(long transferredBytes, int progress) {
+                                mNotificationBuilder.setProgress(100, progress, false);
+                                mNotificationManager.notify(
+                                        GcmBroadcastReceiver.GCM_NOTIFICATION_ID_SENT,
+                                        mNotificationBuilder.build());
                             }
-                        }) {
+                        },
+                        uploadTargetFile.length()) {
                     @Override
                     protected HttpEntity createHttpEntity() {
                         try {
@@ -309,16 +299,13 @@ public class PictureUploadDialogFragment extends DialogFragment
                             float[] latLng = uploadTargetImageView.getLocation();
                             if (latLng != null) {
                                 multipartEntity.addTextBody(LocationData.KEY_LATITUDE,
-                                        Float.toString(latLng[0]),
-                                        ContentType.APPLICATION_JSON);
+                                        Float.toString(latLng[0]));
                                 multipartEntity.addTextBody(LocationData.KEY_LONGITUDE,
-                                        Float.toString(latLng[1]),
-                                        ContentType.APPLICATION_JSON);
+                                        Float.toString(latLng[1]));
                             }
 
                             multipartEntity.addTextBody(KEY_IMAGE_PRIMARY_COLOR,
-                                    uploadTargetImageView.getImagePrimaryColor(),
-                                    ContentType.APPLICATION_JSON);
+                                    uploadTargetImageView.getImagePrimaryColor());
 
                             return multipartEntity.build();
                         } catch (IOException e) {
@@ -366,41 +353,24 @@ public class PictureUploadDialogFragment extends DialogFragment
                 break;
         }
 
-        // create notification
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(App.getContext())
-                        .setSmallIcon(R.drawable.ic_sent_24)
-                        .setColor(App.getContext().getResources().getColor(android.R.color.white))
-                        .setContentTitle(App.getContext().getString(R.string.app_name))
-                        .setContentText(App.getContext().getString(message));
-
-        if (type == NotificationType.UPLOAD_COMPLETE) {
-            // Creates an explicit intent for an Activity in your app
-            Intent resultIntent = new Intent(App.getContext(), MainActivity.class);
-
-            resultIntent.putExtra(MainActivity.KEY_FRAGMENT_TYPE, PictureDataManager.Type.SENT.name());
-
-            // The stack builder object will contain an artificial back stack for the
-            // started Activity.
-            // This ensures that navigating backward from the Activity leads out of
-            // your application to the Home screen.
-            TaskStackBuilder stackBuilder = TaskStackBuilder.create(App.getContext());
-            // Adds the back stack for the Intent (but not the Intent itself)
-            stackBuilder.addParentStack(MainActivity.class);
-            // Adds the Intent that starts the Activity to the top of the stack
-            stackBuilder.addNextIntent(resultIntent);
-            PendingIntent resultPendingIntent =
-                    stackBuilder.getPendingIntent(
-                            0,
-                            PendingIntent.FLAG_UPDATE_CURRENT
-                    );
-            mBuilder.setContentIntent(resultPendingIntent);
-            mBuilder.setAutoCancel(true);
+        if (mNotificationBuilder == null) {
+            // create notification
+            mNotificationBuilder =
+                    new NotificationCompat.Builder(App.getContext())
+                            .setSmallIcon(R.drawable.ic_sent_24)
+                            .setColor(App.getContext().getResources().getColor(android.R.color.white))
+                            .setAutoCancel(true)
+                            .setContentTitle(App.getContext().getString(R.string.app_name));
         }
 
-        NotificationManager mNotificationManager =
+        mNotificationBuilder
+                .setContentText(App.getContext().getString(message))
+                .setProgress(0, 0, false);
+
+        if (mNotificationManager == null)
+            mNotificationManager =
                 (NotificationManager) App.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+        mNotificationManager.notify(GcmBroadcastReceiver.GCM_NOTIFICATION_ID_SENT, mNotificationBuilder.build());
     }
 
 

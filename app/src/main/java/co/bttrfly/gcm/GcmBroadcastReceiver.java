@@ -14,6 +14,7 @@ import android.support.v4.app.TaskStackBuilder;
 
 import co.bttrfly.MainActivity;
 import co.bttrfly.R;
+import co.bttrfly.picture.PictureDataManager;
 
 /**
  * Created by jiho on 1/25/15.
@@ -22,6 +23,10 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
 
     private static final String KEY_GCM_NOTIFICATION_ID = "gcm_notification_id";
     private static final String KEY_MESSAGE = "message";
+
+    public static final int GCM_NOTIFICATION_ID_RECEIVED = 12114;
+    public static final int GCM_NOTIFICATION_ID_SENT = 4124;
+
     @Override
     public void onReceive(Context context, Intent intent) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -38,16 +43,25 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
             return;
         }
 
+        int smallIcon = R.drawable.ic_received_24;
+        if (notificationId == GCM_NOTIFICATION_ID_SENT) {
+            smallIcon = R.drawable.ic_sent_24;
+        }
+
+
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(context)
                         .setColor(Color.WHITE)
                         .setAutoCancel(true)
-                        .setSmallIcon(R.drawable.ic_received_24)
+                        .setSmallIcon(smallIcon)
                         .setContentTitle(context.getString(R.string.app_name))
                         .setContentText(message);
         // Creates an explicit intent for an Activity in your app
         Intent resultIntent = new Intent(context, MainActivity.class);
 
+        if (notificationId == GCM_NOTIFICATION_ID_SENT) {
+            resultIntent.putExtra(MainActivity.KEY_FRAGMENT_TYPE, PictureDataManager.Type.SENT.name());
+        }
 
         boolean vibrate = preferences.getBoolean(
                 context.getString(R.string.key_pref_notification_vibrate),
