@@ -4,6 +4,7 @@ import android.view.View;
 
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ValueAnimator;
+import com.nineoldandroids.view.ViewHelper;
 
 import co.bttrfly.statics.Constants;
 
@@ -56,7 +57,7 @@ public class FadeHideableViewWrapper extends HideableViewWrapper implements Valu
 
     @Override
     public void onAnimationUpdate(ValueAnimator animation) {
-        view.setAlpha((float) animation.getAnimatedValue());
+        ViewHelper.setAlpha(view, (float) animation.getAnimatedValue());
     }
 
     @Override
