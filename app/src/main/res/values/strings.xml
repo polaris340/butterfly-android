@@ -3,10 +3,6 @@
 
     <string name="facebook_app_id">680388332060479</string>
     <string name="app_name">Butterfly</string>
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_auth">Sign in</string>
     <string name="hint_email">\@</string>
@@ -31,16 +27,16 @@
     <string name="label_untitled">Untitled</string>
     <string name="message_uploading_picture">Now uploading your picture. Please wait a moment!</string>
     <string name="label_confirm">OK</string>
-    <string name="message_upload_start">Picture upload started</string>
+    <string name="message_upload_start">Uploading picture...</string>
     <string name="message_sending_picture">Sending picture...</string>
     <string name="message_send_complete">Your picture was sent successfully!</string>
     <string name="message_send_fail">Failed to upload picture</string>
     <string name="title_activity_picture_view">Picture View</string>
-    <string name="label_show_full_image">Click to show full picture</string>
+    <string name="label_show_full_image">Click to see full picture</string>
     <string name="label_sign_up">Sign Up</string>
     <string name="error_email_format">Please enter a valid email</string>
     <string name="error_password_length">The password must have a length of %1$d to %2$d characters</string>
-    <string name="error_password_confirm">Password does not match the confirm password</string>
+    <string name="error_password_confirm">Your password and confirm password do not match</string>
     <string name="error_network">Can\'t connect to server. Please try again later.</string>
     <string name="message_default_progress">Please wait...</string>
     <string name="error_default">An unexpected error occurred. Please try again later.</string>
@@ -53,14 +49,14 @@
     <string name="message_press_back_again">Press back again to leave</string>
     <string name="label_sign_in">Sign In</string>
     <string name="label_unknown">Unknown</string>
-    <string name="message_send_count">%d people received this picture, but there are no location data.</string>
+    <string name="message_send_count">%d people received this picture, but there is no location data.</string>
     <string name="label_close">Close</string>
     <plurals name="message_send_count_plural">
         <item quantity="one">%d person received this picture.</item>
         <item quantity="other">%d people received this picture.</item>
     </plurals>
     <string name="title_activity_sign_up">SignUpActivity</string>
-    <string name="message_empty_list">You don\'t have any pictures.\nHow about take and send a picture first?</string>
+    <string name="message_empty_list">You don\'t have any pictures.\nHow about taking and sending a picture first?</string>
     <string name="format_uploader_name">by  %s</string>
     <string name="label_by">by</string>
 
