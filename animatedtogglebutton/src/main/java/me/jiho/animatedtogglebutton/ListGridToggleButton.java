@@ -1,4 +1,4 @@
-package co.jiho.animatedtogglebutton;
+package me.jiho.animatedtogglebutton;
 
 import android.content.Context;
 import android.graphics.Canvas;

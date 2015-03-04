@@ -17,13 +17,16 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 
+import com.nineoldandroids.view.ViewHelper;
+
 import java.util.concurrent.Callable;
 
 import co.bttrfly.R;
 import co.bttrfly.auth.Auth;
 import co.bttrfly.auth.LoginStateChangeObserver;
 import co.bttrfly.view.FadeHideableViewWrapper;
-import co.jiho.animatedtogglebutton.ListGridToggleButton;
+import co.bttrfly.view.PictureListRecyclerView;
+import me.jiho.animatedtogglebutton.ListGridToggleButton;
 
 /**
  * Created by jiho on 1/13/15.
@@ -39,7 +42,7 @@ public class PictureListFragment extends Fragment
     private PictureDataManager.Type type;
     private LinearLayoutManager linearLayoutManager;
     private GridLayoutManager gridLayoutManager;
-    private RecyclerView recyclerView;
+    private PictureListRecyclerView recyclerView;
     private PictureListAdapter adapter;
     private View fragmentHeader;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -64,7 +67,7 @@ public class PictureListFragment extends Fragment
         type = PictureDataManager.Type.valueOf(args.getString(KEY_TYPE));
         View rootView = inflater.inflate(R.layout.fragment_picture_list, null);
 
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.picture_recycler_view);
+        recyclerView = (PictureListRecyclerView) rootView.findViewById(R.id.picture_recycler_view);
         adapter = new PictureListAdapter(this, type);
         PictureDataManager.getInstance().addObserver(type, adapter);
         if (type == PictureDataObservable.Type.DISCOVER) {
@@ -145,12 +148,12 @@ public class PictureListFragment extends Fragment
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                float newY = fragmentHeader.getTranslationY()-(dy/2);
+                float newY = ViewHelper.getTranslationY(fragmentHeader)-(dy/2);
                 if (newY > 0) newY = 0;
                 else if (newY < (-fragmentHeader.getMeasuredHeight())) {
                     newY = -fragmentHeader.getMeasuredHeight();
                 }
-                fragmentHeader.setTranslationY(newY);
+                ViewHelper.setTranslationY(fragmentHeader, newY);
 
                 if (linearLayoutManager.findLastVisibleItemPosition() == linearLayoutManager.getItemCount()-1) {
                     PictureDataManager.getInstance().loadMore(
@@ -221,17 +224,18 @@ public class PictureListFragment extends Fragment
             emptyLabel.show();
         }
 
-        recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+        recyclerView.setOnLayoutManagerChangeListener(new PictureListRecyclerView.OnLayoutManagerChangeListener() {
             @Override
-            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                LinearLayoutManager currentLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                if (currentLayoutManager.findLastVisibleItemPosition()
+            public void onLayoutChange(RecyclerView recyclerView,
+                                       RecyclerView.LayoutManager oldLayoutManager,
+                                       RecyclerView.LayoutManager newLayoutManager) {
+
+                if (((LinearLayoutManager)oldLayoutManager).findLastVisibleItemPosition()
                         == adapter.getItemCount() - 1) {
                     PictureDataManager.getInstance().loadMore(type, false,
                             onPreLoading,// TODO : 그냥 null로 할까..
                             onLoadingComplete);
                 }
-
             }
         });
 

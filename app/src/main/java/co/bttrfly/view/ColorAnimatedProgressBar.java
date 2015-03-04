@@ -1,10 +1,11 @@
 package co.bttrfly.view;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
+
+import com.nineoldandroids.animation.ArgbEvaluator;
+import com.nineoldandroids.animation.ValueAnimator;
 
 import co.bttrfly.R;
 import co.bttrfly.statics.Constants;
@@ -31,6 +32,9 @@ public class ColorAnimatedProgressBar extends View {
     }
 
     protected void init() {
+
+
+
         valueAnimator = ValueAnimator.ofObject(
                 new ArgbEvaluator(),
                 getResources().getColor(R.color.material_red_500),

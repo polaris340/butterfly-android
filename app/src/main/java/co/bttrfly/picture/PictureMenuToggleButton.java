@@ -12,7 +12,7 @@ import android.widget.ImageButton;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import co.jiho.animatedtogglebutton.MenuAnimatedToggleButton;
+import me.jiho.animatedtogglebutton.MenuAnimatedToggleButton;
 import co.bttrfly.view.HideableMenuButton;
 
 /**

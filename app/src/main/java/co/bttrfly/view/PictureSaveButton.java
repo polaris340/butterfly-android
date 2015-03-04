@@ -1,8 +1,10 @@
 package co.bttrfly.view;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
+
+import com.nineoldandroids.animation.ValueAnimator;
+import com.nineoldandroids.view.ViewHelper;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,13 +31,6 @@ public class PictureSaveButton extends PictureMenuItemButton {
         super(context, attrs, defStyleAttr);
     }
 
-
-    @Override
-    public void onAnimationUpdate(ValueAnimator animation) {
-        float progress = (float) animation.getAnimatedValue();
-        setTranslationX(getMeasuredWidth() * (-progress));
-        setAlpha(progress);
-    }
 
     @Override
     protected void doOnClick(long pictureId) {
@@ -67,5 +62,12 @@ public class PictureSaveButton extends PictureMenuItemButton {
             MessageUtil.showDefaultErrorMessage();
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onAnimationUpdate(ValueAnimator animation) {
+        float progress = (float) animation.getAnimatedValue();
+        ViewHelper.setTranslationX(this, progress * (getMeasuredWidth() * (-1)));
+        ViewHelper.setAlpha(this, progress);
     }
 }

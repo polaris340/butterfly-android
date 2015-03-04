@@ -1,8 +1,9 @@
 package co.bttrfly.view;
 
-import android.animation.Animator;
-import android.animation.ValueAnimator;
 import android.view.View;
+
+import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.animation.ValueAnimator;
 
 import co.bttrfly.statics.Constants;
 

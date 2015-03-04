@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="wrap_content">
-    <co.jiho.animatedtogglebutton.MenuAnimatedToggleButton
-        android:id="@+id/picturemenu_btn_menu"
-        android:layout_width="@dimen/span_small_1"
-        android:layout_height="@dimen/span_small_1"
-        android:padding="@dimen/padding_picture_menu_button"
-        android:layout_alignParentRight="true"
-        />
+
     <co.bttrfly.view.PictureSaveButton
         style="?android:borderlessButtonStyle"
         android:id="@+id/picturemenu_btn_save"
@@ -25,6 +19,14 @@
         android:layout_height="@dimen/span_small_1"
         android:src="@drawable/ic_delete_18"
         android:visibility="gone"
+        android:layout_alignParentRight="true"
+        />
+
+    <me.jiho.animatedtogglebutton.MenuAnimatedToggleButton
+        android:id="@+id/picturemenu_btn_menu"
+        android:layout_width="@dimen/span_small_1"
+        android:layout_height="@dimen/span_small_1"
+        android:padding="@dimen/padding_picture_menu_button"
         android:layout_alignParentRight="true"
         />
 

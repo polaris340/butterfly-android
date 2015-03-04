@@ -1,4 +1,4 @@
-package co.jiho.animatedtogglebutton;
+package me.jiho.animatedtogglebutton;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

@@ -1,12 +1,13 @@
 package co.bttrfly.view;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.nineoldandroids.animation.ValueAnimator;
+import com.nineoldandroids.view.ViewHelper;
 
 import org.json.JSONObject;
 
@@ -38,13 +39,6 @@ public class PictureDeleteButton extends PictureMenuItemButton {
         super(context, attrs, defStyleAttr);
     }
 
-
-    @Override
-    public void onAnimationUpdate(ValueAnimator animation) {
-        float progress = (float) animation.getAnimatedValue();
-        setTranslationX(getMeasuredWidth() * (-progress) * 2);
-        setAlpha(progress);
-    }
 
     @Override
     protected void doOnClick(final long pictureId) {
@@ -82,5 +76,12 @@ public class PictureDeleteButton extends PictureMenuItemButton {
 
 
 
+    }
+
+    @Override
+    public void onAnimationUpdate(ValueAnimator animation) {
+        float progress = (float) animation.getAnimatedValue();
+        ViewHelper.setTranslationX(this, progress * (getMeasuredWidth()*(-2)));
+        ViewHelper.setAlpha(this, progress);
     }
 }
