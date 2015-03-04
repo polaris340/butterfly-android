@@ -155,6 +155,7 @@ public class PictureListFragment extends Fragment
                 }
                 ViewHelper.setTranslationY(fragmentHeader, newY);
 
+                /*
                 if (linearLayoutManager.findLastVisibleItemPosition() == linearLayoutManager.getItemCount()-1) {
                     PictureDataManager.getInstance().loadMore(
                             type,
@@ -162,6 +163,7 @@ public class PictureListFragment extends Fragment
                             onPreLoading,
                             onLoadingComplete);
                 }
+                //*/
             }
         });
 
@@ -224,20 +226,29 @@ public class PictureListFragment extends Fragment
             emptyLabel.show();
         }
 
-        recyclerView.setOnLayoutManagerChangeListener(new PictureListRecyclerView.OnLayoutManagerChangeListener() {
+        adapter.setOnBindViewHolderListener(new PictureListAdapter.OnBindViewHolderListener() {
             @Override
-            public void onLayoutChange(RecyclerView recyclerView,
-                                       RecyclerView.LayoutManager oldLayoutManager,
-                                       RecyclerView.LayoutManager newLayoutManager) {
-
-                if (((LinearLayoutManager)oldLayoutManager).findLastVisibleItemPosition()
-                        == adapter.getItemCount() - 1) {
+            public void onBind(int position) {
+                if (position == adapter.getItemCount()-1) {
                     PictureDataManager.getInstance().loadMore(type, false,
                             onPreLoading,// TODO : 그냥 null로 할까..
                             onLoadingComplete);
                 }
             }
         });
+
+//        recyclerView.setOnLayoutManagerChangeListener(new PictureListRecyclerView.OnLayoutManagerChangeListener() {
+//            @Override
+//            public void onLayoutChange(RecyclerView recyclerView,
+//                                       RecyclerView.LayoutManager oldLayoutManager,
+//                                       RecyclerView.LayoutManager newLayoutManager) {
+//
+//                if (((LinearLayoutManager) newLayoutManager).findLastVisibleItemPosition()
+//                        == adapter.getItemCount() - 1) {
+//
+//                }
+//            }
+//        });
 
         new FadeHideableViewWrapper(layoutToggleButton).show();
         layoutToggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -248,8 +259,8 @@ public class PictureListFragment extends Fragment
                     firstVisibleItemPosition = gridLayoutManager.findFirstVisibleItemPosition();
                     adapter.setLayout(PictureListAdapter.LAYOUT_LIST);
                     recyclerView.setLayoutManager(linearLayoutManager);
-
                     recyclerView.scrollToPosition(firstVisibleItemPosition);
+
                 } else {
                     firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
                     adapter.setLayout(PictureListAdapter.LAYOUT_GRID);

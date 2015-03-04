@@ -37,6 +37,8 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
 
     private int currentLayout = LAYOUT_LIST;
 
+    private OnBindViewHolderListener mOnBindViewHolderListener;
+
 
     public PictureListAdapter(PictureListFragment fragment, PictureDataManager.Type type) {
         this.fragment = fragment;
@@ -60,6 +62,9 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
     @Override
     public void onBindViewHolder(PictureListViewHolder holder, int position) {
         holder.setPictureData(getItem(position));
+        if (mOnBindViewHolderListener != null) {
+            mOnBindViewHolderListener.onBind(position);
+        }
     }
 
     @Override
@@ -257,7 +262,12 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
                     break;
             }
         }
+    }
 
-
+    public void setOnBindViewHolderListener(OnBindViewHolderListener listener) {
+        this.mOnBindViewHolderListener = listener;
+    }
+    public static interface OnBindViewHolderListener {
+        public void onBind(int position);
     }
 }
