@@ -72,6 +72,7 @@ public class PictureUploadDialogFragment extends DialogFragment
     private File uploadTargetFile;
     private EditText titleInput;
     private static boolean uploading = false;
+
     private boolean mFileWrited = false;
 
     private static NotificationCompat.Builder mNotificationBuilder;

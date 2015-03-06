@@ -32,7 +32,10 @@ import me.jiho.animatedtogglebutton.ListGridToggleButton;
  * Created by jiho on 1/13/15.
  */
 public class PictureListFragment extends Fragment
-        implements View.OnClickListener, View.OnLongClickListener, LoginStateChangeObserver, SwipeRefreshLayout.OnRefreshListener {
+        implements View.OnClickListener,
+        View.OnLongClickListener,
+        LoginStateChangeObserver,
+        SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "FRAGMENT_PICTURE_LIST";
 

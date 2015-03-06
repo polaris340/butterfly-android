@@ -1,5 +1,6 @@
 package co.bttrfly.picture;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import co.bttrfly.MainActivity;
 import co.bttrfly.R;
 import co.bttrfly.db.Picture;
 import co.bttrfly.statics.Constants;
@@ -49,10 +51,19 @@ public class PictureViewFragment extends Fragment implements View.OnClickListene
         PictureDataObservable.Type type = PictureDataManager.Type.valueOf(getArguments().getString(PictureDataManager.KEY_TYPE));
         int position = getArguments().getInt(PictureDataManager.KEY_POSITION);
         PictureDataManager manager = PictureDataManager.getInstance();
-        pictureData = manager
-                .get(
-                        manager.getPictureIdList(type).get(position)
-                );
+        try {
+
+
+            pictureData = manager
+                    .get(
+                            manager.getPictureIdList(type).get(position)
+                    );
+        } catch (ArrayIndexOutOfBoundsException e) {
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            getActivity().startActivity(intent);
+            return rootView;
+        }
         //mainImageView.setBackgroundColor(pictureData.getColor());
         ImageLoader.getInstance().displayImage(pictureData.getPictureUrl(), mainImageView);
 
