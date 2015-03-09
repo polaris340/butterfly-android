@@ -5,30 +5,67 @@ import android.graphics.Color;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
 /**
  * Created by jiho on 1/13/15.
  */
 
-// will changed to db table
+@DatabaseTable
 public class Picture {
+    @DatabaseField(id = true)
     private long id;
+
+    @DatabaseField
     private String title;
+
+    @DatabaseField
     private String uploaderName;
+
+    @DatabaseField
     private String thumbnailUrl;
+
+    @DatabaseField
     private String pictureUrl;
+
+    @DatabaseField
     private double latitude;
+
+    @DatabaseField
     private double longitude;
+
+    @DatabaseField
     private float imageRatio;
+
+    @DatabaseField
     private long originalWidth;
+
+    @DatabaseField
     private long originalHeight;
+
+    @DatabaseField
     private String capturedTime;
+
+    @DatabaseField
     private long likeCount;
+
+    @DatabaseField
     private long sendCount;
+
+    @DatabaseField
     private boolean isLiked;
+
+    @DatabaseField
     private String primaryColor;
+
+    @DatabaseField
     private long sendPictureId;
+
+    @DatabaseField
     private String countryName;
+
+    @DatabaseField
     private boolean isMine;
 
 
@@ -192,5 +229,9 @@ public class Picture {
 
     public String getSendCountString() {
         return " " + sendCount;
+    }
+
+    public boolean isReceived() {
+        return sendPictureId > 0;
     }
 }

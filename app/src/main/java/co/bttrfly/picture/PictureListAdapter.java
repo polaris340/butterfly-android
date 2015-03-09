@@ -43,6 +43,9 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
     public PictureListAdapter(PictureListFragment fragment, PictureDataManager.Type type) {
         this.fragment = fragment;
         this.type = type;
+
+        PictureDataManager.getInstance().addObserver(type, this);
+        update();
     }
 
 
@@ -162,9 +165,8 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
                         .setMenuToggleButtonId(R.id.picturemenu_btn_menu)
                         .addButton(R.id.picturemenu_btn_save);
 
-                if (type != PictureDataObservable.Type.DISCOVER) {
-                    builder.addButton(R.id.picturemenu_btn_delete);
-                }
+
+                builder.addButton(R.id.picturemenu_btn_delete);
 
                 menuButton = builder.create();
 

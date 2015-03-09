@@ -6,8 +6,7 @@ package co.bttrfly.picture;
 public interface PictureDataObservable {
     public enum Type {
         SENT,
-        RECEIVED,
-        DISCOVER;
+        RECEIVED;
 
         public String getKey() {
             return name().toLowerCase();

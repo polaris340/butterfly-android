@@ -133,9 +133,8 @@ public class PictureViewFragment extends Fragment implements View.OnClickListene
                 .setLayout(R.layout.btn_picture_menu)
                 .setMenuToggleButtonId(R.id.picturemenu_btn_menu)
                 .addButton(R.id.picturemenu_btn_save);
-        if (type != PictureDataObservable.Type.DISCOVER) {
-            builder.addButton(R.id.picturemenu_btn_delete);
-        }
+        builder.addButton(R.id.picturemenu_btn_delete);
+
         PictureMenuToggleButton pictureMenuToggleButton = builder.create();
         pictureMenuToggleButton.getMenuToggleButton().setColor(
                 getResources().getColor(R.color.white_70)

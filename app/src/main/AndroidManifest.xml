@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <permission
         android:name="co.bttrfly.permission.C2D_MESSAGE"
@@ -79,10 +80,6 @@
             android:name=".settings.SettingsActivity"
             android:exported="false"
             android:label="@string/title_activity_settings" >
-        </activity>
-        <activity
-            android:name=".picture.DiscoverActivity"
-            android:label="@string/title_activity_discover" >
         </activity>
         <meta-data
             android:name="com.crashlytics.ApiKey"

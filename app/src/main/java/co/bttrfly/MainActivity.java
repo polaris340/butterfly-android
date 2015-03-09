@@ -36,7 +36,6 @@ import co.bttrfly.auth.AuthActivity;
 import co.bttrfly.picture.PictureDataManager;
 import co.bttrfly.picture.PictureListFragment;
 import co.bttrfly.picture.PictureUploadDialogFragment;
-import co.bttrfly.picture.PictureViewFragment;
 
 
 
@@ -228,7 +227,14 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onResume() {
         super.onResume();
+        PictureDataManager.getInstance().update();
         checkPlayServices();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        PictureDataManager.getInstance().saveToLocalDB();
     }
 
     /**
@@ -378,7 +384,6 @@ public class MainActivity extends BaseActivity
      * Stores the registration ID and app versionCode in the application's
      * {@code SharedPreferences}.
      *
-     * @param context application's context.
      * @param regId registration ID
      */
     private void storeRegistrationId(String regId) {

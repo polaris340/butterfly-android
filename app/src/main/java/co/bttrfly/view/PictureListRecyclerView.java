@@ -41,6 +41,7 @@ public class PictureListRecyclerView extends RecyclerView {
 
 
 
+
     public static interface OnLayoutManagerChangeListener {
         public void onLayoutChange(RecyclerView recyclerView, LayoutManager oldLayoutManager, LayoutManager newLayoutManager);
     }

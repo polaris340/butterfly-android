@@ -22,8 +22,6 @@ import com.nineoldandroids.view.ViewHelper;
 import java.util.concurrent.Callable;
 
 import co.bttrfly.R;
-import co.bttrfly.auth.Auth;
-import co.bttrfly.auth.LoginStateChangeObserver;
 import co.bttrfly.view.FadeHideableViewWrapper;
 import co.bttrfly.view.PictureListRecyclerView;
 import me.jiho.animatedtogglebutton.ListGridToggleButton;
@@ -33,8 +31,6 @@ import me.jiho.animatedtogglebutton.ListGridToggleButton;
  */
 public class PictureListFragment extends Fragment
         implements View.OnClickListener,
-        View.OnLongClickListener,
-        LoginStateChangeObserver,
         SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "FRAGMENT_PICTURE_LIST";
@@ -72,25 +68,7 @@ public class PictureListFragment extends Fragment
 
         recyclerView = (PictureListRecyclerView) rootView.findViewById(R.id.picture_recycler_view);
         adapter = new PictureListAdapter(this, type);
-        PictureDataManager.getInstance().addObserver(type, adapter);
-        if (type == PictureDataObservable.Type.DISCOVER) {
-            PictureDataManager
-                    .getInstance()
-                    .loadMore(
-                            PictureDataObservable.Type.DISCOVER,
-                            true,
-                            null,
-                            new Callable() {
-                                @Override
-                                public Object call() throws Exception {
-                                    loadedAfterInitialData();
-                                    return null;
-                                }
-                            });
 
-        } else {
-            Auth.getInstance().addLoginStateChangeObserver(this);
-        }
 
         linearLayoutManager = new LinearLayoutManager(getActivity());
         gridLayoutManager = new GridLayoutManager(getActivity(), 3);
@@ -105,16 +83,12 @@ public class PictureListFragment extends Fragment
 
         ImageButton fragmentHeaderIcon = (ImageButton) rootView.findViewById(R.id.picturelist_list_icon);
         fragmentHeaderIcon.setOnClickListener(this);
-        fragmentHeaderIcon.setOnLongClickListener(this);
         switch (type) {
             case SENT:
                 fragmentHeaderIcon.setImageResource(R.drawable.ic_sent_24);
                 break;
             case RECEIVED:
                 fragmentHeaderIcon.setImageResource(R.drawable.ic_received_24);
-                break;
-            case DISCOVER:
-                fragmentHeaderIcon.setImageResource(R.drawable.ic_settings_18);
                 break;
         }
 
@@ -140,7 +114,10 @@ public class PictureListFragment extends Fragment
         };
 
 
+
+
         fragmentHeader = rootView.findViewById(R.id.picturelist_fragment_header);
+
         recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -157,16 +134,6 @@ public class PictureListFragment extends Fragment
                     newY = -fragmentHeader.getMeasuredHeight();
                 }
                 ViewHelper.setTranslationY(fragmentHeader, newY);
-
-                /*
-                if (linearLayoutManager.findLastVisibleItemPosition() == linearLayoutManager.getItemCount()-1) {
-                    PictureDataManager.getInstance().loadMore(
-                            type,
-                            false,
-                            onPreLoading,
-                            onLoadingComplete);
-                }
-                //*/
             }
         });
 
@@ -183,6 +150,7 @@ public class PictureListFragment extends Fragment
         layoutToggleButton.setColor(getResources().getColor(R.color.primary));
 
 
+        loadedAfterInitialData();
 
         return rootView;
     }
@@ -204,15 +172,6 @@ public class PictureListFragment extends Fragment
                 int position = data.getIntExtra(PictureDataManager.KEY_POSITION,0);
                 recyclerView.scrollToPosition(position);
             }
-        }
-    }
-
-    @Override
-    public void onLoginStateChanged(Auth.LoginState loginState) {
-        switch (loginState) {
-            case LOGGED_IN:
-                loadedAfterInitialData();
-                break;
         }
     }
 
@@ -240,19 +199,6 @@ public class PictureListFragment extends Fragment
             }
         });
 
-//        recyclerView.setOnLayoutManagerChangeListener(new PictureListRecyclerView.OnLayoutManagerChangeListener() {
-//            @Override
-//            public void onLayoutChange(RecyclerView recyclerView,
-//                                       RecyclerView.LayoutManager oldLayoutManager,
-//                                       RecyclerView.LayoutManager newLayoutManager) {
-//
-//                if (((LinearLayoutManager) newLayoutManager).findLastVisibleItemPosition()
-//                        == adapter.getItemCount() - 1) {
-//
-//                }
-//            }
-//        });
-
         new FadeHideableViewWrapper(layoutToggleButton).show();
         layoutToggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -276,23 +222,6 @@ public class PictureListFragment extends Fragment
 
         swipeRefreshLayout.setRefreshing(false);
         swipeRefreshLayout.setOnRefreshListener(this);
-    }
-
-    @Override
-    public boolean onLongClick(View v) {
-        /*
-        switch (type) {
-            case SENT:
-            case RECEIVED:
-                Intent intent = new Intent(getActivity(), DiscoverActivity.class);
-                startActivity(intent);
-                break;
-            case DISCOVER:
-                getActivity().finish();
-                break;
-        }
-        //*/
-        return false;
     }
 
     public String getScreenName() {

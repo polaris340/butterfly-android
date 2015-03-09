@@ -14,9 +14,6 @@
     <screenName name="co.bttrfly.picture.PictureViewActivity">
         Picture view activity
     </screenName>
-    <screenName name="co.bttrfly.picture.DiscoverActivity">
-        Discover activity
-    </screenName>
     <screenName name="co.bttrfly.settings.SettingsActivity">
         Settings activity
     </screenName>

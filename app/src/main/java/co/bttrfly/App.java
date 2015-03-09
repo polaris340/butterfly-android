@@ -14,14 +14,15 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
-import io.fabric.sdk.android.Fabric;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.util.HashMap;
 
+import co.bttrfly.db.PictureDatabaseManager;
 import co.bttrfly.location.LastLocationManager;
 import co.bttrfly.picture.PictureDataManager;
 import co.bttrfly.statics.Constants;
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by jiho on 1/7/15.
@@ -87,6 +88,8 @@ public class App extends Application {
                 .build();
         ImageLoader.getInstance().init(config);
 
+
+        PictureDatabaseManager.init(this);
         // to initialize
         PictureDataManager.getInstance();
     }

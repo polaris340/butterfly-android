@@ -11,11 +11,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import co.bttrfly.auth.Auth;
 import co.bttrfly.auth.LoginStateChangeObserver;
 import co.bttrfly.db.Picture;
+import co.bttrfly.db.PictureDatabaseManager;
 import co.bttrfly.network.DefaultErrorListener;
 import co.bttrfly.network.VolleyRequestQueue;
 import co.bttrfly.statics.Constants;
@@ -36,7 +38,21 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
     private HashMap<Type, Request> currentRequestHashMap;
 
     public static final String URL_GET_PICTURE = Constants.URLs.API_URL + "picture/";
+    public static final String URL_GET_PICTURE_REFRESH = Constants.URLs.API_URL + "picture-refresh/";
 
+
+    private PictureDataManager() {
+        pictureHashMap = new HashMap<>();
+        pictureIdListHashMap = new HashMap<>();
+        observers = new HashMap<>();
+        for (Type t:Type.values()) {
+            observers.put(t, new ArrayList<PictureDataObserver>());
+        }
+        currentRequestHashMap = new HashMap<>();
+        Auth.getInstance().addLoginStateChangeObserver(this);
+
+        loadFromLocalDB();
+    }
 
     @Override
     public void update() {
@@ -47,9 +63,14 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
 
     @Override
     public void addItems(Type type, int startPosition, int itemCount) {
-        Iterator<PictureDataObserver> iterator = observers.get(type).iterator();
-        while (iterator.hasNext()) {
-            iterator.next().addItems(startPosition, itemCount);
+        try {
+
+            Iterator<PictureDataObserver> iterator = observers.get(type).iterator();
+            while (iterator.hasNext()) {
+                iterator.next().addItems(startPosition, itemCount);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -77,13 +98,7 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
 
 
 
-    private PictureDataManager() {
-        pictureHashMap = new HashMap<>();
-        pictureIdListHashMap = new HashMap<>();
-        observers = new HashMap<>();
-        currentRequestHashMap = new HashMap<>();
-        Auth.getInstance().addLoginStateChangeObserver(this);
-    }
+
     public static PictureDataManager getInstance() {
         if (instance == null) instance = new PictureDataManager();
         return instance;
@@ -178,6 +193,7 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
 
     }
 
+
     public void loadMore(final Type type, final boolean refresh,
                          final Callable onPreLoading, final Callable onLoadingComplete) {
         if (currentRequestHashMap.containsKey(type)) {
@@ -189,12 +205,11 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
         }
 
         String url = URL_GET_PICTURE;
-        url += type.getKey() + "/";
+        if (refresh) url = URL_GET_PICTURE_REFRESH;
 
-        if (refresh)
-            url += "0";
-        else
-            url += getLastId(type);
+        url += type.getKey();
+
+        if (!refresh) url += ("/"+getLastId(type));
 
         Request request = new JsonObjectRequest(
                 Request.Method.GET,
@@ -205,22 +220,35 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
                     public void onResponse(JSONObject response) {
                         try {
                             PictureDataManager manager = PictureDataManager.getInstance();
-                            if (refresh) {
-                                manager.clear(type);
-                            }
+
                             int addStartPosition = getPictureIdList(type).size();
                             String dataList = response.getString(Constants.Keys.MESSAGE);
                             Picture[] pictures = Picture.fromJsonArray(dataList);
 
+
+                            int addCount = 0;
+                            ArrayList<Long> idList = getPictureIdList(type);
                             for (Picture p:pictures) {
-                                manager.add(type, p);
+                                if (refresh) {
+                                    int position = idList.indexOf(p.getId());
+                                    if (position >= 0) {
+                                        put(p);
+                                        update(p.getId());
+                                    } else {
+                                        add(type, addCount++, p);
+                                    }
+                                } else {
+                                    manager.add(type, p);
+                                }
                             }
-                            if (pictures.length > 0) {
+
+
+                            if (refresh || pictures.length > 0) {
                                 currentRequestHashMap.remove(type);
                             }
 
                             if (refresh) {
-                                update(type);
+                                addItems(type, 0, addCount);
                             } else {
                                 addItems(type, addStartPosition, pictures.length);
                             }
@@ -278,6 +306,27 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
         }
     }
 
+    public void loadFromLocalDB() {
+        List<Picture> pictureList = PictureDatabaseManager.getInstance().selectAll();
+        Iterator<Picture> iterator = pictureList.iterator();
+        while (iterator.hasNext()) {
+            Picture picture = iterator.next();
+            Type type = Type.SENT;
+            if (picture.isReceived()) {
+                type = Type.RECEIVED;
+            }
+
+            add(type, picture);
+        }
+    }
+
+    public void saveToLocalDB() {
+        PictureDatabaseManager dbManager = PictureDatabaseManager.getInstance();
+        Iterator<Picture> iterator = pictureHashMap.values().iterator();
+        while (iterator.hasNext()) {
+            dbManager.upsert(iterator.next());
+        }
+    }
 
 
 }
