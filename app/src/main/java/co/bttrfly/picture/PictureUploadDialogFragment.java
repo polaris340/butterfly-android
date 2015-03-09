@@ -73,7 +73,9 @@ public class PictureUploadDialogFragment extends DialogFragment
     private EditText titleInput;
     private static boolean uploading = false;
 
-    private boolean mFileWrited = false;
+    private boolean mFileEdited = false;
+    private boolean isNewPicture = false;
+    private boolean pictureSent = false;
 
     private static NotificationCompat.Builder mNotificationBuilder;
     private static NotificationManager mNotificationManager;
@@ -177,7 +179,7 @@ public class PictureUploadDialogFragment extends DialogFragment
                     setUploadTargetFile(selectedImage);
                     break;
                 case REQUEST_IMAGE_EDIT:
-                    mFileWrited = true; // 수정한 파일은 저장함
+                    mFileEdited = true; // 수정한 파일은 저장함
                     Uri savedImage = data.getData();
 
                     if (savedImage.getScheme().equals("file")) {
@@ -188,6 +190,7 @@ public class PictureUploadDialogFragment extends DialogFragment
                     }
                 case REQUEST_IMAGE_CAPTURE:
                     //uploadTargetImageView.setImageFile(null);
+                    isNewPicture = true;
                     uploadTargetImageView.setImageFile(uploadTargetFile);
                     break;
             }
@@ -241,7 +244,7 @@ public class PictureUploadDialogFragment extends DialogFragment
                     // TODO : show message
                     break;
                 }
-                mFileWrited = true;
+                pictureSent = true;
                 Request request = new MultipartRequest(UPLOAD_URL, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -370,7 +373,7 @@ public class PictureUploadDialogFragment extends DialogFragment
 
         if (mNotificationManager == null)
             mNotificationManager =
-                (NotificationManager) App.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                    (NotificationManager) App.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(GcmBroadcastReceiver.GCM_NOTIFICATION_ID_SENT, mNotificationBuilder.build());
     }
 
@@ -430,12 +433,13 @@ public class PictureUploadDialogFragment extends DialogFragment
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (!mFileWrited) {
-            if (uploadTargetFile != null) {
+        if (uploadTargetFile != null) {
+            if (mFileEdited || (isNewPicture && pictureSent)) {
+                // 갤러리에 등록하는 경우 : 이미지가 편집됐거나 새 사진을 찍어서 보낸 경우
+                ImageFileUtil.addToGallery(uploadTargetFile);
+            } else {
                 uploadTargetFile.delete();
             }
-        } else {
-            ImageFileUtil.addToGallery(uploadTargetFile);
         }
     }
 }

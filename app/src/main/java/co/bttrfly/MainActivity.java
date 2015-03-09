@@ -397,7 +397,11 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onPageSelected(int position) {
-        setScreen(position);
+        try {
+            setScreen(position);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -405,7 +409,7 @@ public class MainActivity extends BaseActivity
 
     }
 
-    private void setScreen(int position) {
+    private void setScreen(int position) throws NullPointerException {
         PictureListFragment currentFragment
                 = (PictureListFragment) getSupportFragmentManager()
                 .getFragments()
