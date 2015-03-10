@@ -254,7 +254,9 @@ public class PictureListFragment extends Fragment
 
     @Override
     public void addItems(int startPosition, int itemCount) {
-        recyclerView.smoothScrollToPosition(startPosition);
+        if (startPosition == 0) {
+            recyclerView.smoothScrollToPosition(startPosition);
+        }
     }
 
     @Override

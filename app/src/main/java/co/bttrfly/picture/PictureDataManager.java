@@ -122,7 +122,7 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
             if (index >= 0) {
                 pictureIdList.remove(index);
                 removeItem(t, index);
-
+                pictureHashMap.remove(pictureId);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
