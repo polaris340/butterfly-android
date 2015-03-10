@@ -12,9 +12,14 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import co.bttrfly.MainActivity;
 import co.bttrfly.R;
+import co.bttrfly.db.Picture;
 import co.bttrfly.picture.PictureDataManager;
+import co.bttrfly.picture.PictureDataObservable;
 
 /**
  * Created by jiho on 1/25/15.
@@ -23,6 +28,7 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
 
     private static final String KEY_GCM_NOTIFICATION_ID = "gcm_notification_id";
     private static final String KEY_MESSAGE = "message";
+    private static final String KEY_PICTURE_DATA = "picture_data";
 
     public static final int GCM_NOTIFICATION_ID_RECEIVED = 12114;
     public static final int GCM_NOTIFICATION_ID_SENT = 4124;
@@ -46,6 +52,7 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
         int smallIcon = R.drawable.ic_received_24;
         if (notificationId == GCM_NOTIFICATION_ID_SENT) {
             smallIcon = R.drawable.ic_sent_24;
+            message = parseSentNotificationData(message);
         }
 
 
@@ -104,5 +111,19 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
 
         // mId allows you to update the notification later on.
         mNotificationManager.notify(notificationId, notification);
+    }
+
+    private String parseSentNotificationData(String jsonString) {
+        try {
+            JSONObject jsonObject = new JSONObject(jsonString);
+            String message = jsonObject.getString(KEY_MESSAGE);
+            Picture picture = Picture.fromJson(jsonObject.getString(KEY_PICTURE_DATA));
+            PictureDataManager manager = PictureDataManager.getInstance();
+            manager.add(PictureDataObservable.Type.SENT, 0, picture);
+            manager.addItems(PictureDataObservable.Type.SENT, 0, 1);
+            return message;
+        } catch (JSONException e) {
+            return null;
+        }
     }
 }

@@ -31,7 +31,8 @@ import me.jiho.animatedtogglebutton.ListGridToggleButton;
  */
 public class PictureListFragment extends Fragment
         implements View.OnClickListener,
-        SwipeRefreshLayout.OnRefreshListener {
+        SwipeRefreshLayout.OnRefreshListener,
+        PictureDataObserver {
 
     private static final String TAG = "FRAGMENT_PICTURE_LIST";
 
@@ -152,6 +153,7 @@ public class PictureListFragment extends Fragment
 
         loadedAfterInitialData();
 
+
         return rootView;
     }
 
@@ -226,5 +228,37 @@ public class PictureListFragment extends Fragment
 
     public String getScreenName() {
         return TAG + "|" + type.name();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        PictureDataManager.getInstance().addObserver(type, this);
+    }
+
+    @Override
+    public void onPause() {
+        PictureDataManager.getInstance().removeObserver(type, this);
+        super.onPause();
+    }
+
+    @Override
+    public void update() {
+
+    }
+
+    @Override
+    public void update(long pictureId) {
+
+    }
+
+    @Override
+    public void addItems(int startPosition, int itemCount) {
+        recyclerView.smoothScrollToPosition(startPosition);
+    }
+
+    @Override
+    public void removeItem(int position) {
+
     }
 }

@@ -234,7 +234,15 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        PictureDataManager.getInstance().saveToLocalDB();
+        new AsyncTask() {
+
+            @Override
+            protected Object doInBackground(Object[] params) {
+                PictureDataManager.getInstance().saveToLocalDB();
+                return null;
+            }
+        }.execute();
+
     }
 
     /**

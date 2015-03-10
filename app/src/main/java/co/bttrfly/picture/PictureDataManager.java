@@ -9,7 +9,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -33,7 +35,7 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
 
     private HashMap<Long, Picture> pictureHashMap;
     private HashMap<Type, ArrayList<Long>> pictureIdListHashMap;
-    private HashMap<Type, ArrayList<PictureDataObserver>> observers;
+    private HashMap<Type, HashSet<PictureDataObserver>> observers;
 
     private HashMap<Type, Request> currentRequestHashMap;
 
@@ -46,7 +48,7 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
         pictureIdListHashMap = new HashMap<>();
         observers = new HashMap<>();
         for (Type t:Type.values()) {
-            observers.put(t, new ArrayList<PictureDataObserver>());
+            observers.put(t, new HashSet<PictureDataObserver>());
         }
         currentRequestHashMap = new HashMap<>();
         Auth.getInstance().addLoginStateChangeObserver(this);
@@ -113,13 +115,21 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
         return pictureHashMap.get(pictureId);
     }
 
-    public void delete(long pictureId) {
+    public void delete(final long pictureId) {
         for (Type t:Type.values()) {
             ArrayList<Long> pictureIdList = pictureIdListHashMap.get(t);
             int index = pictureIdList.indexOf(pictureId);
             if (index >= 0) {
                 pictureIdList.remove(index);
                 removeItem(t, index);
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        PictureDatabaseManager.getInstance().delete(pictureId);
+                    }
+                }).start();
+
             }
         }
 
@@ -152,7 +162,7 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
     @Override
     public void addObserver(Type type, PictureDataObserver observer) {
         if (!observers.containsKey(type)) {
-            observers.put(type, new ArrayList<PictureDataObserver>());
+            observers.put(type, new HashSet<PictureDataObserver>());
         }
         observers.get(type).add(observer);
     }
@@ -209,7 +219,7 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
 
         url += type.getKey();
 
-        if (!refresh) url += ("/"+getLastId(type));
+        url += ("/"+getLastId(type));
 
         Request request = new JsonObjectRequest(
                 Request.Method.GET,
@@ -295,7 +305,7 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
         VolleyRequestQueue.add(request);
     }
 
-    private long getLastId(Type type) {
+    public long getLastId(Type type) {
         ArrayList<Long> pictureIdList = getPictureIdList(type);
         if (pictureIdList.size() > 0) {
             Picture lastPicture = get(pictureIdList.get(pictureIdList.size() - 1));
@@ -322,9 +332,10 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
 
     public void saveToLocalDB() {
         PictureDatabaseManager dbManager = PictureDatabaseManager.getInstance();
-        Iterator<Picture> iterator = pictureHashMap.values().iterator();
-        while (iterator.hasNext()) {
-            dbManager.upsert(iterator.next());
+        Collection<Picture> pictures = pictureHashMap.values();
+
+        for (Picture p:pictures) {
+            dbManager.upsert(p);
         }
     }
 

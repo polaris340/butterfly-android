@@ -20,6 +20,8 @@ import co.bttrfly.location.LastLocationManager;
 import co.bttrfly.location.LocationData;
 import co.bttrfly.network.DefaultErrorListener;
 import co.bttrfly.network.VolleyRequestQueue;
+import co.bttrfly.picture.PictureDataManager;
+import co.bttrfly.picture.PictureDataObservable;
 import co.bttrfly.statics.Constants;
 
 /**
@@ -35,6 +37,8 @@ public class Auth {
     public static final String KEY_NAME = "name";
     public static final String KEY_PASSWORD = "password";
     public static final String KEY_GCM_REG_ID = "gcm_reg_id";
+    public static final String KEY_LAST_SENT_ID = "last_sent_id";
+    public static final String KEY_LAST_RECEIVED_ID = "last_received_id";
 
     public enum LoginState {
         NOT_LOGGED_IN,
@@ -84,8 +88,10 @@ public class Auth {
     }
 
     public void loginWithAccessToken(final Callable loginCallback, final Callable errorCallback) throws JSONException {
-        if (accessToken == null) throw new NullPointerException();
+        if (accessToken == null) throw new NullPointerException("Access token is null");
         JSONObject jsonObject = new JSONObject().put(KEY_ACCESS_TOKEN, accessToken);
+        jsonObject.put(KEY_LAST_SENT_ID, PictureDataManager.getInstance().getLastId(PictureDataObservable.Type.SENT));
+        jsonObject.put(KEY_LAST_RECEIVED_ID, PictureDataManager.getInstance().getLastId(PictureDataObservable.Type.RECEIVED));
         login(jsonObject, loginCallback, errorCallback);
     }
 

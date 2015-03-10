@@ -59,16 +59,6 @@ public abstract class MultipartRequest extends Request<JSONObject> {
         return getHttpEntity().getContentType().getValue();
     }
 
-//    @Override
-//    public byte[] getBody() throws AuthFailureError {
-//        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//        try {
-//            getHttpEntity().writeTo(bos);
-//        } catch (IOException e) {
-//            VolleyLog.e("IOException writing to ByteArrayOutputStream");
-//        }
-//        return bos.toByteArray();
-//    }
 
     @Override
     protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {

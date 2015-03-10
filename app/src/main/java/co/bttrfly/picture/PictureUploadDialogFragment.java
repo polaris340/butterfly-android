@@ -252,6 +252,14 @@ public class PictureUploadDialogFragment extends DialogFragment
 
                         showNotification(NotificationType.UPLOAD_COMPLETE);
 
+                        if (isNewPicture) {
+                            ImageFileUtil.addToGallery(uploadTargetFile);
+                        } else {
+                            if (!mFileEdited) {
+                                uploadTargetFile.delete();
+                            }
+                        }
+
                     }
                 },
                         new DefaultErrorListener() {
@@ -259,7 +267,7 @@ public class PictureUploadDialogFragment extends DialogFragment
                             public void onErrorResponse(VolleyError error) {
                                 super.onErrorResponse(error);
                                 uploading = false;
-
+                                ImageFileUtil.addToGallery(uploadTargetFile);
                                 showNotification(NotificationType.UPLOAD_FAIL);
                             }
                         },
@@ -434,11 +442,9 @@ public class PictureUploadDialogFragment extends DialogFragment
     public void onDestroy() {
         super.onDestroy();
         if (uploadTargetFile != null) {
-            if (mFileEdited || (isNewPicture && pictureSent)) {
-                // 갤러리에 등록하는 경우 : 이미지가 편집됐거나 새 사진을 찍어서 보낸 경우
+            if (mFileEdited) {
+                // 이미지 편집된 채로 dialog 닫히면 갤러리에 등록
                 ImageFileUtil.addToGallery(uploadTargetFile);
-            } else {
-                uploadTargetFile.delete();
             }
         }
     }
