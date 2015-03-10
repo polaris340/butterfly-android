@@ -32,6 +32,24 @@ public class DialogUtil {
         return dialog;
     }
 
+    public static Dialog getNoticeDialog(Context context, String message) {
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_notice, null);
+        final Dialog dialog = new AlertDialog.Builder(context)
+                .setCancelable(false)
+                .setView(view)
+                .create();
+
+        view.findViewById(R.id.notice_btn_ok).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        ((TextView) view.findViewById(R.id.notice_message)).setText(message);
+        return dialog;
+    }
+
 
 
 

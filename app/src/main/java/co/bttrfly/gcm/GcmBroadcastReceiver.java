@@ -20,6 +20,7 @@ import co.bttrfly.R;
 import co.bttrfly.db.Picture;
 import co.bttrfly.picture.PictureDataManager;
 import co.bttrfly.picture.PictureDataObservable;
+import co.bttrfly.statics.Constants;
 
 /**
  * Created by jiho on 1/25/15.
@@ -31,6 +32,7 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
     private static final String KEY_PICTURE_DATA = "picture_data";
 
     public static final int GCM_NOTIFICATION_ID_RECEIVED = 12114;
+    public static final int GCM_NOTIFICATION_ID_NOTICE = 152;
     public static final int GCM_NOTIFICATION_ID_SENT = 4124;
 
     @Override
@@ -68,6 +70,10 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
 
         if (notificationId == GCM_NOTIFICATION_ID_SENT) {
             resultIntent.putExtra(MainActivity.KEY_FRAGMENT_TYPE, PictureDataManager.Type.SENT.name());
+        }
+
+        if (notificationId == GCM_NOTIFICATION_ID_NOTICE) {
+            resultIntent.putExtra(Constants.Keys.NOTICE, message);
         }
 
         boolean vibrate = preferences.getBoolean(

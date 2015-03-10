@@ -36,7 +36,8 @@ import co.bttrfly.auth.AuthActivity;
 import co.bttrfly.picture.PictureDataManager;
 import co.bttrfly.picture.PictureListFragment;
 import co.bttrfly.picture.PictureUploadDialogFragment;
-
+import co.bttrfly.statics.Constants;
+import co.bttrfly.util.DialogUtil;
 
 
 public class MainActivity extends BaseActivity
@@ -119,6 +120,11 @@ public class MainActivity extends BaseActivity
         String type = intent.getStringExtra(KEY_FRAGMENT_TYPE);
         if (type != null && type.equals(PictureDataManager.Type.SENT.name())) {
             mViewPager.setCurrentItem(1);
+        }
+
+        String notice = intent.getStringExtra(Constants.Keys.NOTICE);
+        if (notice != null) {
+            DialogUtil.getNoticeDialog(this, notice).show();
         }
 
         mViewPager.setOnPageChangeListener(this);
