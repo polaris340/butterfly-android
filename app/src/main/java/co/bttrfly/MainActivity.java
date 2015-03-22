@@ -200,9 +200,14 @@ public class MainActivity extends BaseActivity
 
     @Override
     public boolean onLongClick(View v) {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");
-        startActivityForResult(intent, SELECT_PICTURE);
+        if (PictureUploadDialogFragment.isUploading()) {
+            DialogFragment uploadDialogFragment = new PictureUploadDialogFragment();
+            uploadDialogFragment.show(getSupportFragmentManager(), PictureUploadDialogFragment.TAG);
+        } else {
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setType("image/*");
+            startActivityForResult(intent, SELECT_PICTURE);
+        }
         return false;
     }
 

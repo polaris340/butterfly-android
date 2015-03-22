@@ -28,8 +28,14 @@ public class LoginCallback implements Response.Listener<JSONObject> {
         }
         try {
             PictureDataManager pictureDataManager = PictureDataManager.getInstance();
+            boolean reset = false;
+            if (response.has(KEY_RESET) && response.getBoolean(KEY_RESET)) {
+                reset = true;
+            }
 
             for (PictureDataManager.Type type: PictureDataManager.Type.values()) {
+                if (reset) pictureDataManager.clear(type);
+                pictureDataManager.update(type);
                 if (!response.has(type.getKey())) continue;
 
                 String pictureArrayString = response.getString(type.getKey());

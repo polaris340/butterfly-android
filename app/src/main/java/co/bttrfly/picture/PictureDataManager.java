@@ -230,8 +230,6 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            PictureDataManager manager = PictureDataManager.getInstance();
-
                             int addStartPosition = getPictureIdList(type).size();
                             String dataList = response.getString(Constants.Keys.MESSAGE);
                             Picture[] pictures = Picture.fromJsonArray(dataList);
@@ -249,7 +247,7 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
                                         add(type, addCount++, p);
                                     }
                                 } else {
-                                    manager.add(type, p);
+                                    add(type, p);
                                 }
                             }
 

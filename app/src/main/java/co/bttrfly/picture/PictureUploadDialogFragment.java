@@ -433,6 +433,10 @@ public class PictureUploadDialogFragment extends DialogFragment
         });
     }
 
+    public static boolean isUploading() {
+        return uploading;
+    }
+
     @Override
     public void show(FragmentManager manager, String tag) {
         super.show(manager, tag);
