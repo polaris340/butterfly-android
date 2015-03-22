@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 
 import co.bttrfly.auth.Auth;
 import co.bttrfly.auth.LoginStateChangeObserver;
@@ -33,7 +34,7 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
     public static final String KEY_TYPE = "type";
     public static final String KEY_POSITION = "position";
 
-    private HashMap<Long, Picture> pictureHashMap;
+    private ConcurrentHashMap<Long, Picture> pictureHashMap;
     private HashMap<Type, ArrayList<Long>> pictureIdListHashMap;
     private HashMap<Type, HashSet<PictureDataObserver>> observers;
 
@@ -44,7 +45,7 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
 
 
     private PictureDataManager() {
-        pictureHashMap = new HashMap<>();
+        pictureHashMap = new ConcurrentHashMap<>();
         pictureIdListHashMap = new HashMap<>();
         observers = new HashMap<>();
         for (Type t:Type.values()) {
@@ -258,7 +259,9 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
                             }
 
                             if (refresh) {
-                                addItems(type, 0, addCount);
+                                if (addCount > 0) {
+                                    addItems(type, 0, addCount);
+                                }
                             } else {
                                 addItems(type, addStartPosition, pictures.length);
                             }
@@ -333,6 +336,8 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
     public void saveToLocalDB() {
         PictureDatabaseManager dbManager = PictureDatabaseManager.getInstance();
         Collection<Picture> pictures = pictureHashMap.values();
+
+
 
         for (Picture p:pictures) {
             dbManager.upsert(p);

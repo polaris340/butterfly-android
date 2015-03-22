@@ -89,9 +89,10 @@ public class Auth {
 
     public void loginWithAccessToken(final Callable loginCallback, final Callable errorCallback) throws JSONException {
         if (accessToken == null) throw new NullPointerException("Access token is null");
+        PictureDataManager pictureDataManager = PictureDataManager.getInstance();
         JSONObject jsonObject = new JSONObject().put(KEY_ACCESS_TOKEN, accessToken);
-        jsonObject.put(KEY_LAST_SENT_ID, PictureDataManager.getInstance().getLastId(PictureDataObservable.Type.SENT));
-        jsonObject.put(KEY_LAST_RECEIVED_ID, PictureDataManager.getInstance().getLastId(PictureDataObservable.Type.RECEIVED));
+        jsonObject.put(KEY_LAST_SENT_ID, pictureDataManager.getLastId(PictureDataObservable.Type.SENT));
+        jsonObject.put(KEY_LAST_RECEIVED_ID, pictureDataManager.getLastId(PictureDataObservable.Type.RECEIVED));
         login(jsonObject, loginCallback, errorCallback);
     }
 
@@ -117,7 +118,6 @@ public class Auth {
         if (regid != null) {
             requestData.put(KEY_GCM_REG_ID, regid);
         }
-
 
         Request request = new JsonObjectRequest(Request.Method.POST, URL_LOGIN, requestData,
                 new LoginCallback() {

@@ -94,12 +94,14 @@ public class MainActivity extends BaseActivity
             return;
         }
 
+
         try {
             Auth.getInstance().loginWithAccessToken();
         } catch (JSONException e) {
             // this exception will not occur...
             e.printStackTrace();
         }
+
 
         setContentView(R.layout.activity_main);
 

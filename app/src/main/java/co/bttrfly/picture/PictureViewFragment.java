@@ -122,8 +122,8 @@ public class PictureViewFragment extends Fragment implements View.OnClickListene
         footer = new FadeHideableViewWrapper(footerView);
         header.setDuration(Constants.Integers.ANIMATION_DURATION_LONG);
         footer.setDuration(Constants.Integers.ANIMATION_DURATION_LONG);
-        header.hide(HEADER_FOOTER_HIDE_DELAY);
-        footer.hide(HEADER_FOOTER_HIDE_DELAY);
+        //header.hide(HEADER_FOOTER_HIDE_DELAY);
+        //footer.hide(HEADER_FOOTER_HIDE_DELAY);
 
         TextView fromLabel = (TextView) rootView.findViewById(R.id.pictureview_label_from);
         fromLabel.setTextColor(getResources().getColor(R.color.white_70));

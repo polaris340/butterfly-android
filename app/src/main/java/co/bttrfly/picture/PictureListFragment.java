@@ -22,6 +22,8 @@ import com.nineoldandroids.view.ViewHelper;
 import java.util.concurrent.Callable;
 
 import co.bttrfly.R;
+import co.bttrfly.auth.Auth;
+import co.bttrfly.auth.LoginStateChangeObserver;
 import co.bttrfly.view.FadeHideableViewWrapper;
 import co.bttrfly.view.PictureListRecyclerView;
 import me.jiho.animatedtogglebutton.ListGridToggleButton;
@@ -32,7 +34,8 @@ import me.jiho.animatedtogglebutton.ListGridToggleButton;
 public class PictureListFragment extends Fragment
         implements View.OnClickListener,
         SwipeRefreshLayout.OnRefreshListener,
-        PictureDataObserver {
+        PictureDataObserver,
+        LoginStateChangeObserver {
 
     private static final String TAG = "FRAGMENT_PICTURE_LIST";
 
@@ -79,7 +82,19 @@ public class PictureListFragment extends Fragment
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.picturelist_refresh_layout);
-        swipeRefreshLayout.setRefreshing(true);
+        swipeRefreshLayout.setColorSchemeResources(
+                R.color.material_red_500,
+                R.color.material_orange_500,
+                R.color.material_yellow_500,
+                R.color.material_light_green_500,
+                R.color.material_teal_500,
+                R.color.material_light_blue_500,
+                R.color.material_indigo_500,
+                R.color.material_purple_500
+        );
+        //swipeRefreshLayout.setRefreshing(true);
+
+
 
 
         ImageButton fragmentHeaderIcon = (ImageButton) rootView.findViewById(R.id.picturelist_list_icon);
@@ -190,17 +205,6 @@ public class PictureListFragment extends Fragment
             emptyLabel.show();
         }
 
-        adapter.setOnBindViewHolderListener(new PictureListAdapter.OnBindViewHolderListener() {
-            @Override
-            public void onBind(int position) {
-                if (position == adapter.getItemCount()-1) {
-                    PictureDataManager.getInstance().loadMore(type, false,
-                            onPreLoading,// TODO : 그냥 null로 할까..
-                            onLoadingComplete);
-                }
-            }
-        });
-
         new FadeHideableViewWrapper(layoutToggleButton).show();
         layoutToggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -224,6 +228,8 @@ public class PictureListFragment extends Fragment
 
         swipeRefreshLayout.setRefreshing(false);
         swipeRefreshLayout.setOnRefreshListener(this);
+
+        Auth.getInstance().addLoginStateChangeObserver(this);
     }
 
     public String getScreenName() {
@@ -234,6 +240,9 @@ public class PictureListFragment extends Fragment
     public void onResume() {
         super.onResume();
         PictureDataManager.getInstance().addObserver(type, this);
+        if (Auth.getInstance().isLogin()) {
+            //onRefresh();
+        }
     }
 
     @Override
@@ -262,5 +271,22 @@ public class PictureListFragment extends Fragment
     @Override
     public void removeItem(int position) {
 
+    }
+
+    @Override
+    public void onLoginStateChanged(Auth.LoginState loginState) {
+        switch (loginState) {
+            case LOGGED_IN:
+                adapter.setOnBindViewHolderListener(new PictureListAdapter.OnBindViewHolderListener() {
+                    @Override
+                    public void onBind(int position) {
+                        if (position == adapter.getItemCount()-1) {
+                            PictureDataManager.getInstance().loadMore(type, false,
+                                    onPreLoading,// TODO : 그냥 null로 할까..
+                                    onLoadingComplete);
+                        }
+                    }
+                });
+        }
     }
 }

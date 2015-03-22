@@ -73,6 +73,7 @@ public class App extends Application {
                 .resetViewBeforeLoading(true)
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
+                .considerExifParams(true)
                 .displayer(new FadeInBitmapDisplayer(Constants.Integers.ANIMATION_DURATION));
 
         // AUIL Settings
@@ -92,6 +93,8 @@ public class App extends Application {
         PictureDatabaseManager.init(this);
         // to initialize
         PictureDataManager.getInstance();
+
+
     }
 
 

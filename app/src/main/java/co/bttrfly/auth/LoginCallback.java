@@ -28,13 +28,8 @@ public class LoginCallback implements Response.Listener<JSONObject> {
         }
         try {
             PictureDataManager pictureDataManager = PictureDataManager.getInstance();
-            boolean reset = false;
-            if (response.has(KEY_RESET) && response.getBoolean(KEY_RESET)) {
-                reset = true;
-            }
 
             for (PictureDataManager.Type type: PictureDataManager.Type.values()) {
-                if (reset) pictureDataManager.clear(type);
                 if (!response.has(type.getKey())) continue;
 
                 String pictureArrayString = response.getString(type.getKey());
@@ -42,13 +37,13 @@ public class LoginCallback implements Response.Listener<JSONObject> {
 
                 int insertedCount = 0;
                 ArrayList<Long> pictureIdList = pictureDataManager.getPictureIdList(type);
-                for (int i = 0; i < pictures.length; i++) {
-                    int index = pictureIdList.indexOf(pictures[i].getId());
+                for (Picture p : pictures) {
+                    int index = pictureIdList.indexOf(p.getId());
                     if (index >= 0) {
-                        pictureDataManager.put(pictures[i]);
-                        pictureDataManager.update(pictures[i].getId());
+                        pictureDataManager.put(p);
+                        pictureDataManager.update(p.getId());
                     } else {
-                        pictureDataManager.add(type, insertedCount++, pictures[i]);
+                        pictureDataManager.add(type, insertedCount++, p);
                     }
                     if (insertedCount > 0) {
                         pictureDataManager.addItems(type, 0, insertedCount);
