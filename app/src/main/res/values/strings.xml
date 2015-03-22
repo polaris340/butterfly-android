@@ -66,5 +66,6 @@
         <!--<item>Log out</item>-->
     </string-array>
     <string name="title_activity_discover">DiscoverActivity</string>
+    <string name="message_picture_deleted">Picture deleted</string>
 
 </resources>

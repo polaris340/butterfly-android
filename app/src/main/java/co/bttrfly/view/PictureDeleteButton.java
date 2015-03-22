@@ -1,5 +1,6 @@
 package co.bttrfly.view;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.util.AttributeSet;
 
@@ -54,6 +55,8 @@ public class PictureDeleteButton extends PictureMenuItemButton {
                 } else {
                     url = URL_SEND_PICTURE_DELETE + pictureData.getSendPictureId();
                 }
+                final Dialog progressDialog = DialogUtil.getDefaultProgressDialog(getContext());
+                progressDialog.show();
 
                 Request request = new JsonObjectRequest(
                         Request.Method.DELETE,
@@ -63,7 +66,8 @@ public class PictureDeleteButton extends PictureMenuItemButton {
                             @Override
                             public void onResponse(JSONObject response) {
                                 PictureDataManager.getInstance().delete(pictureId);
-                                MessageUtil.showMessage("Picture deleted");
+                                MessageUtil.showMessage(R.string.message_picture_deleted);
+                                progressDialog.dismiss();
                                 dismiss();
                             }
                         },
