@@ -34,6 +34,7 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
     public static final int GCM_NOTIFICATION_ID_RECEIVED = 12114;
     public static final int GCM_NOTIFICATION_ID_NOTICE = 152;
     public static final int GCM_NOTIFICATION_ID_SENT = 4124;
+    public static final int GCM_NOTIFICATION_ID_LIKE = 7642;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -52,9 +53,16 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
         }
 
         int smallIcon = R.drawable.ic_received_24;
-        if (notificationId == GCM_NOTIFICATION_ID_SENT) {
-            smallIcon = R.drawable.ic_sent_24;
-            message = parseSentNotificationData(message);
+
+        switch (notificationId) {
+            case GCM_NOTIFICATION_ID_SENT:
+                smallIcon = R.drawable.ic_sent_24;
+                message = parseSentNotificationData(message);
+                if (message == null) return;
+                break;
+            case GCM_NOTIFICATION_ID_LIKE:
+                smallIcon = R.drawable.heart_active_18;
+                break;
         }
 
 
@@ -68,12 +76,14 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
         // Creates an explicit intent for an Activity in your app
         Intent resultIntent = new Intent(context, MainActivity.class);
 
-        if (notificationId == GCM_NOTIFICATION_ID_SENT) {
-            resultIntent.putExtra(MainActivity.KEY_FRAGMENT_TYPE, PictureDataManager.Type.SENT.name());
-        }
-
-        if (notificationId == GCM_NOTIFICATION_ID_NOTICE) {
-            resultIntent.putExtra(Constants.Keys.NOTICE, message);
+        switch (notificationId) {
+            case GCM_NOTIFICATION_ID_LIKE:
+            case GCM_NOTIFICATION_ID_SENT:
+                resultIntent.putExtra(MainActivity.KEY_FRAGMENT_TYPE, PictureDataManager.Type.SENT.name());
+                break;
+            case GCM_NOTIFICATION_ID_NOTICE:
+                resultIntent.putExtra(Constants.Keys.NOTICE, message);
+                break;
         }
 
         boolean vibrate = preferences.getBoolean(
@@ -118,6 +128,9 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
         // mId allows you to update the notification later on.
         mNotificationManager.notify(notificationId, notification);
     }
+
+
+
 
     private String parseSentNotificationData(String jsonString) {
         try {

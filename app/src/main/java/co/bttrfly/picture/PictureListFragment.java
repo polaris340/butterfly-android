@@ -158,6 +158,9 @@ public class PictureListFragment extends Fragment
         View emptyLabelView = rootView.findViewById(R.id.picturelist_message_empty);
         emptyLabel = new FadeHideableViewWrapper(emptyLabelView);
 
+        if (adapter.getItemCount() > 0) {
+            emptyLabel.hide();
+        }
 
 
         // toggle layout
