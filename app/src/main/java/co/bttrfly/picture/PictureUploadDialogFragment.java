@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,6 +19,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -43,6 +45,7 @@ import java.io.InputStream;
 import java.util.concurrent.Callable;
 
 import co.bttrfly.App;
+import co.bttrfly.MainActivity;
 import co.bttrfly.R;
 import co.bttrfly.gcm.GcmBroadcastReceiver;
 import co.bttrfly.location.LocationData;
@@ -378,6 +381,23 @@ public class PictureUploadDialogFragment extends DialogFragment
         mNotificationBuilder
                 .setContentText(App.getContext().getString(message))
                 .setProgress(0, 0, false);
+
+        if (type == NotificationType.UPLOAD_COMPLETE) {
+            Intent resultIntent = new Intent(App.getContext(), MainActivity.class);
+            resultIntent.putExtra(MainActivity.KEY_FRAGMENT_TYPE, PictureDataManager.Type.SENT.name());
+
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(App.getContext());
+            // Adds the back stack for the Intent (but not the Intent itself)
+            stackBuilder.addParentStack(MainActivity.class);
+            // Adds the Intent that starts the Activity to the top of the stack
+            stackBuilder.addNextIntent(resultIntent);
+            PendingIntent resultPendingIntent =
+                    stackBuilder.getPendingIntent(
+                            0,
+                            PendingIntent.FLAG_UPDATE_CURRENT
+                    );
+            mNotificationBuilder.setContentIntent(resultPendingIntent);
+        }
 
         if (mNotificationManager == null)
             mNotificationManager =
