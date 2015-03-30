@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v4.content.IntentCompat;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
@@ -215,7 +216,7 @@ public class Auth {
         getAuthPreference().edit().clear().commit();
         Intent intent = new Intent(App.getContext(), AuthActivity.class);
         intent.addFlags(
-                Intent.FLAG_ACTIVITY_CLEAR_TASK
+                IntentCompat.FLAG_ACTIVITY_CLEAR_TASK
                         |Intent.FLAG_ACTIVITY_NEW_TASK
         );
 

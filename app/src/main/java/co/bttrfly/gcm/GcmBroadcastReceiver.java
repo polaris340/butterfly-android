@@ -57,8 +57,6 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
         switch (notificationId) {
             case GCM_NOTIFICATION_ID_SENT:
                 smallIcon = R.drawable.ic_sent_24;
-                message = parseSentNotificationData(message);
-                if (message == null) return;
                 break;
             case GCM_NOTIFICATION_ID_LIKE:
                 smallIcon = R.drawable.heart_active_18;
@@ -74,7 +72,7 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
                         .setContentTitle(context.getString(R.string.app_name))
                         .setContentText(message);
         // Creates an explicit intent for an Activity in your app
-        Intent resultIntent = new Intent(context, MainActivity.class);
+        Intent resultIntent = MainActivity.getIntent(context);
 
         switch (notificationId) {
             case GCM_NOTIFICATION_ID_LIKE:
@@ -136,10 +134,13 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
             String message = jsonObject.getString(KEY_MESSAGE);
-            Picture picture = Picture.fromJson(jsonObject.getString(KEY_PICTURE_DATA));
-            PictureDataManager manager = PictureDataManager.getInstance();
-            manager.add(PictureDataObservable.Type.SENT, 0, picture);
-            manager.addItems(PictureDataObservable.Type.SENT, 0, 1);
+
+            if (jsonObject.has(KEY_PICTURE_DATA)) {
+                Picture picture = Picture.fromJson(jsonObject.getString(KEY_PICTURE_DATA));
+                PictureDataManager manager = PictureDataManager.getInstance();
+                manager.add(PictureDataObservable.Type.SENT, 0, picture);
+                manager.addItems(PictureDataObservable.Type.SENT, 0, 1);
+            }
             return message;
         } catch (JSONException e) {
             return null;

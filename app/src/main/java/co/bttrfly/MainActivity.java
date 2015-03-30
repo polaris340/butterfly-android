@@ -1,22 +1,39 @@
 package co.bttrfly;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
+import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.IntentCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.ConnectionResult;
@@ -24,18 +41,37 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.melnykov.fab.FloatingActionButton;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.InputStreamBody;
 import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import co.bttrfly.auth.Auth;
 import co.bttrfly.auth.AuthActivity;
+import co.bttrfly.gcm.GcmBroadcastReceiver;
+import co.bttrfly.location.LocationData;
+import co.bttrfly.network.DefaultErrorListener;
+import co.bttrfly.network.MultipartRequest;
+import co.bttrfly.network.VolleyRequestQueue;
 import co.bttrfly.picture.PictureDataManager;
 import co.bttrfly.picture.PictureListFragment;
-import co.bttrfly.picture.PictureUploadDialogFragment;
 import co.bttrfly.statics.Constants;
 import co.bttrfly.util.DialogUtil;
+import co.bttrfly.util.ImageFileUtil;
+import co.bttrfly.util.MessageUtil;
+import co.bttrfly.view.UploadTargetImageView;
 
 
 public class MainActivity extends BaseActivity
@@ -43,6 +79,23 @@ public class MainActivity extends BaseActivity
     private static final String TAG = "MainActivity";
     public static final String KEY_FRAGMENT_TYPE = "fragment_type";
     public static final int SELECT_PICTURE = 128;
+    public static final int REQUEST_IMAGE_EDIT = 64;
+    public static final int REQUEST_IMAGE_CAPTURE = 32;
+    public static final String UPLOAD_URL = Constants.URLs.API_URL + "picture";
+    public static final String KEY_UPLOAD_IMAGE = "image";
+    public static final String KEY_IMAGE_TITLE = "title";
+    public static final String KEY_IMAGE_PRIMARY_COLOR = "primary_color";
+
+    private static boolean uploading = false;
+
+    private static NotificationCompat.Builder mNotificationBuilder;
+    private static NotificationManager mNotificationManager;
+
+    private enum NotificationType {
+        UPLOAD_START,
+        UPLOAD_COMPLETE,
+        UPLOAD_FAIL
+    }
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -76,6 +129,21 @@ public class MainActivity extends BaseActivity
     String regid;
 
 
+    // picture upload
+    private AlertDialog mUploadPictureDialog;
+    private TextView mTitleInput;
+    private UploadTargetImageView mUploadTargetImageView;
+    private File mUploadTargetFile;
+
+    public static Intent getIntent(Context context) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.addFlags(
+                IntentCompat.FLAG_ACTIVITY_CLEAR_TASK
+                        |Intent.FLAG_ACTIVITY_NEW_TASK
+        );
+
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,14 +152,15 @@ public class MainActivity extends BaseActivity
 
         if (!Auth.getInstance().hasAccessToken()) {
             Intent intent = new Intent(this, AuthActivity.class);
+
             intent.addFlags(
-                    Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    IntentCompat.FLAG_ACTIVITY_CLEAR_TASK
                             |Intent.FLAG_ACTIVITY_NEW_TASK
             );
             startActivity(intent);
+
             return;
         }
-
 
         try {
             Auth.getInstance().loginWithAccessToken();
@@ -99,14 +168,9 @@ public class MainActivity extends BaseActivity
             // this exception will not occur...
             e.printStackTrace();
         }
-
-
         setContentView(R.layout.activity_main);
-
         drawer = (DrawerLayout) findViewById(R.id.drawer);
-
         getSupportActionBar().hide();
-
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -139,6 +203,21 @@ public class MainActivity extends BaseActivity
 
 
         // gcm
+        registerGcm();
+
+        // handle share intent
+        handleIntent(intent);
+
+
+        //create upload dialog
+        createPictureUploadDialog();
+
+
+        mTracker = ((App) App.getContext()).getTracker(App.TrackerName.APP_TRACKER);
+
+    }
+
+    private void registerGcm() {
         context = getApplicationContext();
         if (checkPlayServices()) {
             gcm = GoogleCloudMessaging.getInstance(this);
@@ -148,8 +227,10 @@ public class MainActivity extends BaseActivity
                 registerInBackground();
             }
         }
+    }
 
-        // handle share intent
+
+    private void handleIntent(Intent intent) {
         String action = intent.getAction();
         if (action != null && intent.getAction().equals(Intent.ACTION_SEND)) {
             Uri imageUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
@@ -157,29 +238,13 @@ public class MainActivity extends BaseActivity
                 showUploadDialogWithImageUri(imageUri);
             }
         }
-
-
-        mTracker = ((App) App.getContext()).getTracker(App.TrackerName.APP_TRACKER);
-
     }
 
-
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_take_picture:
-                DialogFragment uploadDialogFragment = new PictureUploadDialogFragment();
-                uploadDialogFragment.show(getSupportFragmentManager(), PictureUploadDialogFragment.TAG);
-                break;
-        }
-    }
 
     @Override
     public boolean onLongClick(View v) {
-        if (PictureUploadDialogFragment.isUploading()) {
-            DialogFragment uploadDialogFragment = new PictureUploadDialogFragment();
-            uploadDialogFragment.show(getSupportFragmentManager(), PictureUploadDialogFragment.TAG);
+        if (uploading) {
+            showNowUploadingDialog();
         } else {
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.setType("image/*");
@@ -192,23 +257,107 @@ public class MainActivity extends BaseActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == SELECT_PICTURE) {
-                Uri selectedImage = data.getData();
-                showUploadDialogWithImageUri(selectedImage);
+            switch (requestCode) {
+                case SELECT_PICTURE:
+                    Uri selectedImage = data.getData();
+                    showUploadDialogWithImageUri(selectedImage);
+                    break;
+                case REQUEST_IMAGE_CAPTURE:
+                    mUploadPictureDialog.show();
+                    break;
+                case REQUEST_IMAGE_EDIT:
+                    Uri savedImage = data.getData();
+
+                    if (savedImage.getScheme().equals("file")) {
+                        mUploadTargetFile = new File(savedImage.getPath());
+                        mUploadTargetImageView.setImageFile(mUploadTargetFile);
+                    } else {
+                        final Dialog progressDialog = DialogUtil.getDefaultProgressDialog(this);
+                        progressDialog.show();
+                        ImageFileUtil.copy(savedImage, mUploadTargetFile, new Callable() {
+                            @Override
+                            public Object call() throws Exception {
+                                setUploadTargetFile(null);
+                                setUploadTargetFile(mUploadTargetFile);
+                                progressDialog.dismiss();
+                                return null;
+                            }
+                        }, new Callable() {
+                            @Override
+                            public Object call() throws Exception {
+                                MessageUtil.showDefaultErrorMessage();
+                                progressDialog.dismiss();
+                                mUploadPictureDialog.dismiss();
+                                return null;
+                            }
+                        });
+                    }
+                    break;
+            }
+
+        }
+    }
+
+    private void startTakePictureActivity() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            try {
+                if (mUploadTargetFile == null) {
+                    mUploadTargetFile = ImageFileUtil.createNewImageFile();
+                }
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                        Uri.fromFile(mUploadTargetFile));
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                MessageUtil.showDefaultErrorMessage();
             }
         }
     }
 
     private void showUploadDialogWithImageUri(Uri uri) {
-        PictureUploadDialogFragment uploadDialogFragment = new PictureUploadDialogFragment();
-        uploadDialogFragment.setUploadTargetFile(uri);
-        uploadDialogFragment.show(getSupportFragmentManager(), PictureUploadDialogFragment.TAG);
+        try {
+            InputStream is = App.getContext().getContentResolver().openInputStream(uri);
+            final Dialog progressDialog = DialogUtil.getDefaultProgressDialog(this);
+            if (!this.isFinishing()) {
+                progressDialog.show();
+            }
+            if (mUploadTargetFile == null) {
+                mUploadTargetFile = ImageFileUtil.createNewImageFile();
+            }
+            ImageFileUtil.copy(is, mUploadTargetFile, new Callable() {
+                @Override
+                public Object call() throws Exception {
+                    if (progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                    }
+                    mUploadPictureDialog.show();
+                    return null;
+                }
+            }, new Callable() {
+                @Override
+                public Object call() throws Exception {
+                    MessageUtil.showDefaultErrorMessage();
+                    if (progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                    }
+                    return null;
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            MessageUtil.showDefaultErrorMessage();
+        }
     }
+
 
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(Gravity.START)) {
             drawer.closeDrawer(Gravity.START);
+        } else if (mUploadPictureDialog.isShowing()) {
+            dismissUploadDialog();
         } else {
             super.onBackPressed();
         }
@@ -424,6 +573,284 @@ public class MainActivity extends BaseActivity
         mTracker.send(new HitBuilders.AppViewBuilder().build());
 
     }
+
+
+    private void createPictureUploadDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+        View rootView = LayoutInflater.from(MainActivity.this)
+                .inflate(R.layout.dialog_send, null);
+
+        mTitleInput = (TextView) rootView.findViewById(R.id.upload_et_title);
+        mUploadTargetImageView = (UploadTargetImageView) rootView.findViewById(R.id.upload_iv_target);
+        rootView.findViewById(R.id.upload_btn_cancel).setOnClickListener(this);
+        rootView.findViewById(R.id.upload_btn_edit_picture).setOnClickListener(this);
+        rootView.findViewById(R.id.upload_btn_submit).setOnClickListener(this);
+
+        builder.setView(rootView)
+                .setCancelable(false)
+                .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                    @Override
+                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+
+                        if (keyCode == KeyEvent.KEYCODE_BACK
+                                && event.getAction() == KeyEvent.ACTION_UP) {
+                            dismissUploadDialog();
+                            return true;
+                        }
+
+                        return false;
+                    }
+                });
+
+        mUploadPictureDialog = builder.create();
+        mUploadPictureDialog.setCanceledOnTouchOutside(false);
+        mUploadPictureDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        mUploadPictureDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                if (mUploadTargetFile != null) {
+                    mUploadTargetImageView.setImageFile(mUploadTargetFile);
+                }
+            }
+        });
+    }
+
+    private void setUploadTargetFile(File file) {
+        this.mUploadTargetFile = file;
+        if (mUploadPictureDialog.isShowing()) {
+            mUploadTargetImageView.setImageFile(file);
+        }
+    }
+
+
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_take_picture:
+                if (uploading) {
+                    showNowUploadingDialog();
+                } else {
+                    startTakePictureActivity();
+                }
+                break;
+            case R.id.upload_btn_cancel:
+                dismissUploadDialog();
+                break;
+            case R.id.upload_btn_edit_picture:
+                if (mUploadTargetFile == null) {
+                    // TODO : show message
+
+                } else {
+                    Intent editIntent = new Intent(Intent.ACTION_EDIT);
+                    editIntent.setDataAndType(Uri.fromFile(mUploadTargetFile), "image/jpg");
+                    editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    editIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mUploadTargetFile));
+                    editIntent.putExtra("finishActivityOnSaveCompleted", true);
+                    startActivityForResult(editIntent, REQUEST_IMAGE_EDIT);
+                }
+                break;
+
+            case R.id.upload_btn_submit:
+                uploadPicture();
+
+                break;
+        }
+    }
+
+    private void uploadPicture() {
+        if (mUploadTargetFile == null) {
+            // TODO : show message
+            return;
+        }
+        Request request = new MultipartRequest(UPLOAD_URL, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                uploading = false;
+
+                showNotification(NotificationType.UPLOAD_COMPLETE);
+
+
+            }
+        },
+                new DefaultErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        super.onErrorResponse(error);
+                        uploading = false;
+                        ImageFileUtil.addToGallery(mUploadTargetFile);
+                        mUploadTargetFile = null;
+                        showNotification(NotificationType.UPLOAD_FAIL);
+                    }
+                },
+                new MultipartRequest.ProgressReporter() {
+                    @Override
+                    public void transferred(long transferredBytes, int progress) {
+                        mNotificationBuilder.setProgress(100, progress, false);
+                        mNotificationManager.notify(
+                                GcmBroadcastReceiver.GCM_NOTIFICATION_ID_SENT,
+                                mNotificationBuilder.build());
+                    }
+                },
+                mUploadTargetFile.length()) {
+            @Override
+            protected HttpEntity createHttpEntity() {
+                try {
+
+                    InputStream inputStream = new FileInputStream(mUploadTargetFile);
+                    byte[] data;
+                    data = IOUtils.toByteArray(inputStream);
+
+                    InputStreamBody inputStreamBody = new InputStreamBody(
+                            new ByteArrayInputStream(data),
+                            mUploadTargetFile.getName()
+                    );
+
+                    MultipartEntityBuilder multipartEntity
+                            = MultipartEntityBuilder.create();
+                    multipartEntity.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+                    multipartEntity.addPart(KEY_UPLOAD_IMAGE, inputStreamBody);
+
+
+
+
+                    if (mTitleInput.length() > 0) {
+                        multipartEntity.addTextBody(KEY_IMAGE_TITLE,
+                                mTitleInput.getText().toString(),
+                                ContentType.APPLICATION_JSON);
+                    }
+
+                    float[] latLng = mUploadTargetImageView.getLocation();
+                    if (latLng != null) {
+                        multipartEntity.addTextBody(LocationData.KEY_LATITUDE,
+                                Float.toString(latLng[0]));
+                        multipartEntity.addTextBody(LocationData.KEY_LONGITUDE,
+                                Float.toString(latLng[1]));
+                    }
+
+                    multipartEntity.addTextBody(KEY_IMAGE_PRIMARY_COLOR,
+                            mUploadTargetImageView.getImagePrimaryColor());
+
+                    return multipartEntity.build();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        };
+
+
+        showNotification(NotificationType.UPLOAD_START);
+        MessageUtil.showMessage(R.string.message_upload_start);
+        mUploadPictureDialog.dismiss();
+        uploading = true;
+        VolleyRequestQueue.add(
+                request,
+                VolleyRequestQueue.TIMEOUT_LONG,
+                0
+        );
+    }
+
+    private void dismissUploadDialog() {
+        new DialogUtil.ConfirmDialog(this) {
+
+            @Override
+            protected void onPositiveButtonClicked() {
+                this.dismiss();
+                mUploadPictureDialog.dismiss();
+                if (mUploadTargetFile != null) {
+                    mUploadTargetFile.delete();
+                    mUploadTargetFile = null;
+                }
+            }
+        }
+                .setTitle(R.string.app_name)
+                .setMessage(R.string.confirm_close_dialog)
+                .create()
+                .show();
+    }
+
+    private static void showNotification(NotificationType type) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+        boolean doNotification = preferences.getBoolean(
+                App.getContext().getString(R.string.key_pref_notification),
+                true
+        );
+        if (!doNotification) return;
+
+
+        int message = 0;
+        switch (type) {
+            case UPLOAD_START:
+                message = R.string.message_sending_picture;
+                break;
+            case UPLOAD_COMPLETE:
+                message = R.string.message_send_complete;
+                break;
+            case UPLOAD_FAIL:
+                message = R.string.message_send_fail;
+                break;
+        }
+
+        if (mNotificationBuilder == null) {
+            // create notification
+            mNotificationBuilder =
+                    new NotificationCompat.Builder(App.getContext())
+                            .setSmallIcon(R.drawable.ic_sent_24)
+                            .setColor(App.getContext().getResources().getColor(android.R.color.white))
+                            .setAutoCancel(true)
+                            .setContentTitle(App.getContext().getString(R.string.app_name));
+        }
+
+        mNotificationBuilder
+                .setContentText(App.getContext().getString(message))
+                .setProgress(0, 0, false);
+
+        if (type == NotificationType.UPLOAD_COMPLETE) {
+            Intent resultIntent = MainActivity.getIntent(App.getContext());
+            resultIntent.putExtra(MainActivity.KEY_FRAGMENT_TYPE, PictureDataManager.Type.SENT.name());
+
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(App.getContext());
+            // Adds the back stack for the Intent (but not the Intent itself)
+            stackBuilder.addParentStack(MainActivity.class);
+            // Adds the Intent that starts the Activity to the top of the stack
+            stackBuilder.addNextIntent(resultIntent);
+            PendingIntent resultPendingIntent =
+                    stackBuilder.getPendingIntent(
+                            0,
+                            PendingIntent.FLAG_UPDATE_CURRENT
+                    );
+            mNotificationBuilder.setContentIntent(resultPendingIntent);
+        }
+
+        if (mNotificationManager == null)
+            mNotificationManager =
+                    (NotificationManager) App.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(GcmBroadcastReceiver.GCM_NOTIFICATION_ID_SENT, mNotificationBuilder.build());
+    }
+
+
+    private void showNowUploadingDialog() {
+
+        View rootView = LayoutInflater.from(this).inflate(R.layout.dialog_now_uploading, null);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setView(rootView)
+                .setCancelable(false);
+        final Dialog dialog = builder.create();
+
+        rootView.findViewById(R.id.btn_close_dialog).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
 }
 
 

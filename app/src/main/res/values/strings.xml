@@ -8,6 +8,9 @@
     <string name="hint_email">\@</string>
     <string name="hint_password">*</string>
     <string name="hint_password_confirm">**</string>
+    <string name="fa_send_o"></string>
+    <string name="fa_close"></string>
+    <string name="fa_edit"></string>
     <string name="fa_facebook_square"></string>
     <string name="fa_google_plus_square"></string>
     <string name="fa_envelope_square"></string>
@@ -67,5 +70,6 @@
     </string-array>
     <string name="title_activity_discover">DiscoverActivity</string>
     <string name="message_picture_deleted">Picture deleted</string>
+    <string name="confirm_close_dialog">Are you sure you want to close this dialog?</string>
 
 </resources>

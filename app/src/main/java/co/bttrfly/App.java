@@ -14,6 +14,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.util.HashMap;
@@ -22,6 +24,7 @@ import co.bttrfly.db.PictureDatabaseManager;
 import co.bttrfly.location.LastLocationManager;
 import co.bttrfly.picture.PictureDataManager;
 import co.bttrfly.statics.Constants;
+import co.bttrfly.util.ImageFileUtil;
 import io.fabric.sdk.android.Fabric;
 
 /**
@@ -118,6 +121,7 @@ public class App extends Application {
     }
 
 
+
     public synchronized Tracker getTracker(TrackerName trackerName) {
         if (!mTrackers.containsKey(trackerName)) {
 
@@ -128,4 +132,5 @@ public class App extends Application {
         }
         return mTrackers.get(trackerName);
     }
+
 }

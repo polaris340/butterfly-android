@@ -59,8 +59,7 @@ public class PictureViewFragment extends Fragment implements View.OnClickListene
                             manager.getPictureIdList(type).get(position)
                     );
         } catch (ArrayIndexOutOfBoundsException e) {
-            Intent intent = new Intent(getActivity(), MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            Intent intent = MainActivity.getIntent(getActivity());
             getActivity().startActivity(intent);
             return rootView;
         }

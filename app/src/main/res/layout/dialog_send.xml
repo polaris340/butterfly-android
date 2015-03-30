@@ -1,92 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:persistentDrawingCache="scrolling"
-    >
-<LinearLayout
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@android:color/white"
-    >
 
+    android:paddingTop="@dimen/margin_2"
+    android:paddingBottom="@dimen/margin_2"
+
+    >
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <co.bttrfly.view.UploadTargetImageView
-            android:id="@+id/upload_iv_target"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        >
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white_100"
-            android:scaleType="fitXY"
-            android:adjustViewBounds="true"
-            android:layout_centerInParent="true"
-            android:src="@drawable/loading_placeholder_base_white"
-            />
-        <ImageButton
-            android:id="@+id/upload_btn_take_picture"
-            style="?android:borderlessButtonStyle"
+            android:orientation="vertical"
+            android:layout_above="@+id/upload_dialog_btnset">
+            <co.bttrfly.view.BaseFontEditText
+                android:id="@+id/upload_et_title"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/span_1"
+                android:singleLine="true"
+                android:hint="@string/hint_picture_title"
+                android:gravity="center"
+                android:background="@null"
+
+                />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:persistentDrawingCache="scrolling"
+                >
+
+                <co.bttrfly.view.UploadTargetImageView
+                    android:id="@+id/upload_iv_target"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white_100"
+                    android:scaleType="fitXY"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/loading_placeholder_base_white"
+                    />
+
+            </ScrollView>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/upload_dialog_btnset"
 
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignTop="@+id/upload_iv_target"
-            android:layout_alignBottom="@+id/upload_iv_target"
-            android:adjustViewBounds="true"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/white_100"
+            android:layout_alignParentBottom="true">
+            <co.bttrfly.view.BaseFontButton
+                android:id="@+id/upload_btn_cancel"
+                style="?android:borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/span_1"
+                android:text="@string/label_cancel"
+                android:textColor="@color/black_54"
+                />
 
-            />
+            <co.bttrfly.view.BaseFontButton
+                android:id="@+id/upload_btn_edit_picture"
 
+                style="?android:borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/span_1"
+                android:text="@string/label_edit"
+                android:textColor="@color/black_87"
+                />
+
+            <co.bttrfly.view.BaseFontButton
+                android:id="@+id/upload_btn_submit"
+                style="?android:borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/span_1"
+                android:text="@string/label_send"
+                android:textColor="@color/black_87"
+                />
+        </LinearLayout>
     </RelativeLayout>
-    <co.bttrfly.view.BaseFontEditText
-        android:id="@+id/upload_et_title"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/span_1"
-        android:singleLine="true"
-        android:hint="@string/hint_picture_title"
-        android:gravity="center"
-        android:background="@null"
-        />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-
-
-        <co.bttrfly.view.BaseFontButton
-            android:id="@+id/upload_btn_cancel"
-            style="?android:borderlessButtonStyle"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="@dimen/span_1"
-            android:text="@string/label_cancel"
-            android:textColor="@color/black_54"
-            />
-
-        <co.bttrfly.view.BaseFontButton
-            android:id="@+id/upload_btn_edit_picture"
-
-            style="?android:borderlessButtonStyle"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="@dimen/span_1"
-            android:text="@string/label_edit"
-            android:textColor="@color/black_87"
-            />
-
-        <co.bttrfly.view.BaseFontButton
-            android:id="@+id/upload_btn_submit"
-            style="?android:borderlessButtonStyle"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="@dimen/span_1"
-            android:text="@string/label_send"
-            android:textColor="@color/black_87"
-            />
-
-
-    </LinearLayout>
-
-
-</LinearLayout>
-</ScrollView>
+</RelativeLayout>

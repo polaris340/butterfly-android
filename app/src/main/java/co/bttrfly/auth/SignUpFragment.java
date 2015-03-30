@@ -80,11 +80,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
                 new Callable() {
                     @Override
                     public Object call() throws Exception {
-                        Intent intent = new Intent(getActivity(), MainActivity.class);
-                        intent.addFlags(
-                                Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                |Intent.FLAG_ACTIVITY_NEW_TASK
-                        );
+                        Intent intent = MainActivity.getIntent(getActivity());
                         startActivity(intent);
                         return null;
                     }
