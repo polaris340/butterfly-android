@@ -335,8 +335,6 @@ public class PictureDataManager implements PictureDataObservable, LoginStateChan
         PictureDatabaseManager dbManager = PictureDatabaseManager.getInstance();
         Collection<Picture> pictures = pictureHashMap.values();
 
-
-
         for (Picture p:pictures) {
             dbManager.upsert(p);
         }

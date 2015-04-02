@@ -14,6 +14,8 @@ public interface Constants {
         public static final String NOTICE = "notice";
         public static final String MESSAGE = "message";
         public static final String DATA = "data";
+
+        public static final String PICTURE_ID = "picture_id";
     }
 
     public interface Integers {

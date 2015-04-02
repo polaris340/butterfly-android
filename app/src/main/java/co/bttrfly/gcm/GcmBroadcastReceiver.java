@@ -20,6 +20,7 @@ import co.bttrfly.R;
 import co.bttrfly.db.Picture;
 import co.bttrfly.picture.PictureDataManager;
 import co.bttrfly.picture.PictureDataObservable;
+import co.bttrfly.picture.SinglePictureViewActivity;
 import co.bttrfly.statics.Constants;
 
 /**
@@ -72,7 +73,14 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
                         .setContentTitle(context.getString(R.string.app_name))
                         .setContentText(message);
         // Creates an explicit intent for an Activity in your app
-        Intent resultIntent = MainActivity.getIntent(context);
+
+
+        Intent resultIntent;
+        if (intent.hasExtra(Constants.Keys.PICTURE_ID)) {
+            resultIntent = SinglePictureViewActivity.getIntent(context, Long.parseLong(intent.getStringExtra(Constants.Keys.PICTURE_ID)));
+        } else {
+            resultIntent = MainActivity.getIntent(context);
+        }
 
         switch (notificationId) {
             case GCM_NOTIFICATION_ID_LIKE:

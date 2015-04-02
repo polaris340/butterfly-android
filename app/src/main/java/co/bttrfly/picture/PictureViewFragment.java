@@ -1,5 +1,6 @@
 package co.bttrfly.picture;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,13 +11,23 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import co.bttrfly.MainActivity;
 import co.bttrfly.R;
 import co.bttrfly.db.Picture;
+import co.bttrfly.network.DefaultErrorListener;
+import co.bttrfly.network.VolleyRequestQueue;
 import co.bttrfly.statics.Constants;
 import co.bttrfly.util.DialogUtil;
+import co.bttrfly.util.MessageUtil;
 import co.bttrfly.view.FadeHideableViewWrapper;
 import co.bttrfly.view.PictureLikeButton;
 import co.bttrfly.view.PinchZoomImageView;
@@ -27,12 +38,35 @@ import uk.co.senab.photoview.PhotoViewAttacher;
  */
 public class PictureViewFragment extends Fragment implements View.OnClickListener {
     private static final long HEADER_FOOTER_HIDE_DELAY = 1000;
+    public static final String URL_GET_PICTURE = Constants.URLs.API_URL + "picture";
 
 
     private FadeHideableViewWrapper header;
     private FadeHideableViewWrapper footer;
+
     private Picture pictureData;
 
+    private PinchZoomImageView mainImageView;
+    private TextView titleView;
+    private TextView uploaderName;
+    private View countryButtonWrapper;
+    private PictureLikeButton likeButton;
+    private Button sendCountButton;
+    private View rootView;
+    private PictureMenuToggleButton pictureMenuToggleButton;
+
+    private PictureDataObservable.Type type;
+
+
+    public static PictureViewFragment newInstance(long pictureId) {
+        PictureViewFragment fragment = new PictureViewFragment();
+
+        Bundle args = new Bundle();
+        args.putLong(Constants.Keys.PICTURE_ID, pictureId);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
 
     public static PictureViewFragment newInstance(PictureDataManager.Type type, int position) {
         Bundle args = new Bundle();
@@ -45,72 +79,89 @@ public class PictureViewFragment extends Fragment implements View.OnClickListene
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_picture_view, container, false);
+        rootView = inflater.inflate(R.layout.fragment_picture_view, container, false);
 
-        PinchZoomImageView mainImageView = (PinchZoomImageView) rootView.findViewById(R.id.pictureview_main_image);
-        PictureDataObservable.Type type = PictureDataManager.Type.valueOf(getArguments().getString(PictureDataManager.KEY_TYPE));
-        int position = getArguments().getInt(PictureDataManager.KEY_POSITION);
+        mainImageView = (PinchZoomImageView) rootView.findViewById(R.id.pictureview_main_image);
+
+
+
+        Bundle args = getArguments();
+
+        Picture picture;
+
         PictureDataManager manager = PictureDataManager.getInstance();
-        try {
+        if (args.containsKey(Constants.Keys.PICTURE_ID)) {
+            long pictureId = args.getLong(Constants.Keys.PICTURE_ID);
+            picture = manager.get(pictureId);
+            if (picture == null) {
+                final Dialog dialog = DialogUtil.getDefaultProgressDialog(getActivity());
+                Request request = new JsonObjectRequest(
+                        Request.Method.GET,
+                        URL_GET_PICTURE + "/" + pictureId,
+                        null,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                Picture picture = null;
+                                try {
+                                    picture = Picture.fromJson(response.getString(Constants.Keys.DATA));
+                                    setPictureData(picture);
+                                } catch (JSONException e) {
+                                    MessageUtil.showDefaultErrorMessage();
+                                    e.printStackTrace();
+                                    getActivity().finish();
+                                }
 
+                                dialog.hide();
+                            }
+                        },
+                        new DefaultErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                super.onErrorResponse(error);
+                                getActivity().finish();
+                            }
+                        }
 
-            pictureData = manager
-                    .get(
-                            manager.getPictureIdList(type).get(position)
-                    );
-        } catch (ArrayIndexOutOfBoundsException e) {
-            Intent intent = MainActivity.getIntent(getActivity());
-            getActivity().startActivity(intent);
-            return rootView;
-        }
-        //mainImageView.setBackgroundColor(pictureData.getColor());
-        ImageLoader.getInstance().displayImage(pictureData.getPictureUrl(), mainImageView);
-
-
-        TextView titleView = (TextView) rootView.findViewById(R.id.pictureview_tv_title);
-        String title = pictureData.getTitle();
-        if (title == null || title.equals("null")) {
-            titleView.setTextColor(getResources().getColor(R.color.white_70));
-            titleView.setText(R.string.label_untitled);
+                );
+                dialog.show();
+                VolleyRequestQueue.add(request);
+                //load data from server
+            }
         } else {
-            titleView.setText(title);
-            titleView.setTextColor(getResources().getColor(R.color.white_100));
+
+            try {
+                type = PictureDataManager.Type.valueOf(getArguments().getString(PictureDataManager.KEY_TYPE));
+                int position = getArguments().getInt(PictureDataManager.KEY_POSITION);
+                picture = manager
+                        .get(
+                                manager.getPictureIdList(type).get(position)
+                        );
+            } catch (ArrayIndexOutOfBoundsException e) {
+                Intent intent = MainActivity.getIntent(getActivity());
+                getActivity().startActivity(intent);
+                return rootView;
+            }
+
         }
+
+        titleView = (TextView) rootView.findViewById(R.id.pictureview_tv_title);
+
 
 
         ((TextView) rootView.findViewById(R.id.pictureview_label_by))
                 .setTextColor(getResources().getColor(R.color.white_12));
-        TextView uploaderName = (TextView) rootView.findViewById(R.id.pictureview_tv_uploader);
+        uploaderName = (TextView) rootView.findViewById(R.id.pictureview_tv_uploader);
         uploaderName.setTextColor(getResources().getColor(R.color.white_30));
-        uploaderName.setText(pictureData.getUploaderName());
 
-        View countryButtonWrapper = rootView.findViewById(R.id.pictureview_ll_country_button_wrap);
-        Button sendCountButton = (Button) rootView.findViewById(R.id.pictureview_btn_send_count);
+
+        countryButtonWrapper = rootView.findViewById(R.id.pictureview_ll_country_button_wrap);
+        sendCountButton = (Button) rootView.findViewById(R.id.pictureview_btn_send_count);
         sendCountButton.setTextColor(getResources().getColor(R.color.white_100));
-        if (type == PictureDataManager.Type.SENT) {
-            countryButtonWrapper.setVisibility(View.GONE);
-            sendCountButton.setText(pictureData.getSendCountString());
-            sendCountButton.setTextColor(getResources().getColor(R.color.white_100));
-            sendCountButton.setTag(pictureData);
-        } else {
-            sendCountButton.setVisibility(View.GONE);
-            Button countryButton = (Button) rootView.findViewById(R.id.pictureview_btn_country_name);
-            countryButton.setTextColor(getResources().getColor(R.color.white_100));
-            String countryName = pictureData.getCountryName();
-
-            if (countryName == null || countryName.equals("null") || countryName.equals("")) {
-                countryButton.setText(getString(R.string.label_unknown));
-                countryButton.setEnabled(false);
-            } else {
-                countryButton.setText(countryName);
-            }
-            countryButton.setOnClickListener(this);
-        }
 
 
 
-        PictureLikeButton likeButton = (PictureLikeButton) rootView.findViewById(R.id.pictureview_btn_like);
-        likeButton.setPictureId(pictureData.getId());
+        likeButton = (PictureLikeButton) rootView.findViewById(R.id.pictureview_btn_like);
         likeButton.setTextColor(getResources().getColor(R.color.white_100));
 
         View headerView = rootView.findViewById(R.id.pictureview_rl_header);
@@ -134,11 +185,11 @@ public class PictureViewFragment extends Fragment implements View.OnClickListene
                 .addButton(R.id.picturemenu_btn_save);
         builder.addButton(R.id.picturemenu_btn_delete);
 
-        PictureMenuToggleButton pictureMenuToggleButton = builder.create();
+        pictureMenuToggleButton = builder.create();
         pictureMenuToggleButton.getMenuToggleButton().setColor(
                 getResources().getColor(R.color.white_70)
         );
-        pictureMenuToggleButton.setPictureId(pictureData.getId());
+
 
         View menuButtonRootView = pictureMenuToggleButton.getRootView();
         ((ViewGroup) rootView.findViewById(R.id.pictureview_tb_menu))
@@ -161,7 +212,81 @@ public class PictureViewFragment extends Fragment implements View.OnClickListene
                 });
 
 
+        if (picture != null) {
+            setPictureData(picture);
+        }
+
         return rootView;
+    }
+
+    public void setPictureData(Picture picture) {
+        PictureDataManager.getInstance().put(picture);
+        this.pictureData = picture;
+
+        ImageLoader.getInstance().displayImage(pictureData.getPictureUrl(), mainImageView);
+
+        String title = pictureData.getTitle();
+        if (title == null || title.equals("null")) {
+            titleView.setTextColor(getResources().getColor(R.color.white_70));
+            titleView.setText(R.string.label_untitled);
+        } else {
+            titleView.setText(title);
+            titleView.setTextColor(getResources().getColor(R.color.white_100));
+        }
+
+        uploaderName.setText(pictureData.getUploaderName());
+
+        likeButton.setPictureId(pictureData.getId());
+
+        if (type == null) {
+            if (pictureData.getIsMine()) {
+                type = PictureDataObservable.Type.SENT;
+            } else {
+                type = PictureDataObservable.Type.RECEIVED;
+            }
+        }
+
+        if (type == PictureDataManager.Type.SENT) {
+            countryButtonWrapper.setVisibility(View.GONE);
+            sendCountButton.setText(pictureData.getSendCountString());
+            sendCountButton.setTextColor(getResources().getColor(R.color.white_100));
+            sendCountButton.setTag(pictureData);
+        } else {
+            sendCountButton.setVisibility(View.GONE);
+            Button countryButton = (Button) rootView.findViewById(R.id.pictureview_btn_country_name);
+            countryButton.setTextColor(getResources().getColor(R.color.white_100));
+            String countryName = pictureData.getCountryName();
+
+            if (countryName == null || countryName.equals("null") || countryName.equals("")) {
+                countryButton.setText(getString(R.string.label_unknown));
+                countryButton.setEnabled(false);
+            } else {
+                countryButton.setText(countryName);
+            }
+            countryButton.setOnClickListener(this);
+        }
+
+        if (type == PictureDataManager.Type.SENT) {
+            countryButtonWrapper.setVisibility(View.GONE);
+            sendCountButton.setText(pictureData.getSendCountString());
+            sendCountButton.setTextColor(getResources().getColor(R.color.white_100));
+            sendCountButton.setTag(pictureData);
+        } else {
+            sendCountButton.setVisibility(View.GONE);
+            Button countryButton = (Button) rootView.findViewById(R.id.pictureview_btn_country_name);
+            countryButton.setTextColor(getResources().getColor(R.color.white_100));
+            String countryName = pictureData.getCountryName();
+
+            if (countryName == null || countryName.equals("null") || countryName.equals("")) {
+                countryButton.setText(getString(R.string.label_unknown));
+                countryButton.setEnabled(false);
+            } else {
+                countryButton.setText(countryName);
+            }
+            countryButton.setOnClickListener(this);
+        }
+
+        pictureMenuToggleButton.setPictureId(pictureData.getId());
     }
 
     @Override
@@ -176,7 +301,6 @@ public class PictureViewFragment extends Fragment implements View.OnClickListene
                 break;
         }
     }
-
 
 
 }

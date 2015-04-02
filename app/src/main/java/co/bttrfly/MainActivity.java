@@ -669,7 +669,7 @@ public class MainActivity extends BaseActivity
             @Override
             public void onResponse(JSONObject response) {
                 uploading = false;
-
+                mUploadTargetFile.delete();
                 showNotification(NotificationType.UPLOAD_COMPLETE);
 
 

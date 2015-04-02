@@ -31,49 +31,49 @@ ADDED from AndroidManifest.xml:8:5
 	android:name
 		ADDED from AndroidManifest.xml:8:22
 uses-permission#android.permission.GET_ACCOUNTS
-ADDED from AndroidManifest.xml:9:5
-	android:name
-		ADDED from AndroidManifest.xml:9:22
-uses-permission#android.permission.WAKE_LOCK
 ADDED from AndroidManifest.xml:10:5
 	android:name
 		ADDED from AndroidManifest.xml:10:22
-uses-permission#com.google.android.c2dm.permission.RECEIVE
+uses-permission#android.permission.WAKE_LOCK
 ADDED from AndroidManifest.xml:11:5
 	android:name
 		ADDED from AndroidManifest.xml:11:22
-uses-permission#android.permission.ACCESS_NETWORK_STATE
+uses-permission#com.google.android.c2dm.permission.RECEIVE
 ADDED from AndroidManifest.xml:12:5
 	android:name
 		ADDED from AndroidManifest.xml:12:22
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from AndroidManifest.xml:13:5
+	android:name
+		ADDED from AndroidManifest.xml:13:22
 permission#co.bttrfly.permission.C2D_MESSAGE
-ADDED from AndroidManifest.xml:14:5
+ADDED from AndroidManifest.xml:15:5
 	android:protectionLevel
+		ADDED from AndroidManifest.xml:17:9
+	android:name
 		ADDED from AndroidManifest.xml:16:9
-	android:name
-		ADDED from AndroidManifest.xml:15:9
 uses-permission#co.bttrfly.permission.C2D_MESSAGE
-ADDED from AndroidManifest.xml:18:5
-	android:name
-		ADDED from AndroidManifest.xml:18:22
-uses-permission#android.permission.VIBRATE
 ADDED from AndroidManifest.xml:19:5
 	android:name
 		ADDED from AndroidManifest.xml:19:22
+uses-permission#android.permission.VIBRATE
+ADDED from AndroidManifest.xml:20:5
+	android:name
+		ADDED from AndroidManifest.xml:20:22
 meta-data#com.google.android.gms.version
-ADDED from AndroidManifest.xml:21:5
+ADDED from AndroidManifest.xml:22:5
 	android:value
-		ADDED from AndroidManifest.xml:22:9
+		ADDED from AndroidManifest.xml:23:9
 	android:name
-		ADDED from AndroidManifest.xml:21:16
+		ADDED from AndroidManifest.xml:22:16
 uses-feature#android.hardware.camera
-ADDED from AndroidManifest.xml:24:5
+ADDED from AndroidManifest.xml:25:5
 	android:required
-		ADDED from AndroidManifest.xml:26:9
+		ADDED from AndroidManifest.xml:27:9
 	android:name
-		ADDED from AndroidManifest.xml:25:9
+		ADDED from AndroidManifest.xml:26:9
 application
-ADDED from AndroidManifest.xml:28:5
+ADDED from AndroidManifest.xml:29:5
 MERGED from com.google.android.gms:play-services:6.5.87:20:5
 MERGED from com.android.support:support-v4:21.0.3:16:5
 MERGED from com.android.support:recyclerview-v7:21.0.3:17:5
@@ -100,109 +100,109 @@ MERGED from io.fabric.sdk.android:fabric:1.1.1:9:5
 MERGED from com.crashlytics.sdk.android:beta:1.1.1:9:5
 MERGED from io.fabric.sdk.android:fabric:1.1.1:9:5
 	android:label
-		ADDED from AndroidManifest.xml:32:9
+		ADDED from AndroidManifest.xml:33:9
 	android:hardwareAccelerated
 		ADDED from com.github.chrisbanes.photoview:library:1.2.3:4:45
 	android:allowBackup
-		ADDED from AndroidManifest.xml:30:9
-	android:icon
 		ADDED from AndroidManifest.xml:31:9
+	android:icon
+		ADDED from AndroidManifest.xml:32:9
 	android:theme
-		ADDED from AndroidManifest.xml:33:9
+		ADDED from AndroidManifest.xml:34:9
 	android:name
-		ADDED from AndroidManifest.xml:29:9
+		ADDED from AndroidManifest.xml:30:9
 meta-data#com.facebook.sdk.ApplicationId
-ADDED from AndroidManifest.xml:34:9
+ADDED from AndroidManifest.xml:35:9
 	android:value
+		ADDED from AndroidManifest.xml:37:13
+	android:name
 		ADDED from AndroidManifest.xml:36:13
-	android:name
-		ADDED from AndroidManifest.xml:35:13
 activity#co.bttrfly.MainActivity
-ADDED from AndroidManifest.xml:38:9
+ADDED from AndroidManifest.xml:39:9
 	android:screenOrientation
+		ADDED from AndroidManifest.xml:42:13
+	android:label
 		ADDED from AndroidManifest.xml:41:13
-	android:label
+	android:name
 		ADDED from AndroidManifest.xml:40:13
-	android:name
-		ADDED from AndroidManifest.xml:39:13
 intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
-ADDED from AndroidManifest.xml:42:13
+ADDED from AndroidManifest.xml:43:13
 action#android.intent.action.MAIN
-ADDED from AndroidManifest.xml:43:17
+ADDED from AndroidManifest.xml:44:17
 	android:name
-		ADDED from AndroidManifest.xml:43:25
+		ADDED from AndroidManifest.xml:44:25
 category#android.intent.category.LAUNCHER
-ADDED from AndroidManifest.xml:45:17
+ADDED from AndroidManifest.xml:46:17
 	android:name
-		ADDED from AndroidManifest.xml:45:27
+		ADDED from AndroidManifest.xml:46:27
 intent-filter#android.intent.action.SEND+android.intent.category.DEFAULT
-ADDED from AndroidManifest.xml:47:13
+ADDED from AndroidManifest.xml:48:13
 action#android.intent.action.SEND
-ADDED from AndroidManifest.xml:48:17
+ADDED from AndroidManifest.xml:49:17
 	android:name
-		ADDED from AndroidManifest.xml:48:25
+		ADDED from AndroidManifest.xml:49:25
 category#android.intent.category.DEFAULT
-ADDED from AndroidManifest.xml:50:17
+ADDED from AndroidManifest.xml:51:17
 	android:name
-		ADDED from AndroidManifest.xml:50:27
+		ADDED from AndroidManifest.xml:51:27
 data
-ADDED from AndroidManifest.xml:52:17
+ADDED from AndroidManifest.xml:53:17
 	android:mimeType
-		ADDED from AndroidManifest.xml:52:23
+		ADDED from AndroidManifest.xml:53:23
 activity#co.bttrfly.auth.AuthActivity
-ADDED from AndroidManifest.xml:55:9
+ADDED from AndroidManifest.xml:56:9
 	android:screenOrientation
+		ADDED from AndroidManifest.xml:59:13
+	android:label
 		ADDED from AndroidManifest.xml:58:13
-	android:label
+	android:name
 		ADDED from AndroidManifest.xml:57:13
-	android:name
-		ADDED from AndroidManifest.xml:56:13
 activity#com.facebook.LoginActivity
-ADDED from AndroidManifest.xml:60:9
-	android:name
-		ADDED from AndroidManifest.xml:60:19
-activity#co.bttrfly.picture.PictureViewActivity
 ADDED from AndroidManifest.xml:61:9
+	android:name
+		ADDED from AndroidManifest.xml:61:19
+activity#co.bttrfly.picture.PictureViewActivity
+ADDED from AndroidManifest.xml:62:9
 	android:label
-		ADDED from AndroidManifest.xml:63:13
-	android:theme
 		ADDED from AndroidManifest.xml:64:13
+	android:theme
+		ADDED from AndroidManifest.xml:65:13
 	android:name
-		ADDED from AndroidManifest.xml:62:13
+		ADDED from AndroidManifest.xml:63:13
 receiver#co.bttrfly.gcm.GcmBroadcastReceiver
-ADDED from AndroidManifest.xml:67:9
+ADDED from AndroidManifest.xml:68:9
 	android:name
-		ADDED from AndroidManifest.xml:67:19
+		ADDED from AndroidManifest.xml:68:19
 intent-filter#co.bttrfly+com.google.android.c2dm.intent.RECEIVE
-ADDED from AndroidManifest.xml:68:13
+ADDED from AndroidManifest.xml:69:13
 action#com.google.android.c2dm.intent.RECEIVE
-ADDED from AndroidManifest.xml:69:17
+ADDED from AndroidManifest.xml:70:17
 	android:name
-		ADDED from AndroidManifest.xml:69:25
+		ADDED from AndroidManifest.xml:70:25
 category#co.bttrfly
-ADDED from AndroidManifest.xml:71:17
+ADDED from AndroidManifest.xml:72:17
 	android:name
-		ADDED from AndroidManifest.xml:71:27
+		ADDED from AndroidManifest.xml:72:27
 activity#co.bttrfly.auth.SignUpActivity
-ADDED from AndroidManifest.xml:75:9
+ADDED from AndroidManifest.xml:76:9
 	android:label
+		ADDED from AndroidManifest.xml:78:13
+	android:name
 		ADDED from AndroidManifest.xml:77:13
-	android:name
-		ADDED from AndroidManifest.xml:76:13
 activity#co.bttrfly.settings.SettingsActivity
-ADDED from AndroidManifest.xml:79:9
+ADDED from AndroidManifest.xml:80:9
 	android:label
-		ADDED from AndroidManifest.xml:82:13
+		ADDED from AndroidManifest.xml:83:13
 	android:exported
+		ADDED from AndroidManifest.xml:82:13
+	android:name
 		ADDED from AndroidManifest.xml:81:13
-	android:name
-		ADDED from AndroidManifest.xml:80:13
 meta-data#com.crashlytics.ApiKey
-ADDED from AndroidManifest.xml:84:9
+ADDED from AndroidManifest.xml:85:9
 	android:value
-		ADDED from AndroidManifest.xml:86:13
+		ADDED from AndroidManifest.xml:87:13
 	android:name
-		ADDED from AndroidManifest.xml:85:13
+		ADDED from AndroidManifest.xml:86:13
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.google.android.gms:play-services:6.5.87:18:5
