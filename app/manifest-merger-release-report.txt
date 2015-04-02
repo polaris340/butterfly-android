@@ -31,41 +31,41 @@ ADDED from AndroidManifest.xml:8:5
 	android:name
 		ADDED from AndroidManifest.xml:8:22
 uses-permission#android.permission.GET_ACCOUNTS
+ADDED from AndroidManifest.xml:9:5
+	android:name
+		ADDED from AndroidManifest.xml:9:22
+uses-permission#android.permission.WAKE_LOCK
 ADDED from AndroidManifest.xml:10:5
 	android:name
 		ADDED from AndroidManifest.xml:10:22
-uses-permission#android.permission.WAKE_LOCK
+uses-permission#com.google.android.c2dm.permission.RECEIVE
 ADDED from AndroidManifest.xml:11:5
 	android:name
 		ADDED from AndroidManifest.xml:11:22
-uses-permission#com.google.android.c2dm.permission.RECEIVE
+uses-permission#android.permission.ACCESS_NETWORK_STATE
 ADDED from AndroidManifest.xml:12:5
 	android:name
 		ADDED from AndroidManifest.xml:12:22
-uses-permission#android.permission.ACCESS_NETWORK_STATE
-ADDED from AndroidManifest.xml:13:5
-	android:name
-		ADDED from AndroidManifest.xml:13:22
 permission#co.bttrfly.permission.C2D_MESSAGE
-ADDED from AndroidManifest.xml:15:5
+ADDED from AndroidManifest.xml:14:5
 	android:protectionLevel
-		ADDED from AndroidManifest.xml:17:9
-	android:name
 		ADDED from AndroidManifest.xml:16:9
+	android:name
+		ADDED from AndroidManifest.xml:15:9
 uses-permission#co.bttrfly.permission.C2D_MESSAGE
+ADDED from AndroidManifest.xml:18:5
+	android:name
+		ADDED from AndroidManifest.xml:18:22
+uses-permission#android.permission.VIBRATE
 ADDED from AndroidManifest.xml:19:5
 	android:name
 		ADDED from AndroidManifest.xml:19:22
-uses-permission#android.permission.VIBRATE
-ADDED from AndroidManifest.xml:20:5
-	android:name
-		ADDED from AndroidManifest.xml:20:22
 meta-data#com.google.android.gms.version
-ADDED from AndroidManifest.xml:22:5
+ADDED from AndroidManifest.xml:21:5
 	android:value
 		ADDED from AndroidManifest.xml:23:9
 	android:name
-		ADDED from AndroidManifest.xml:22:16
+		ADDED from AndroidManifest.xml:22:9
 uses-feature#android.hardware.camera
 ADDED from AndroidManifest.xml:25:5
 	android:required
@@ -198,11 +198,17 @@ ADDED from AndroidManifest.xml:80:9
 	android:name
 		ADDED from AndroidManifest.xml:81:13
 meta-data#com.crashlytics.ApiKey
-ADDED from AndroidManifest.xml:85:9
+ADDED from AndroidManifest.xml:86:9
 	android:value
-		ADDED from AndroidManifest.xml:87:13
+		ADDED from AndroidManifest.xml:88:13
 	android:name
-		ADDED from AndroidManifest.xml:86:13
+		ADDED from AndroidManifest.xml:87:13
+activity#co.bttrfly.picture.SinglePictureViewActivity
+ADDED from AndroidManifest.xml:90:9
+	android:label
+		ADDED from AndroidManifest.xml:92:13
+	android:name
+		ADDED from AndroidManifest.xml:91:13
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.google.android.gms:play-services:6.5.87:18:5

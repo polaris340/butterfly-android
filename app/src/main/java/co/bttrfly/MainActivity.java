@@ -665,11 +665,11 @@ public class MainActivity extends BaseActivity
             // TODO : show message
             return;
         }
+        ImageFileUtil.addToGallery(mUploadTargetFile);
         Request request = new MultipartRequest(UPLOAD_URL, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 uploading = false;
-                mUploadTargetFile.delete();
                 showNotification(NotificationType.UPLOAD_COMPLETE);
 
 
@@ -680,7 +680,7 @@ public class MainActivity extends BaseActivity
                     public void onErrorResponse(VolleyError error) {
                         super.onErrorResponse(error);
                         uploading = false;
-                        ImageFileUtil.addToGallery(mUploadTargetFile);
+
                         mUploadTargetFile = null;
                         showNotification(NotificationType.UPLOAD_FAIL);
                     }
