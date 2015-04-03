@@ -73,5 +73,6 @@
     <string name="confirm_close_dialog">Are you sure you want to close this dialog?</string>
     <string name="title_activity_single_picture_view">SinglePictureViewActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="message_share">Butterfly</string>
 
 </resources>

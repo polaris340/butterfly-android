@@ -2,6 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="wrap_content">
 
+    <co.bttrfly.view.PictureShareButton
+        style="?android:borderlessButtonStyle"
+        android:id="@+id/picturemenu_btn_share"
+        android:layout_width="@dimen/span_small_1"
+        android:layout_height="@dimen/span_small_1"
+        android:src="@drawable/ic_share_18"
+        android:visibility="gone"
+        android:layout_alignParentRight="true"
+        />
+
     <co.bttrfly.view.PictureSaveButton
         style="?android:borderlessButtonStyle"
         android:id="@+id/picturemenu_btn_save"

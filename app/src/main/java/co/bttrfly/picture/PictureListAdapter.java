@@ -160,16 +160,7 @@ public class PictureListAdapter extends RecyclerView.Adapter<PictureListAdapter.
                 showFullImageButton = (Button) rootView.findViewById(R.id.picturelist_btn_show_image);
                 uploaderName = (TextView) rootView.findViewById(R.id.pictureview_tv_uploader);
 
-                PictureMenuToggleButton.Builder builder = new PictureMenuToggleButton.Builder(rootView.getContext());
-                builder.setLayout(R.layout.btn_picture_menu)
-                        .setMenuToggleButtonId(R.id.picturemenu_btn_menu)
-                        .addButton(R.id.picturemenu_btn_save);
-
-
-                builder.addButton(R.id.picturemenu_btn_delete);
-
-                menuButton = builder.create();
-
+                menuButton = PictureMenuToggleButton.getDefault(rootView.getContext());
 
                 menuButton.getMenuToggleButton().setColor(
                         rootView.getContext().getResources().getColor(R.color.black_54)

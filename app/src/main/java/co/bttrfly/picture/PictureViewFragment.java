@@ -179,13 +179,8 @@ public class PictureViewFragment extends Fragment implements View.OnClickListene
         fromLabel.setTextColor(getResources().getColor(R.color.white_70));
 
         // set PictureMenuButton
-        PictureMenuToggleButton.Builder builder = new PictureMenuToggleButton.Builder(getActivity())
-                .setLayout(R.layout.btn_picture_menu)
-                .setMenuToggleButtonId(R.id.picturemenu_btn_menu)
-                .addButton(R.id.picturemenu_btn_save);
-        builder.addButton(R.id.picturemenu_btn_delete);
 
-        pictureMenuToggleButton = builder.create();
+        pictureMenuToggleButton = PictureMenuToggleButton.getDefault(getActivity());
         pictureMenuToggleButton.getMenuToggleButton().setColor(
                 getResources().getColor(R.color.white_70)
         );

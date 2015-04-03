@@ -6,7 +6,7 @@ package co.bttrfly.statics;
 public interface Constants {
     public interface URLs {
         //public static final String BASE_URL = "http://dev.bttrfly.co:8001/";
-        public static final String BASE_URL = "http://bttrfly.co:8000/";
+        public static final String BASE_URL = "http://api.bttrfly.co:8000/";
         public static final String API_URL = BASE_URL + "api/";
     }
 

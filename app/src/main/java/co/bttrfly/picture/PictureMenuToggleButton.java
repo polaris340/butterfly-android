@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import co.bttrfly.R;
 import me.jiho.animatedtogglebutton.MenuAnimatedToggleButton;
 import co.bttrfly.view.HideableMenuButton;
 
@@ -77,10 +78,22 @@ public class PictureMenuToggleButton {
 
 
 
+    public static PictureMenuToggleButton getDefault(Context context) {
+        PictureMenuToggleButton.Builder builder = new PictureMenuToggleButton.Builder(context)
+                .setLayout(R.layout.btn_picture_menu)
+                .setMenuToggleButtonId(R.id.picturemenu_btn_menu)
+                .addButton(R.id.picturemenu_btn_share)
+                .addButton(R.id.picturemenu_btn_delete)
+                .addButton(R.id.picturemenu_btn_save);
+
+        return builder.create();
+    }
+
     public static class Builder {
         private View rootView;
         private LayoutInflater mLayoutInflater;
         private PictureMenuToggleButton pictureMenuToggleButton;
+
 
         public Builder(Context context) {
             mLayoutInflater = LayoutInflater.from(context);
