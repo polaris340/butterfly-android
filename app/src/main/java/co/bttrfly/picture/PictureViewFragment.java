@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 import co.bttrfly.MainActivity;
 import co.bttrfly.R;
+import co.bttrfly.auth.Auth;
 import co.bttrfly.db.Picture;
 import co.bttrfly.network.DefaultErrorListener;
 import co.bttrfly.network.VolleyRequestQueue;
@@ -94,38 +95,62 @@ public class PictureViewFragment extends Fragment implements View.OnClickListene
             long pictureId = args.getLong(Constants.Keys.PICTURE_ID);
 
             final Dialog dialog = DialogUtil.getDefaultProgressDialog(getActivity());
-            Request request = new JsonObjectRequest(
-                    Request.Method.GET,
-                    URL_GET_PICTURE + "/" + pictureId,
-                    null,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            Picture picture = null;
-                            try {
-                                picture = Picture.fromJson(response.getString(Constants.Keys.DATA));
-                                setPictureData(picture);
-                            } catch (JSONException e) {
-                                MessageUtil.showDefaultErrorMessage();
-                                e.printStackTrace();
-                                getActivity().finish();
-                            }
+            Request request = null;
 
-                            dialog.hide();
-                        }
-                    },
-                    new DefaultErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            super.onErrorResponse(error);
-                            getActivity().finish();
-                        }
+            Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Picture picture = null;
+                    try {
+                        picture = Picture.fromJson(response.getString(Constants.Keys.DATA));
+                        setPictureData(picture);
+                    } catch (JSONException e) {
+                        MessageUtil.showDefaultErrorMessage();
+                        e.printStackTrace();
+                        getActivity().finish();
                     }
 
-            );
-            dialog.show();
-            VolleyRequestQueue.add(request);
-            //load data from server
+                    dialog.hide();
+                }
+            };
+
+            Response.ErrorListener errorListener = new DefaultErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    super.onErrorResponse(error);
+                    getActivity().finish();
+                }
+            };
+
+            if (Auth.getInstance().isLogin()) {
+                request = new JsonObjectRequest(
+                        Request.Method.GET,
+                        URL_GET_PICTURE + "/" + pictureId,
+                        null,
+                        listener,
+                        errorListener
+
+                );
+            } else {
+                try {
+                    JSONObject data = new JSONObject().put(Auth.KEY_ACCESS_TOKEN, Auth.getInstance().getAccessToken());
+                    request = new JsonObjectRequest(
+                            Request.Method.POST,
+                            URL_GET_PICTURE + "/" + pictureId,
+                            data,
+                            listener,
+                            errorListener
+                    );
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            if (request != null) {
+                dialog.show();
+                VolleyRequestQueue.add(request);
+            }
 
         } else {
 
