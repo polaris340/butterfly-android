@@ -87,47 +87,46 @@ public class PictureViewFragment extends Fragment implements View.OnClickListene
 
         Bundle args = getArguments();
 
-        Picture picture;
+        Picture picture = null;
 
         PictureDataManager manager = PictureDataManager.getInstance();
         if (args.containsKey(Constants.Keys.PICTURE_ID)) {
             long pictureId = args.getLong(Constants.Keys.PICTURE_ID);
-            picture = manager.get(pictureId);
-            if (picture == null) {
-                final Dialog dialog = DialogUtil.getDefaultProgressDialog(getActivity());
-                Request request = new JsonObjectRequest(
-                        Request.Method.GET,
-                        URL_GET_PICTURE + "/" + pictureId,
-                        null,
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                Picture picture = null;
-                                try {
-                                    picture = Picture.fromJson(response.getString(Constants.Keys.DATA));
-                                    setPictureData(picture);
-                                } catch (JSONException e) {
-                                    MessageUtil.showDefaultErrorMessage();
-                                    e.printStackTrace();
-                                    getActivity().finish();
-                                }
 
-                                dialog.hide();
-                            }
-                        },
-                        new DefaultErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                super.onErrorResponse(error);
+            final Dialog dialog = DialogUtil.getDefaultProgressDialog(getActivity());
+            Request request = new JsonObjectRequest(
+                    Request.Method.GET,
+                    URL_GET_PICTURE + "/" + pictureId,
+                    null,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Picture picture = null;
+                            try {
+                                picture = Picture.fromJson(response.getString(Constants.Keys.DATA));
+                                setPictureData(picture);
+                            } catch (JSONException e) {
+                                MessageUtil.showDefaultErrorMessage();
+                                e.printStackTrace();
                                 getActivity().finish();
                             }
-                        }
 
-                );
-                dialog.show();
-                VolleyRequestQueue.add(request);
-                //load data from server
-            }
+                            dialog.hide();
+                        }
+                    },
+                    new DefaultErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            super.onErrorResponse(error);
+                            getActivity().finish();
+                        }
+                    }
+
+            );
+            dialog.show();
+            VolleyRequestQueue.add(request);
+            //load data from server
+
         } else {
 
             try {
