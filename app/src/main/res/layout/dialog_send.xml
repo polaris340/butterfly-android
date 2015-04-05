@@ -2,23 +2,24 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
-    android:paddingTop="@dimen/margin_2"
-    android:paddingBottom="@dimen/margin_2"
-
     >
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+
         android:gravity="center"
+        android:padding="0dp"
+        android:layout_margin="0dp"
         >
         <LinearLayout
+            android:id="@+id/upload_picture_wrap"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="0dp"
             android:background="@color/white_100"
             android:orientation="vertical"
-            android:layout_above="@+id/upload_dialog_btnset">
+            android:paddingBottom="@dimen/span_1">
             <co.bttrfly.view.BaseFontEditText
                 android:id="@+id/upload_et_title"
                 android:layout_width="match_parent"
@@ -55,7 +56,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:background="@color/white_100"
-            android:layout_alignParentBottom="true">
+            android:layout_gravity="bottom">
             <co.bttrfly.view.BaseFontButton
                 android:id="@+id/upload_btn_cancel"
                 style="?android:borderlessButtonStyle"
@@ -87,5 +88,5 @@
                 android:textColor="@color/black_87"
                 />
         </LinearLayout>
-    </RelativeLayout>
+    </FrameLayout>
 </RelativeLayout>

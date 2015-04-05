@@ -606,6 +606,7 @@ public class MainActivity extends BaseActivity
         mUploadPictureDialog = builder.create();
         mUploadPictureDialog.setCanceledOnTouchOutside(false);
         mUploadPictureDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
         mUploadPictureDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
