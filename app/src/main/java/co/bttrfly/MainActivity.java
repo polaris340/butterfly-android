@@ -689,10 +689,13 @@ public class MainActivity extends BaseActivity
                 new MultipartRequest.ProgressReporter() {
                     @Override
                     public void transferred(long transferredBytes, int progress) {
-                        mNotificationBuilder.setProgress(100, progress, false);
-                        mNotificationManager.notify(
-                                GcmBroadcastReceiver.GCM_NOTIFICATION_ID_SENT,
-                                mNotificationBuilder.build());
+                        if (mNotificationBuilder != null) {
+
+                            mNotificationBuilder.setProgress(100, progress, false);
+                            mNotificationManager.notify(
+                                    GcmBroadcastReceiver.GCM_NOTIFICATION_ID_SENT,
+                                    mNotificationBuilder.build());
+                        }
                     }
                 },
                 mUploadTargetFile.length()) {
