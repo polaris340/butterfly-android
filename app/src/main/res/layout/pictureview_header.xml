@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Jiho Hong"
+                android:text="Anonymous"
                 android:textColor="@color/black_54"
                 />
         </LinearLayout>

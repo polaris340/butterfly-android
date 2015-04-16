@@ -1,7 +1,10 @@
 package co.bttrfly.auth;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.IntentCompat;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,6 +32,15 @@ public class AuthActivity extends BaseActivity {
     ViewPager mViewPager;
 
     long lastBackPressedTime = 0;
+
+    public static Intent getIntent(Context context) {
+        Intent intent = new Intent(context, AuthActivity.class);
+        intent.addFlags(
+                IntentCompat.FLAG_ACTIVITY_CLEAR_TASK
+                        |Intent.FLAG_ACTIVITY_NEW_TASK
+        );
+        return intent;
+    }
 
 
     @Override

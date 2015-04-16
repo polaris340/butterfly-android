@@ -59,7 +59,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawableRight="@drawable/heart_active_18"
-        android:text="32 "
+        android:text="0 "
         android:minWidth="0dp"
         android:minHeight="0dp"
         android:textColor="@color/black_87"
