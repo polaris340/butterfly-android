@@ -166,9 +166,12 @@ public class MainActivity extends BaseActivity
             Auth.getInstance().loginWithAccessToken(null, new Callable() {
                 @Override
                 public Object call() throws Exception {
+                    /*
                     Intent intent = AuthActivity.getIntent(MainActivity.this);
                     startActivity(intent);
+                    */
                     return null;
+
                 }
             });
         } catch (JSONException e) {
