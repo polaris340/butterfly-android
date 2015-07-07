@@ -23,8 +23,8 @@ android {
         applicationId "co.bttrfly"
         minSdkVersion 9
         targetSdkVersion 21
-        versionCode 14
-        versionName "1.0.12"
+        versionCode 15
+        versionName "1.0.13"
     }
     buildTypes {
         release {
@@ -52,7 +52,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile 'com.android.support:palette-v7:21.0.3'
     compile 'com.facebook.android:facebook-android-sdk:3.21.1'
-    compile 'com.google.android.gms:play-services:6.5.87'
     compile 'com.melnykov:floatingactionbutton:1.1.0'
     compile 'commons-io:commons-io:2.0.1'
     compile 'org.apache.httpcomponents:httpmime:4.3.6'
